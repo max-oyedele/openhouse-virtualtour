@@ -28,17 +28,17 @@ export default class SearchBox extends Component {
     }
   }
 
-  filterData = (query) => {
-    var filtered = SearchWordData.filter(each => {
-      var eachStr = each.toLowerCase();
-      return eachStr.includes(query);
-    });
-    return filtered;
-  }
+  // filterData = (query) => {
+  //   var filtered = SearchWordData.filter(each => {
+  //     var eachStr = each;
+  //     return eachStr.includes(query);
+  //   });
+  //   return filtered;
+  // }
 
   render() {
     const { query } = this.state;
-    const data = this.filterData(query.toLowerCase());
+    //const data = this.filterData(query);
     //console.log('data',data);
     return (
       <View>
@@ -74,22 +74,22 @@ export default class SearchBox extends Component {
           </View>
         </View>
         {
-          query != '' && data.length > 0 &&
-          <ScrollView style={[styles.autoCompleteContainer,
-           { height: data.length * 15 > 150 ? 150 + 5 : data.length * 15 }
-          ]}>
-            {
-              data.map((each, index) => {
-                return (
-                  <View key={index}>
-                    <TouchableOpacity onPress={() => this.setState({ query: each })}>
-                      <Text style={{marginLeft: normalize(5)}}>{each}</Text>
-                    </TouchableOpacity>
-                  </View>
-                )
-              })
-            }
-          </ScrollView>
+          // query != '' && data.length > 0 &&
+          // <ScrollView style={[styles.autoCompleteContainer,
+          //  { height: data.length * 15 > 150 ? 150 + 5 : data.length * 15 }
+          // ]}>
+          //   {
+          //     data.map((each, index) => {
+          //       return (
+          //         <View key={index}>
+          //           <TouchableOpacity onPress={() => this.setState({ query: each })}>
+          //             <Text style={{marginLeft: normalize(5)}}>{each}</Text>
+          //           </TouchableOpacity>
+          //         </View>
+          //       )
+          //     })
+          //   }
+          // </ScrollView>
         }
       </View>
     );

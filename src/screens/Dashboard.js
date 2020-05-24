@@ -150,9 +150,9 @@ export default class DashboardScreen extends Component {
   getCategory = () => {
     var categoryParam = {
       action: 'properties_categories',
-      user_latitude: 40.776611,//LoginInfo.latitude,
-      user_longitude: -73.345718,//LoginInfo.longitude,
-      user_id: 1, //LoginInfo.uniqueid
+      user_latitude: LoginInfo.latitude,
+      user_longitude: LoginInfo.longitude,
+      user_id: LoginInfo.uniqueid
     };
 
     getContentByAction(categoryParam)
@@ -167,11 +167,12 @@ export default class DashboardScreen extends Component {
   }
 
   getFeatureProperty = () => {
+    console.log('type', this.state.listingType);
     var featurePrpertyParam = {
       action: 'feature_properties',
-      user_latitude: 40.776611,//LoginInfo.latitude,
-      user_longitude: -73.345718,// LoginInfo.longitude,      
-      user_id: 1,//LoginInfo.uniqueid,
+      user_latitude: LoginInfo.latitude,
+      user_longitude: LoginInfo.longitude,      
+      user_id: LoginInfo.uniqueid,
       listingtype: this.state.listingType
     };
 
@@ -179,7 +180,7 @@ export default class DashboardScreen extends Component {
     .then((res)=>{
       //console.log('feature property', res)
       var sortedRes = res.sort((a, b) => {return a.properties_displayorder - b.properties_displayorder})
-      this.setState({ featurePropertyData: res });
+      this.setState({ featurePropertyData: sortedRes });
     })
     .catch((err)=>{
       console.log('get feature property error', err)
@@ -189,9 +190,9 @@ export default class DashboardScreen extends Component {
   getSearchWord = () => {
     var searchWordParam = {
       action: 'searchcities',
-      user_latitude: 40.776611,//LoginInfo.latitude,
-      user_longitude: -73.345718,// LoginInfo.longitude,      
-      user_id: 1,//LoginInfo.uniqueid,      
+      user_latitude: LoginInfo.latitude,
+      user_longitude: LoginInfo.longitude,      
+      user_id: LoginInfo.uniqueid,      
     };
 
     getContentByAction(searchWordParam)
@@ -251,8 +252,7 @@ export default class DashboardScreen extends Component {
                 initial={0}
                 onPress={value => {
                   this.setState({ listingType: value });
-                  this.getFeatureProperty();
-                  this.setState({ refresh: !this.state.refresh });
+                  this.getFeatureProperty();                  
                 }}
                 backgroundColor='#E2E6EC'
                 height={50}
@@ -260,8 +260,8 @@ export default class DashboardScreen extends Component {
                 selectedColor={Colors.blueColor}
                 buttonColor='white'
                 options={[
-                  { label: "BUY", value: "s" },
-                  { label: "RENT", value: "r" }
+                  { label: "BUY", value: "r" },//?
+                  { label: "RENT", value: "s" }//?
                 ]}
               />
             </View>

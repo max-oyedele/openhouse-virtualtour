@@ -28,7 +28,7 @@ import {
   SideMenu,
   SignModal,
 } from '@components';
-import { Colors, Images, PropertyCardTheme, RouteParam } from '@constants';
+import { Colors, Images, PropertyCardTheme, RouteParam, LoginInfo } from '@constants';
 import { getContentByAction } from '../api/rest';
 
 export default class FavoritesScreen extends Component {
@@ -235,9 +235,9 @@ export default class FavoritesScreen extends Component {
   getData = () => {
     var dataParam = {
       action: 'properties_viewed_or_favorited',
-      user_latitude: 40.776611,//LoginInfo.latitude,
-      user_longitude: -73.345718,// LoginInfo.longitude,      
-      user_id: 1,//LoginInfo.uniqueid,
+      user_latitude: LoginInfo.latitude,
+      user_longitude: LoginInfo.longitude,      
+      user_id: LoginInfo.uniqueid,
       page_type: this.state.tab,
     };
 

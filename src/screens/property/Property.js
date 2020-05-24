@@ -24,7 +24,6 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import MapView from 'react-native-maps';
 import { Marker } from 'react-native-maps';
 
-import { Colors, Images, RouteParam } from '@constants';
 import {
   BrowseCard,
   Button,
@@ -37,6 +36,7 @@ import {
   SignModal,
 } from '@components';
 
+import { Colors, Images, RouteParam, LoginInfo } from '@constants';
 import { getContentByAction, postSaveOrRemoveProperty } from '../../api/rest';
 
 export default class PropertyScreen extends Component {
@@ -104,9 +104,9 @@ export default class PropertyScreen extends Component {
   getProperty = () => {
     var propertyParam = {
       action: 'property_detail',
-      user_latitude: 40.776611,//LoginInfo.latitude,
-      user_longitude: -73.345718,// LoginInfo.longitude,      
-      user_id: 1,//LoginInfo.uniqueid,
+      user_latitude: LoginInfo.latitude,
+      user_longitude: LoginInfo.longitude,      
+      user_id: LoginInfo.uniqueid,
       property_recordno: RouteParam.param1,//this.props.route.params.propertyRecordNo
     };
 
@@ -126,9 +126,9 @@ export default class PropertyScreen extends Component {
   getPropertyPhoto = () => {
     var photoParam = {
       action: 'property_photos',
-      user_latitude: 40.776611,//LoginInfo.latitude,
-      user_longitude: -73.345718,// LoginInfo.longitude,      
-      user_id: 1,//LoginInfo.uniqueid,
+      user_latitude: LoginInfo.latitude,
+      user_longitude: LoginInfo.longitude,      
+      user_id: LoginInfo.uniqueid,
       property_recordno: RouteParam.param1,//this.props.route.params.propertyRecordNo
     };
 
@@ -145,9 +145,9 @@ export default class PropertyScreen extends Component {
   getAgentCard = () => {
     var cardParam = {
       action: 'agent_card',
-      user_latitude: 40.776611,//LoginInfo.latitude,
-      user_longitude: -73.345718,// LoginInfo.longitude,      
-      user_id: 1,//LoginInfo.uniqueid,
+      user_latitude: LoginInfo.latitude,
+      user_longitude: LoginInfo.longitude,      
+      user_id: LoginInfo.uniqueid,
       user_assigned_agent: 0, //hard code
       property_recordno: RouteParam.param1,//this.props.route.params.propertyRecordNo
     };
@@ -171,9 +171,9 @@ export default class PropertyScreen extends Component {
     var addRemoveFlag = this.state.isFavorite ? 'remove' : 'add';
     var favoriteParam = {
       action: 'favorites_properties',
-      user_latitude: 40.776611,//LoginInfo.latitude,
-      user_longitude: -73.345718,// LoginInfo.longitude,      
-      user_id: 1,//LoginInfo.uniqueid,
+      user_latitude: LoginInfo.latitude,
+      user_longitude: LoginInfo.longitude,      
+      user_id: LoginInfo.uniqueid,
       user_action: addRemoveFlag,
       property_recordno: RouteParam.param1,//this.props.route.params.propertyRecordNo
     };

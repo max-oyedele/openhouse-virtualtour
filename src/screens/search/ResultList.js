@@ -30,7 +30,7 @@ import {
   SideMenu,
   SignModal,
 } from '@components';
-import { Colors, Images, PropertyCardTheme, SearchBy, SearchWordData } from '@constants';
+import { Colors, Images, PropertyCardTheme, LoginInfo, SearchBy, SearchWordData } from '@constants';
 import { getContentByAction } from '../../api/rest';
 
 export default class ResultListScreen extends Component {
@@ -237,9 +237,9 @@ export default class ResultListScreen extends Component {
   getSearchResult = () => {
     var searchParam = {
       action: 'property_search',
-      user_latitude: 40.776611,//LoginInfo.latitude,
-      user_longitude: -73.345718,// LoginInfo.longitude,      
-      user_id: 1,//LoginInfo.uniqueid,      
+      user_latitude: LoginInfo.latitude,
+      user_longitude: LoginInfo.longitude,      
+      user_id: LoginInfo.uniqueid,      
       search_city: SearchBy.query,
       listingtype: SearchBy.listingType,
       propertytype: SearchBy.propertyType,

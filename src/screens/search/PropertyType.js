@@ -17,7 +17,7 @@ import normalize from 'react-native-normalize';
 import { RFPercentage } from "react-native-responsive-fontsize";
 import SwitchSelector from 'react-native-switch-selector';
 
-import { Colors, Images, PropertyCardTheme } from '@constants';
+import { Colors, Images, PropertyCardTheme, LoginInfo } from '@constants';
 import {
   BrowseCard,
   Button,
@@ -76,9 +76,9 @@ export default class PropertyTypeScreen extends Component {
   getCategory = () => {
     var categoryParam = {
       action: 'properties_categories',
-      user_latitude: 40.776611,//LoginInfo.latitude,
-      user_longitude: -73.345718,//LoginInfo.longitude,
-      user_id: 1, //LoginInfo.uniqueid
+      user_latitude: LoginInfo.latitude,
+      user_longitude: LoginInfo.longitude,
+      user_id: LoginInfo.uniqueid
     };
     
     getContentByAction(categoryParam)

@@ -41,25 +41,8 @@ export default class FormScreen extends Component {
 
   }
 
-  handleSendCode = () => {
-    // Request to send OTP
-    if (this.validatePhoneNumber()) {
-      auth()
-        .signInWithPhoneNumber(this.state.telephone)
-        .then(confirmResult => {
-          this.setState({ confirmResult });
-        })
-        .catch(error => {
-          alert(error.message)
-          console.log(error)
-        })
-    } else {
-      alert('Invalid Phone Number')
-    }
-  }
-
   validatePhoneNumber = () => {
-    var regexp = /^\+[0-9]?()[0-9](\s|\S)(\d[0-9]{8,16})$/
+    var regexp = /^[0-9]?()[0-9](\s|\S)(\d[0-9]{8,16})$/
     return regexp.test(this.state.telephone)
   }
 
@@ -97,7 +80,7 @@ export default class FormScreen extends Component {
         })
 
       auth()
-        .signInWithPhoneNumber(this.state.telephone)
+        .signInWithPhoneNumber('+' + this.state.telephone)
         .then(confirmResult => {
           this.setState({ confirmResult });
           this.props.navigation.navigate('SMS', { confirmResult: confirmResult });
