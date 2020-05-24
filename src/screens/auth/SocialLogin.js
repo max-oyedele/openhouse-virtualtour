@@ -42,7 +42,7 @@ export default class SocialLoginScreen extends Component {
     }
   }
 
-  componentDidMount() {
+  componentDidMount() {        
     //temp
     //this.submit();
   }

@@ -234,7 +234,7 @@ export default class ResultListScreen extends Component {
     //this.props.navigation.navigate('Location');
   }
 
-  getSearchResult = () => {    
+  getSearchResult = () => {
     var searchParam = {
       action: 'property_search',
       user_latitude: 40.776611,//LoginInfo.latitude,

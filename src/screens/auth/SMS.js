@@ -37,86 +37,45 @@ export default class SMSScreen extends Component {
   }
 
   componentDidMount() {
-    
-  }     
-
-  validatePhoneNumber = () => {
-    var regexp = /^\+[0-9]?()[0-9](\s|\S)(\d[0-9]{8,16})$/
-    return regexp.test(LoginInfo.telephone)
+    console.log(this.props.route.params.confirmResult);
+    let confirmResult = this.props.route.params.confirmResult;
+    this.setState({ confirmResult: confirmResult });
   }
-  
-  handleVerifyCode = () => {
-    // Request for OTP verification
-    const { confirmResult, verificationCode } = this.state
-    if (verificationCode.length == 6) {
-      confirmResult
-        .confirm(verificationCode)
-        .then(user => {
-          this.setState({ userId: user.uid })
-          alert(`Verified! ${user.uid}`)
-        })
-        .catch(error => {
-          alert(error.message)
-          console.log(error)
-        })
-    } else {
-      alert('Please enter a 6 digit OTP code.')
-    }
-  }
-  
-  handleSendCode = () => {
-    // Request to send OTP
-    if (this.validatePhoneNumber()) {
-        auth()
-        .signInWithPhoneNumber(LoginInfo.telephone)
-        .then(confirmResult => {
-          this.setState({ confirmResult })
-        })
-        .catch(error => {
-          alert(error.message)
-
-          console.log(error)
-        })
-    } else {
-      alert('Invalid Phone Number')
-    }
-  }
-
 
   onConfirm = async () => {
-    const { confirmResult, verificationCode } = this.state
+    const { confirmResult, verificationCode } = this.state;
     if (verificationCode.length == 6) {
       confirmResult
         .confirm(verificationCode)
         .then(user => {
-          this.setState({ userId: user.uid })
-          alert(`Verified! ${user.uid}`)
+          this.setState({ userId: user.uid });
+          Alert.alert(`Verified! ${user.uid}`);
           this.submit();
         })
         .catch(error => {
-          alert(error.message)
-          console.log(error)
+          console.log('verification error', error);
+          Alert.alert('Verification Code is wrong!');
         })
     } else {
-      alert('Please enter a 6 digit OTP code.')
+      Alert.alert('Please enter a 6 digit OTP code.')
     }
   }
 
   submit = async () => {
     let bodyFormData = new FormData();
     bodyFormData.append('action', 'newaccount');
-    bodyFormData.append('uniqueid', LoginInfo.uniqueid); 
-    bodyFormData.append('fullname', LoginInfo.fullname); 
-    bodyFormData.append('email', LoginInfo.email); 
-    bodyFormData.append('telephone', LoginInfo.telephone); 
-    bodyFormData.append('photourl', LoginInfo.photourl); 
+    bodyFormData.append('uniqueid', LoginInfo.uniqueid);
+    bodyFormData.append('fullname', LoginInfo.fullname);
+    bodyFormData.append('email', LoginInfo.email);
+    bodyFormData.append('telephone', LoginInfo.telephone);
+    bodyFormData.append('photourl', LoginInfo.photourl);
     bodyFormData.append('providerid', LoginInfo.providerid);
     bodyFormData.append('email_verified', LoginInfo.email_verified);
     bodyFormData.append('latitude', LoginInfo.latitude);
-    bodyFormData.append('longitude', LoginInfo.longitude); 
+    bodyFormData.append('longitude', LoginInfo.longitude);
     bodyFormData.append('appid', 'com.openhousemarketingsystem.open');
     bodyFormData.append('referredby', 0);
-        
+
     await postLoginInfo(bodyFormData)
       .then((res) => console.log('post login info success', res))
       .catch((err) => console.log('post login info error', err))
@@ -138,7 +97,6 @@ export default class SMSScreen extends Component {
             <View style={styles.txtLabelContainer}>
               <Text style={styles.txtLabel}>Please enter the verification code from the text message we just sent you.</Text>
             </View>
-            <View style={styles.verificationView}>
             <View style={styles.inputBoxContainer}>
               <TextInput
                 style={styles.txtInput}
@@ -153,7 +111,6 @@ export default class SMSScreen extends Component {
             <View style={styles.nextContainer}>
               <Button btnTxt='Confirm' btnStyle={{ width: '100%', height: normalize(50, 'height'), color: 'blue' }} onPress={() => this.onConfirm()} />
             </View>
-          </View>
           </View>
         </ImageBackground>
       </KeyboardAvoidingView>

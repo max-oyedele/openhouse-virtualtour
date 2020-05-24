@@ -31,7 +31,7 @@ export default class SearchBox extends Component {
   filterData = (query) => {
     var filtered = SearchWordData.filter(each => {
       var eachStr = each.toLowerCase();
-      return eachStr.includes(query)
+      return eachStr.includes(query);
     });
     return filtered;
   }

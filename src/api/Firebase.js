@@ -13,15 +13,18 @@ import appleAuth, {
   AppleAuthRequestOperation,
 } from '@invertase/react-native-apple-authentication';
 
-// firebase.initializeApp({
-//   apiKey: "AIzaSyBrMHAsTeASvIYb6077oIlasIrT1N0J-Co",       // Auth / General Use
-//   appId: "1:1006237194994:ios:e45673ac04425952450e6b",      // General Use
-//   projectId: "open-6eecb",                               // General Use
-//   // authDomain: "YOUR_APP.firebaseapp.com",               // Auth with popup/redirect
-//   databaseURL: "https://open-6eecb.firebaseio.com",      // Realtime Database
-//   storageBucket: "open-6eecb.appspot.com",               // Storage
-//   messagingSenderId: "1006237194994"                        // Cloud Messaging
-// });
+
+// export const firebaseInit = () => {  
+//   firebase.initializeApp({
+//     apiKey: "AIzaSyBrMHAsTeASvIYb6077oIlasIrT1N0J-Co",       // Auth / General Use
+//     appId: "1:1006237194994:ios:e45673ac04425952450e6b",      // General Use
+//     projectId: "open-6eecb",                               // General Use
+//     // authDomain: "YOUR_APP.firebaseapp.com",               // Auth with popup/redirect
+//     databaseURL: "https://open-6eecb.firebaseio.com",      // Realtime Database
+//     storageBucket: "open-6eecb.appspot.com",               // Storage
+//     messagingSenderId: "1006237194994"                        // Cloud Messaging
+//   });
+// }
 
 export const appleSignin = () => {
   return new Promise(async (resolve, reject) => {

@@ -44,10 +44,10 @@ export default class FormScreen extends Component {
   handleSendCode = () => {
     // Request to send OTP
     if (this.validatePhoneNumber()) {
-        auth()
+      auth()
         .signInWithPhoneNumber(this.state.telephone)
         .then(confirmResult => {
-          this.setState({ confirmResult })
+          this.setState({ confirmResult });
         })
         .catch(error => {
           alert(error.message)
@@ -63,28 +63,7 @@ export default class FormScreen extends Component {
     return regexp.test(this.state.telephone)
   }
 
-  handleVerifyCode = () => {
-    // Request for OTP verification
-    const { confirmResult, verificationCode } = this.state
-    if (verificationCode.length == 6) {
-      confirmResult
-        .confirm(verificationCode)
-        .then(user => {
-          this.setState({ userId: user.uid })
-          alert(`Verified! ${user.uid}`)
-          this.onOK();
-        })
-        .catch(error => {
-          alert(error.message)
-          console.log(error)
-        })
-    } else {
-      alert('Please enter a 6 digit OTP code.')
-    }
-
-  }
-
-  onOK = () => {    
+  onNext = () => {
     if (this.state.fullname == null || this.state.fullname == '') {
       Alert.alert('Please enter your full name');
       return;
@@ -114,37 +93,22 @@ export default class FormScreen extends Component {
         })
         .catch(error => {
           console.log('get location error', error)
-          Alert.alert('Cannot get your location'); 
+          Alert.alert('Cannot get your location');
         })
-        
-        this.submit()
+
+      auth()
+        .signInWithPhoneNumber(this.state.telephone)
+        .then(confirmResult => {
+          this.setState({ confirmResult });
+          this.props.navigation.navigate('SMS', { confirmResult: confirmResult });
+        })
+        .catch(error => {          
+          console.log('signInWithPhoneNumber', error);
+        })
     }
     else {
-      alert('Invalid Phone Number')
+      Alert.alert('Invalid Phone Number')
     }
-    
-  }
-
-  submit = async () => {
-    let bodyFormData = new FormData();
-    bodyFormData.append('action', 'newaccount');
-    bodyFormData.append('uniqueid', LoginInfo.uniqueid); 
-    bodyFormData.append('fullname', LoginInfo.fullname); 
-    bodyFormData.append('email', LoginInfo.email); 
-    bodyFormData.append('telephone', LoginInfo.telephone); 
-    bodyFormData.append('photourl', LoginInfo.photourl); 
-    bodyFormData.append('providerid', LoginInfo.providerid);
-    bodyFormData.append('email_verified', LoginInfo.email_verified);
-    bodyFormData.append('latitude', LoginInfo.latitude);
-    bodyFormData.append('longitude', LoginInfo.longitude); 
-    bodyFormData.append('appid', 'com.openhousemarketingsystem.open');
-    bodyFormData.append('referredby', 0);
-        
-    await postLoginInfo(bodyFormData)
-      .then((res) => console.log('post login info success', res))
-      .catch((err) => console.log('post login info error', err))
-
-    this.props.navigation.navigate('Welcome');
   }
 
   render() {
@@ -193,36 +157,14 @@ export default class FormScreen extends Component {
                 placeholder='Cell Phone Number'
                 placeholderTextColor={Colors.weakBlackColor}
                 editable={LoginInfo.telephone ? false : true}
-                onChangeText={(telephone) => this.setState({ telephone })}                
+                onChangeText={(telephone) => this.setState({ telephone })}
               />
             </View>
             <View style={styles.nextContainer}>
-              <Button btnTxt='Send' 
-                btnStyle={{ width: '100%', height: normalize(50, 'height'), color: 'blue' }} 
-                onPress={this.handleSendCode} />
-            </View>
-            { this.state.confirmResult &&
-            <View style={styles.inputBoxContainer}>
-              <TextInput
-                style={styles.txtInput}
-                autoFocus={true}
-                keyboardType={'numeric'}
-                value={this.state.verificationCode}
-                placeholder='Verification Code'
-                placeholderTextColor={Colors.weakBlackColor}
-                editable={LoginInfo.telephone ? false : true}
-                onChangeText={(verificationCode) => this.setState({ verificationCode })}
-              />
-            </View>
-            }
-            { this.state.confirmResult &&
-
-              <View style={styles.nextContainer}>
-                <Button btnTxt='Confirm' 
-                  btnStyle={{ width: '100%', height: normalize(50, 'height'), color: 'blue' }} 
-                  onPress={this.handleVerifyCode} />
-              </View>
-            }
+              <Button btnTxt='Next'
+                btnStyle={{ width: '100%', height: normalize(50, 'height'), color: 'blue' }}
+                onPress={() => this.onNext()} />
+            </View>            
           </View>
         </ImageBackground>
       </KeyboardAvoidingView>

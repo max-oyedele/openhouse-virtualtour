@@ -217,7 +217,8 @@ export default class DashboardScreen extends Component {
 
   onSearch = (query) => { 
     SearchBy.query = query;
-    if(query == '') this.props.navigation.navigate('SearchStack', {screen: 'SearchBy'});
+    console.log(SearchBy.query);
+    if(query == null ) this.props.navigation.navigate('SearchStack', {screen: 'SearchBy'});
     else this.props.navigation.navigate('SearchStack');
   }
 
