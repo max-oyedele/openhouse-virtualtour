@@ -24,8 +24,9 @@ export const LoginInfo = {
 }
 
 export const RouteParam = {
-  param1: '',
-  param2: '',
+  loginEssentialInfo: {},
+  confirmResult: {},
+  propertyRecordNo: '',  
 }
 
 export const SearchWordData = [];

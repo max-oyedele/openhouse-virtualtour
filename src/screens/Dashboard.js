@@ -208,7 +208,7 @@ export default class DashboardScreen extends Component {
   }
 
   onPropertyPress = (propertyRecordNo) => { 
-    RouteParam.param1 = propertyRecordNo;    
+    RouteParam.propertyRecordNo = propertyRecordNo;    
     this.props.navigation.navigate('PropertyStack');
   }
 

@@ -107,7 +107,7 @@ export default class PropertyScreen extends Component {
       user_latitude: LoginInfo.latitude,
       user_longitude: LoginInfo.longitude,      
       user_id: LoginInfo.uniqueid,
-      property_recordno: RouteParam.param1,//this.props.route.params.propertyRecordNo
+      property_recordno: RouteParam.propertyRecordNo,//this.props.route.params.propertyRecordNo
     };
 
     getContentByAction(propertyParam)
@@ -129,7 +129,7 @@ export default class PropertyScreen extends Component {
       user_latitude: LoginInfo.latitude,
       user_longitude: LoginInfo.longitude,      
       user_id: LoginInfo.uniqueid,
-      property_recordno: RouteParam.param1,//this.props.route.params.propertyRecordNo
+      property_recordno: RouteParam.propertyRecordNo,//this.props.route.params.propertyRecordNo
     };
 
     getContentByAction(photoParam)
@@ -149,7 +149,7 @@ export default class PropertyScreen extends Component {
       user_longitude: LoginInfo.longitude,      
       user_id: LoginInfo.uniqueid,
       user_assigned_agent: 0, //hard code
-      property_recordno: RouteParam.param1,//this.props.route.params.propertyRecordNo
+      property_recordno: RouteParam.propertyRecordNo,//this.props.route.params.propertyRecordNo
     };
 
     getContentByAction(cardParam)
@@ -175,7 +175,7 @@ export default class PropertyScreen extends Component {
       user_longitude: LoginInfo.longitude,      
       user_id: LoginInfo.uniqueid,
       user_action: addRemoveFlag,
-      property_recordno: RouteParam.param1,//this.props.route.params.propertyRecordNo
+      property_recordno: RouteParam.propertyRecordNo,//this.props.route.params.propertyRecordNo
     };
 
     let bodyFormData = new FormData();

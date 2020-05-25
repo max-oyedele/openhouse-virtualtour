@@ -20,7 +20,7 @@ import { postLoginInfo } from '../../api/rest';
 import { signInWithPhoneNumber } from '../../api/Firebase';
 import auth from '@react-native-firebase/auth'
 
-import { Colors, Images, LoginInfo } from '@constants';
+import { Colors, Images, LoginInfo, RouteParam } from '@constants';
 import {
   Button,
   Header,
@@ -33,6 +33,7 @@ export default class SMSScreen extends Component {
       verificationCode: '',
       confirmResult: null,
       userId: '',
+      isBtnShow: false
     }
   }
 
@@ -42,14 +43,27 @@ export default class SMSScreen extends Component {
     this.setState({ confirmResult: confirmResult });
   }
 
+  onInputCode = (verificationCode) => {
+    this.setState({ verificationCode: verificationCode });
+    if (verificationCode.length > 6) {
+      this.setState({ isBtnShow: true });
+    }
+  }
+
   onConfirm = async () => {
     const { confirmResult, verificationCode } = this.state;
     if (verificationCode.length == 6) {
       confirmResult
         .confirm(verificationCode)
         .then(user => {
-          this.setState({ userId: user.uid });
-          Alert.alert(`Verified! ${user.uid}`);
+          // this.setState({ userId: user.uid });
+          // Alert.alert(`Verified! ${user.uid}`);
+          Alert.alert('Verified');
+
+          LoginInfo.fullname = RouteParam.loginEssentialInfo.fullname;
+          LoginInfo.email = RouteParam.loginEssentialInfo.email;
+          LoginInfo.telephone = RouteParam.loginEssentialInfo.telephone;
+
           this.submit();
         })
         .catch(error => {
@@ -105,12 +119,14 @@ export default class SMSScreen extends Component {
                 value={this.state.verificationCode}
                 placeholder='Code'
                 placeholderTextColor={Colors.weakBlackColor}
-                onChangeText={(verificationCode) => this.setState({ verificationCode })}
+                onChangeText={(verificationCode) => this.onInputCode(verificationCode)}
               />
             </View>
-            <View style={styles.nextContainer}>
-              <Button btnTxt='Confirm' btnStyle={{ width: '100%', height: normalize(50, 'height'), color: 'blue' }} onPress={() => this.onConfirm()} />
-            </View>
+            { this.state.isBtnShow &&  
+              <View style={styles.nextContainer}>
+                <Button btnTxt='Confirm' btnStyle={{ width: '100%', height: normalize(50, 'height'), color: 'blue' }} onPress={() => this.onConfirm()} />
+              </View>
+            }
           </View>
         </ImageBackground>
       </KeyboardAvoidingView>

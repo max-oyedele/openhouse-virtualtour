@@ -15,7 +15,7 @@ import {
   Platform,
 } from "react-native";
 import normalize from "react-native-normalize";
-import GetLocation from 'react-native-get-location';
+
 import auth from '@react-native-firebase/auth'
 import { postLoginInfo } from '../../api/rest';
 
@@ -24,6 +24,7 @@ import {
   Button,
   Header,
 } from '@components';
+import { RouteParam } from "../../constants";
 
 export default class FormScreen extends Component {
   constructor(props) {
@@ -31,9 +32,7 @@ export default class FormScreen extends Component {
     this.state = {
       fullname: LoginInfo.fullname,
       email: LoginInfo.email,
-      telephone: LoginInfo.telephone,
-      confirmResult: null,
-      verificationCode: '',
+      telephone: LoginInfo.telephone,            
     }
   }
 
@@ -61,31 +60,19 @@ export default class FormScreen extends Component {
     }
 
     if (this.validatePhoneNumber()) {
-      LoginInfo.fullname = this.state.fullname;
-      LoginInfo.email = this.state.email;
-      LoginInfo.telephone = this.state.telephone;
-
-      GetLocation.getCurrentPosition({
-        enableHighAccuracy: true,
-        timeout: 15000,
-      })
-        .then(location => {
-          //console.log(location);
-          LoginInfo.latitude = location.latitude;
-          LoginInfo.longitude = location.longitude;
-        })
-        .catch(error => {
-          console.log('get location error', error)
-          Alert.alert('Cannot get your location');
-        })
-
       auth()
         .signInWithPhoneNumber('+' + this.state.telephone)
         .then(confirmResult => {
-          this.setState({ confirmResult });
-          this.props.navigation.navigate('SMS', { confirmResult: confirmResult });
+          RouteParam.confirmResult = confirmResult;
+          RouteParam.loginEssentialInfo = {
+            fullname: this.state.fullname,
+            email: this.state.email,
+            telephone: this.state.telephone
+          };
+          this.props.navigation.navigate('SMS');
         })
-        .catch(error => {          
+        .catch(error => {     
+          Alert.alert('Signin with your phone is failed');
           console.log('signInWithPhoneNumber', error);
         })
     }

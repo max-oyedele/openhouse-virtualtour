@@ -99,6 +99,7 @@ export default class SocialLoginScreen extends Component {
         }        
       })
       .catch((err) => {
+        Alert.alert('Apple SignIn is failed');
         console.log('apple signin error', err)
       })
   }
@@ -123,6 +124,7 @@ export default class SocialLoginScreen extends Component {
         }        
       })
       .catch((err) => {
+        Alert.alert('Facebook SignIn is failed');
         console.log('fb signin error', err)
       })
   }
@@ -148,6 +150,7 @@ export default class SocialLoginScreen extends Component {
         }        
       })
       .catch((err) => {
+        Alert.alert('Google SignIn is failed');
         console.log('google signin error', err)
       })
   }
@@ -158,6 +161,7 @@ export default class SocialLoginScreen extends Component {
         console.log('twitter signin success', res);        
       })
       .catch((err) => {
+        Alert.alert('Twitter SignIn is failed');
         console.log('twitter signin error', err)
       })
   }

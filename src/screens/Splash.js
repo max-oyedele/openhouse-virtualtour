@@ -15,8 +15,9 @@ import {
 import normalize from "react-native-normalize";
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 import { RFPercentage, RFValue } from "react-native-responsive-fontsize";
+import GetLocation from 'react-native-get-location';
 
-import { Colors, Images } from '@constants';
+import { Colors, Images, LoginInfo } from '@constants';
 import {
   BrowseCard,
   Button,
@@ -38,10 +39,26 @@ export default class SplashScreen extends Component {
   }
 
   componentDidMount() {
-    setTimeout(()=>{
-      this.props.navigation.navigate('Auth');      
-    }, 2000);
-  }  
+    this.getLocation();
+  } 
+  
+  getLocation = () => {
+    GetLocation.getCurrentPosition({
+      enableHighAccuracy: true,
+      timeout: 15000,
+    })
+      .then(location => {
+        //console.log(location);
+        LoginInfo.latitude = location.latitude;
+        LoginInfo.longitude = location.longitude;
+
+        this.props.navigation.navigate('Auth');
+      })
+      .catch(error => {
+        console.log('get location error', error)
+        Alert.alert('Cannot get your location');
+      })
+  }
 
   render() {
     return (
