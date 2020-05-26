@@ -30,30 +30,28 @@ export default class SMSScreen extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      verificationCode: '',
-      confirmResult: null,
+      verificationCode: '',      
       userId: '',
       isBtnShow: false
     }
   }
 
-  componentDidMount() {
-    console.log(this.props.route.params.confirmResult);
-    let confirmResult = this.props.route.params.confirmResult;
-    this.setState({ confirmResult: confirmResult });
+  componentDidMount() {   
+    
   }
 
   onInputCode = (verificationCode) => {
     this.setState({ verificationCode: verificationCode });
-    if (verificationCode.length > 6) {
+    if (verificationCode.length == 6) {
       this.setState({ isBtnShow: true });
     }
+    else this.setState({ isBtnShow: false });
   }
 
   onConfirm = async () => {
-    const { confirmResult, verificationCode } = this.state;
+    const { verificationCode } = this.state;
     if (verificationCode.length == 6) {
-      confirmResult
+      RouteParam.confirmResult
         .confirm(verificationCode)
         .then(user => {
           // this.setState({ userId: user.uid });
