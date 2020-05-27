@@ -14,12 +14,11 @@ import {
   FlatList
 } from "react-native";
 import normalize from 'react-native-normalize';
-import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
+import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import { RFPercentage, RFValue } from "react-native-responsive-fontsize";
 
 import Slider from 'react-native-slider';
 
-import { Colors, Images, PropertyCardTheme } from '@constants';
 import {
   BrowseCard,
   Button,
@@ -31,58 +30,26 @@ import {
   SideMenu,
   SignModal
 } from '@components';
+import { Colors, Images, PropertyCardTheme, SearchBy } from '@constants';
 
 export default class SearchByScreen extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      condition: {
-        fromPrice: 100,
-        toPrice: 1000,
-        bedRooms: 1,
-        bathRooms: 3,
-        distance: 0.3,
-        propertyType: [
-          {
-            name: 'Single Family Home',
-            checked: true
-          },
-          {
-            name: 'Multi-Family Home',
-            checked: false
-          },
-          {
-            name: 'Condominum',
-            checked: false
-          },
-          {
-            name: 'Co-Op',
-            checked: false
-          },
-          {
-            name: 'Timeshare',
-            checked: false
-          },
-          {
-            name: 'Rental Property',
-            checked: false
-          },
-          {
-            name: 'Commercial Property',
-            checked: false
-          },
-        ],
-        numberOfRooms: [
-          {
-            name: 'BEDROOMS',
-            count: 1
-          },
-          {
-            name: 'BATHROOMS',
-            count: 1
-          },
-        ]
-      },
+      numberOfRooms: [
+        {
+          name: 'BEDROOMS',
+          count: SearchBy.bedrooms
+        },
+        {
+          name: 'BATHROOMS',
+          count: SearchBy.bathrooms
+        },
+      ],
+      query: '',
+      distance: SearchBy.distance,
+      priceFrom: SearchBy.priceFrom.toString(),
+      priceTo: SearchBy.priceTo.toString(),
     }
   }
 
@@ -94,7 +61,23 @@ export default class SearchByScreen extends Component {
     //this.props.navigation.navigate('Location');
   }
 
-  render() {
+  onUpdate = () => {
+    if(this.state.priceFrom == '' || this.state.priceTo == ''){
+      Alert.alert('Please enter the price');
+      return;
+    }
+    
+    //SearchBy.query = this.state.query;
+    SearchBy.priceFrom = this.state.priceFrom;
+    SearchBy.priceTo = this.state.priceTo;
+    SearchBy.bedrooms = this.state.numberOfRooms[0].count;
+    SearchBy.bathrooms = this.state.numberOfRooms[1].count;
+    SearchBy.distance = this.state.distance;   
+    
+    this.props.navigation.goBack(null);
+  }
+
+  render() {    
     return (
       <View style={styles.container}>
         <View style={{ width: '100%' }}>
@@ -102,23 +85,26 @@ export default class SearchByScreen extends Component {
         </View>
 
         <View style={styles.body}>
-          <View style={styles.eachBigLineContainer}>
-            <SearchBox boxStyle={{ width: width*0.9, height: normalize(40, 'height'), backgroundColor: Colors.searchBackColor, borderColor: Colors.blueColor, btnColor: Colors.blueColor }} onSearch={this.onSearch} />
-          </View>
+          {/* <View style={styles.eachBigLineContainer}>
+            <SearchBox boxStyle={{ width: width * 0.9, height: normalize(40, 'height'), backgroundColor: Colors.searchBackColor, borderColor: Colors.blueColor, btnColor: Colors.blueColor }} onSearch={this.onSearch} />
+          </View> */}
 
           <View style={[styles.eachBigLineContainer, { flexDirection: 'column' }]}>
             <View style={{ width: '100%', height: '40%', flexDirection: 'row', paddingTop: normalize(10, 'height') }}>
               <Text style={{ fontFamily: 'SFProText-Semibold', fontSize: RFPercentage(2), color: Colors.blackColor }}>SEARCH WITHIN</Text>
-              <Text style={{ fontFamily: 'SFProText-Semibold', fontSize: RFPercentage(2), color: Colors.blueColor }}> {this.state.condition.distance * 100} MILES</Text>
-            </View>            
+              <Text style={{ fontFamily: 'SFProText-Semibold', fontSize: RFPercentage(2), color: Colors.blueColor }}> {this.state.distance} MILES</Text>
+            </View>
             <Slider
               // style={{width: '80%', height: '30%'}}
+              minimumValue={1}
+              maximumValue={10000000}
+              step={1}
               minimumTrackTintColor='#2A5FA4'
               maximumTrackTintColor='#11DBB3'
               thumbTintColor={Colors.blueColor}
-              trackStyle={{width: normalize(330), height: normalize(1.5, 'height')}}
-              value={this.state.condition.distance}
-              onValueChange={(value) => {let condition = this.state.condition; condition.distance = value; this.setState({ condition: condition })}} />
+              trackStyle={{ width: normalize(330), height: normalize(1.5, 'height') }}
+              value={this.state.distance}
+              onValueChange={(value) => { this.setState({ distance: value }) }} />
           </View>
 
           <View style={[styles.eachBigLineContainer, { flexDirection: 'column', justifyContent: 'center' }]}>
@@ -127,11 +113,25 @@ export default class SearchByScreen extends Component {
             </View>
             <View style={{ width: '100%', height: '50%', flexDirection: 'row', alignItems: 'center' }}>
               <View style={{ backgroundColor: Colors.searchBackColor, width: '45%', height: '80%', borderRadius: 8, borderWidth: 1 }}>
-                <TextInput style={{ width: '100%', height: '100%', paddingLeft: normalize(10) }} placeholder='From' placeholderTextColor={Colors.passiveTxtColor} />
+                <TextInput
+                  style={{ width: '100%', height: '100%', paddingLeft: normalize(10) }}
+                  placeholder='From'
+                  placeholderTextColor={Colors.passiveTxtColor}
+                  keyboardType='numeric'
+                  value={this.state.priceFrom}
+                  onChangeText={(text)=>this.setState({ priceFrom: text })}
+                />
               </View>
               <View style={{ width: '10%', height: '80%', justifyContent: 'center', alignItems: 'center' }}><Text>-</Text></View>
               <View style={{ backgroundColor: Colors.searchBackColor, width: '45%', height: '80%', borderRadius: 8, borderWidth: 1 }}>
-                <TextInput style={{ width: '100%', height: '100%', paddingLeft: normalize(10) }} placeholder='To' placeholderTextColor={Colors.passiveTxtColor} />
+                <TextInput
+                  style={{ width: '100%', height: '100%', paddingLeft: normalize(10) }}
+                  placeholder='To'
+                  placeholderTextColor={Colors.passiveTxtColor}
+                  keyboardType='numeric'
+                  value={this.state.priceTo}
+                  onChangeText={(text)=>this.setState({ priceTo: text })}
+                />
               </View>
             </View>
           </View>
@@ -146,7 +146,7 @@ export default class SearchByScreen extends Component {
           </View>
 
           {
-            this.state.condition.numberOfRooms.map((each, index) => {
+            this.state.numberOfRooms.map((each, index) => {
               return (
                 <View style={styles.eachSmallLineContainer}>
                   <View style={{ width: '50%', height: '100%', justifyContent: 'center' }}>
@@ -155,9 +155,9 @@ export default class SearchByScreen extends Component {
                   <View style={{ width: '50%', height: '100%', flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-end' }}>
                     <View style={{ width: '20%', height: '100%', justifyContent: 'center', alignItems: 'center' }}>
                       <TouchableOpacity style={{ width: '70%', height: '50%' }} onPress={() => {
-                        let condition = this.state.condition;
-                        condition.numberOfRooms[index].count = each.count > 1 ? each.count - 1 : 1;
-                        this.setState({ condition: condition });
+                        let numberOfRooms = this.state.numberOfRooms;
+                        numberOfRooms[index].count = each.count > 0 ? each.count - 1 : 0;
+                        this.setState({ numberOfRooms: numberOfRooms });
                       }}>
                         <Image style={{ width: '100%', height: '100%' }} source={Images.iconMinus} resizeMode='contain' />
                       </TouchableOpacity>
@@ -167,9 +167,9 @@ export default class SearchByScreen extends Component {
                     </View>
                     <View style={{ width: '20%', height: '100%', justifyContent: 'center', alignItems: 'center' }}>
                       <TouchableOpacity style={{ width: '70%', height: '50%' }} onPress={() => {
-                        let condition = this.state.condition;
-                        condition.numberOfRooms[index].count = each.count + 1;
-                        this.setState({ condition: condition });
+                        let numberOfRooms = this.state.numberOfRooms;
+                        numberOfRooms[index].count = each.count + 1;
+                        this.setState({ numberOfRooms: numberOfRooms });
                       }}>
                         <Image style={{ width: '100%', height: '100%' }} source={Images.iconPlus} resizeMode='contain' />
                       </TouchableOpacity>
@@ -181,7 +181,7 @@ export default class SearchByScreen extends Component {
           }
 
           <View style={styles.btnContainer}>
-            <Button btnTxt='Update' btnStyle={{ width: '100%', height: normalize(50, 'height'), color: 'blue' }} onPress={() => this.props.navigation.goBack(null)} />
+            <Button btnTxt='Update' btnStyle={{ width: '100%', height: normalize(50, 'height'), color: 'blue' }} onPress={this.onUpdate} />
           </View>
         </View>
       </View>

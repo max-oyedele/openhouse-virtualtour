@@ -40,7 +40,7 @@ export default class SideMenu extends Component {
   }
 
   render() {
-    let { navigation, onToggleMenu } = this.props;
+    let { navigation, onToggleMenu, onLogout } = this.props;
 
     return (
       <ImageBackground style={styles.container} source={Images.sideBlurBack}>
@@ -77,7 +77,7 @@ export default class SideMenu extends Component {
           </TouchableOpacity>
 
           <View style={[styles.menuItemContainer, {marginTop: normalize(40, 'height')}]}>
-            <Button btnTxt='Log out' btnStyle={{ width: width * 0.45, height: normalize(50, 'height'), color: 'blue' }} onPress={() => onToggleMenu()} />
+            <Button btnTxt='Log out' btnStyle={{ width: width * 0.45, height: normalize(50, 'height'), color: 'blue' }} onPress={() => onLogout()} />
           </View>
         </View>
       </ImageBackground>
@@ -87,7 +87,8 @@ export default class SideMenu extends Component {
 
 SideMenu.propTypes = {
   navigation: PropTypes.object.isRequired,
-  onToggleMenu: PropTypes.func.isRequired
+  onToggleMenu: PropTypes.func.isRequired,
+  onLogout: PropTypes.func.isRequired
 };
 
 const width = Dimensions.get('window').width;

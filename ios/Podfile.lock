@@ -680,6 +680,8 @@ PODS:
     - React
   - RNAppleAuthentication (1.0.0):
     - React
+  - RNCAsyncStorage (1.11.0):
+    - React
   - RNCMaskedView (0.1.10):
     - React
   - RNFBApp (7.1.0):
@@ -775,6 +777,7 @@ DEPENDENCIES:
   - ReactCommon/turbomodule/core (from `../node_modules/react-native/ReactCommon`)
   - ReactNativeGetLocation (from `../node_modules/react-native-get-location`)
   - "RNAppleAuthentication (from `../node_modules/@invertase/react-native-apple-authentication`)"
+  - "RNCAsyncStorage (from `../node_modules/@react-native-community/async-storage`)"
   - "RNCMaskedView (from `../node_modules/@react-native-community/masked-view`)"
   - "RNFBApp (from `../node_modules/@react-native-firebase/app`)"
   - "RNFBAuth (from `../node_modules/@react-native-firebase/auth`)"
@@ -898,6 +901,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-get-location"
   RNAppleAuthentication:
     :path: "../node_modules/@invertase/react-native-apple-authentication"
+  RNCAsyncStorage:
+    :path: "../node_modules/@react-native-community/async-storage"
   RNCMaskedView:
     :path: "../node_modules/@react-native-community/masked-view"
   RNFBApp:
@@ -994,6 +999,7 @@ SPEC CHECKSUMS:
   ReactCommon: ed4e11d27609d571e7eee8b65548efc191116eb3
   ReactNativeGetLocation: 9114734cbe43209e1e86ec8d1d3974ad0c364db3
   RNAppleAuthentication: 954b347c26ffb638265c828a5003ce1fa6971120
+  RNCAsyncStorage: db711e29e5e0500d9bd21aa0c2e397efa45302b1
   RNCMaskedView: f5c7d14d6847b7b44853f7acb6284c1da30a3459
   RNFBApp: 25a6476dfd7aac2bcbe984f569875bcea122895b
   RNFBAuth: 52e7af4244e6adf39237ab8e94d6d51f2c1bf450
@@ -1010,6 +1016,6 @@ SPEC CHECKSUMS:
   Yoga: 3ebccbdd559724312790e7742142d062476b698e
   YogaKit: f782866e155069a2cca2517aafea43200b01fd5a
 
-PODFILE CHECKSUM: d88c2c668ebd149e042b132e0cc55cc8298e82bb
+PODFILE CHECKSUM: 472ab884e7427753bae7ab8cfda5df4a0cd8c57a
 
-COCOAPODS: 1.8.4
+COCOAPODS: 1.9.2

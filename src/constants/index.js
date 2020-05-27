@@ -34,17 +34,19 @@ export const SearchWordData = [];
 export const SearchBy = {
   query: '',
   listingType: 'S',
-  propertyType: 1,
-  priceFrom: 100,
-  priceTo: 10000,
-  bedrooms: 1,
-  bathrooms: 1,
-  distance: 10,
-  sortBy: 'distance',
-  ascdesc: 'asc'
+  propertyTypeIndex: 1,
+  priceFrom: 1,
+  priceTo: 10000000,
+  bedrooms: 0,
+  bathrooms: 0,
+  distance: 1000000,
+  sortBy: 'property_price',
+  sortOrder: 'asc'
 }
 
-export const Preferences = [
+export const PropertyTypeData = [];
+
+export const PreferencesData = [
   { 
     id: 0,   
     question: 'I AM CURRENTLY LOOKING TO...',

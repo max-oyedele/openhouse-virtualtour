@@ -35,7 +35,7 @@
 			<string>Editor</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>fb154500682588188</string>
+				<string>https://open-6eecb.firebaseapp.com/__/auth/handler</string>
 			</array>
 		</dict>
 		<dict>
@@ -69,7 +69,7 @@
 		</dict>
 	</dict>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string></string>
+	<string>Open Requires to access your geo location to operate. Allowing geo location will increase the accuracy of the properties displayed by Open</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>Billabong.ttf</string>

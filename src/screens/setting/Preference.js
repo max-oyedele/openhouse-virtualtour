@@ -20,7 +20,7 @@ import { RFPercentage, RFValue } from "react-native-responsive-fontsize";
 
 import Overlay from 'react-native-modal-overlay';
 
-import { Colors, Images, Preferences } from '@constants';
+import { Colors, Images, PreferencesData } from '@constants';
 import {
   BrowseCard,
   Button,
@@ -56,7 +56,7 @@ export default class PreferenceScreen extends Component {
   }
 
   updatePreference = (index) => {
-    Preferences[this.state.selectedPreferenceIndex].answerIndex = index;
+    PreferencesData[this.state.selectedPreferenceIndex].answerIndex = index;
     this.setState({
       refresh: !this.state.refresh,
       visibleModal: false
@@ -81,7 +81,7 @@ export default class PreferenceScreen extends Component {
         </View>
         <ScrollView style={{ marginTop: normalize(10, 'height') }}>
           {
-            Preferences.map((each, index) => {
+            PreferencesData.map((each, index) => {
               return (
                 <TouchableOpacity key={index} style={styles.eachContainer} onPress={() => this.onClickQuestion(index)}>
                   <View style={styles.questionContainer}>
@@ -113,7 +113,7 @@ export default class PreferenceScreen extends Component {
             <View style={{ width: '86%', height: '100%', justifyContent: 'center', alignItems: 'center' }}>
               {/* <Text style={{ fontFamily: 'SFProText-Semibold', fontSize: RFPercentage(2.2), color: Colors.whiteColor }}>ANSWER</Text> */}
               <Text style={{ fontFamily: 'SFProText-Semibold', fontSize: RFPercentage(2), color: Colors.whiteColor }}>
-                {Preferences[this.state.selectedPreferenceIndex].question}
+                {PreferencesData[this.state.selectedPreferenceIndex].question}
               </Text>
             </View>
             <TouchableOpacity
@@ -127,7 +127,7 @@ export default class PreferenceScreen extends Component {
           <KeyboardAvoidingView style={styles.modalBodyBack} behavior={Platform.OS == "ios" ? "padding" : "height"}>
             <View style={styles.modalQuery}>
               <Text style={{ fontFamily: 'SFProText-Semibold', fontSize: RFPercentage(2.2), color: Colors.whiteColor }}>
-                {Preferences[this.state.selectedPreferenceIndex].subquery}
+                {PreferencesData[this.state.selectedPreferenceIndex].subquery}
               </Text>
             </View>
             <View style={styles.modalBody}>
@@ -137,20 +137,20 @@ export default class PreferenceScreen extends Component {
                 showsVerticalScrollIndicator={isOptionOverFlow ? true : false}
               >
                 {
-                  Preferences[this.state.selectedPreferenceIndex].answerType === 'radio' &&
-                  Preferences[this.state.selectedPreferenceIndex].options.map((each, index) => {
+                  PreferencesData[this.state.selectedPreferenceIndex].answerType === 'radio' &&
+                  PreferencesData[this.state.selectedPreferenceIndex].options.map((each, index) => {
                     return (
                       <TouchableOpacity
                         key={index}
                         style={[
                           styles.eachLine,
-                          index == Preferences[this.state.selectedPreferenceIndex].options.length - 1 ||
+                          index == PreferencesData[this.state.selectedPreferenceIndex].options.length - 1 ||
                             (isOptionOverFlow && index == 7) ? { borderBottomWidth: 0 } : null,
                         ]}
                         onPress={() => this.updatePreference(index)}
                       >
                         <Text style={
-                          index == Preferences[this.state.selectedPreferenceIndex].answerIndex ?
+                          index == PreferencesData[this.state.selectedPreferenceIndex].answerIndex ?
                             { color: Colors.blueButtonBackColor, fontFamily: 'SFProText-Semibold', fontSize: RFPercentage(2.2), textAlign: 'center' } :
                             { color: Colors.blackColor, fontFamily: 'SFProText-Regular', fontSize: RFPercentage(2.2), textAlign: 'center' }
                         }>
@@ -161,13 +161,13 @@ export default class PreferenceScreen extends Component {
                   })
                 }
                 {
-                  Preferences[this.state.selectedPreferenceIndex].answerType === 'input' &&
+                  PreferencesData[this.state.selectedPreferenceIndex].answerType === 'input' &&
                   <View style={[styles.eachLine, { borderBottomWidth: 0 }]}>
                     <TextInput
                       style={{ width: '100%', height: '100%', paddingLeft: normalize(10), color: Colors.blackColor }}
-                      placeholder={Preferences[this.state.selectedPreferenceIndex].options[Preferences[this.state.selectedPreferenceIndex].answerIndex]}
+                      placeholder={PreferencesData[this.state.selectedPreferenceIndex].options[PreferencesData[this.state.selectedPreferenceIndex].answerIndex]}
                       value={this.state.inputValue}
-                      keyboardType={Preferences[this.state.selectedPreferenceIndex].id == 9 ? 'numeric' : 'default'}
+                      keyboardType={PreferencesData[this.state.selectedPreferenceIndex].id == 9 ? 'numeric' : 'default'}
                       onChangeText={(text) => this.setState({ inputValue: text })}
                     />
                   </View>
@@ -177,14 +177,14 @@ export default class PreferenceScreen extends Component {
 
             <View style={styles.modalBtnContainer}>
               {
-                Preferences[this.state.selectedPreferenceIndex].answerType === 'radio' &&
+                PreferencesData[this.state.selectedPreferenceIndex].answerType === 'radio' &&
                 <Button btnTxt='Cancel' btnStyle={{ width: '100%', height: normalize(50, 'height'), color: 'blue' }}
                   onPress={() => {
                     this.setState({ visibleModal: false });
                   }}
                 />
               }
-              {Preferences[this.state.selectedPreferenceIndex].answerType === 'input' &&
+              {PreferencesData[this.state.selectedPreferenceIndex].answerType === 'input' &&
                 <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                   <Button btnTxt='Cancel' btnStyle={{ width: width * 0.42, height: normalize(50, 'height'), color: 'blue' }}
                     onPress={() => {
@@ -198,8 +198,8 @@ export default class PreferenceScreen extends Component {
                   <Button btnTxt='OK' btnStyle={{ width: width * 0.42, height: normalize(50, 'height'), color: 'blue' }}
                     onPress={() => {
                       if (this.state.inputValue != '') {
-                        Preferences[this.state.selectedPreferenceIndex].options[1] = this.state.inputValue;
-                        Preferences[this.state.selectedPreferenceIndex].answerIndex = 1;
+                        PreferencesData[this.state.selectedPreferenceIndex].options[1] = this.state.inputValue;
+                        PreferencesData[this.state.selectedPreferenceIndex].answerIndex = 1;
                       }
                       this.setState({
                         inputValue: '',

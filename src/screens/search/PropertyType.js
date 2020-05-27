@@ -17,7 +17,6 @@ import normalize from 'react-native-normalize';
 import { RFPercentage } from "react-native-responsive-fontsize";
 import SwitchSelector from 'react-native-switch-selector';
 
-import { Colors, Images, PropertyCardTheme, LoginInfo } from '@constants';
 import {
   BrowseCard,
   Button,
@@ -29,102 +28,55 @@ import {
   SideMenu,
   SignModal,
 } from '@components';
-import { getContentByAction } from '../../api/rest';
+import { Colors, Images, PropertyCardTheme, LoginInfo, SearchBy, PropertyTypeData } from '@constants';
 
 export default class PropertyTypeScreen extends Component {
   constructor(props) {
     super(props);
     this.state = {
       refresh: false,
-      propertyTypeList: [
-        // {
-        //   name: 'Single Family Home',
-        //   checked: 1
-        // },
-        // {
-        //   name: 'Multi-Family Home',
-        //   checked: 0
-        // },
-        // {
-        //   name: 'Condominum',
-        //   checked: 0
-        // },
-        // {
-        //   name: 'Co-Op',
-        //   checked: 0
-        // },
-        // {
-        //   name: 'Timeshare',
-        //   checked: 0
-        // },
-        // {
-        //   name: 'Rental Property',
-        //   checked: 0
-        // },
-        // {
-        //   name: 'Commercial Property',
-        //   checked: 0
-        // },
-      ],        
-    }
+      propertyTypeCheckedList: [],
+    }    
   }
 
   componentDidMount() {    
-    this.getCategory();
+    this.getCheckedList();
   }
 
-  getCategory = () => {
-    var categoryParam = {
-      action: 'properties_categories',
-      user_latitude: LoginInfo.latitude,
-      user_longitude: LoginInfo.longitude,
-      user_id: LoginInfo.uniqueid
-    };
-    
-    getContentByAction(categoryParam)
-    .then((res)=>{
-      //console.log('category', res)
-      var sortedRes = res.sort((a, b) => {return a.properties_category_displayorder - b.properties_category_displayorder})
-      var propertyTypeList = [];
-      sortedRes.forEach(each => {
-        var eachPropertyType = {
-          name: each.properties_category_long_desc,
-          checked: 0
-        }
-        propertyTypeList.push(eachPropertyType);
-      });
-      
-      propertyTypeList[0].checked = 1; //default
-      this.setState({ propertyTypeList: propertyTypeList });
-    })
-    .catch((err)=>{
-      console.log('get category error', err)
-    })
-  }
+  getCheckedList = () => {    
+    var propertyTypeCheckedList = [];
+    PropertyTypeData.forEach((each, index) => {
+      if(index == SearchBy.propertyTypeIndex) propertyTypeCheckedList[index] = 1;
+      else propertyTypeCheckedList[index] = 0;
+    });  
+    this.setState({propertyTypeCheckedList: propertyTypeCheckedList});
+  }  
 
-  clearSwitch = (selectedIndex, selectedValue) => {
-    let { propertyTypeList } = this.state;
-    propertyTypeList[selectedIndex].checked = selectedValue;
-    
-    if(selectedValue){
-        propertyTypeList.map((each, index) => {
-        if(index != selectedIndex) propertyTypeList[index].checked = 0;
+  controlSwitch = (selectedIndex, selectedValue) => {
+    let { propertyTypeCheckedList } = this.state;
+    propertyTypeCheckedList[selectedIndex] = selectedValue;
+
+    if (selectedValue) {
+      propertyTypeCheckedList.map((each, index) => {
+        if (index != selectedIndex) propertyTypeCheckedList[index] = 0;
       })
+      SearchBy.propertyTypeIndex = selectedIndex;
     }
-    
-    if(!selectedValue){
+
+    if (!selectedValue) {
       let nonSelectedCount = 0;
-      propertyTypeList.map((each, index) => {
-        if(!each.checked) nonSelectedCount++;
+      propertyTypeCheckedList.map((each, index) => {
+        if (!each.checked) nonSelectedCount++;
       })
-      if(nonSelectedCount == propertyTypeList.length){
-        propertyTypeList[0].checked = 1
+      if (nonSelectedCount == propertyTypeCheckedList.length) {
+        propertyTypeCheckedList[0] = 1;
+        SearchBy.propertyTypeIndex = 0;
       }
     }
 
-    this.setState({ 
-      propertyTypeList: propertyTypeList,
-      refresh: !this.state.refresh 
+    this.setState({
+      propertyTypeCheckedList: propertyTypeCheckedList,
+      refresh: !this.state.refresh
     });
   }
 
@@ -137,23 +89,23 @@ export default class PropertyTypeScreen extends Component {
 
         <View style={styles.body}>
           {
-            this.state.propertyTypeList.map((each, index) => {
+            this.state.propertyTypeCheckedList.map((eachChecked, index) => {
               return (
                 <View key={index} style={styles.eachLineContainer}>
                   <View style={styles.nameContainer}>
-                    <Text style={{fontFamily: 'SFProText-Regular', fontSize: RFPercentage(2.2), color: Colors.blackColor}}>{each.name}</Text>
+                    <Text style={{ fontFamily: 'SFProText-Regular', fontSize: RFPercentage(2.2), color: Colors.blackColor }}>{PropertyTypeData[index].properties_category_long_desc}</Text>
                   </View>
                   <View style={styles.switchContainer}>
                     <SwitchSelector
                       style={{ width: '53%', height: normalize(30) }}
                       height={normalize(30)}
-                      backgroundColor={each.checked ? Colors.blueColor : Colors.borderColor}
+                      backgroundColor={eachChecked ? Colors.blueColor : Colors.borderColor}
                       selectedColor='#00f'
                       buttonColor={Colors.whiteColor}
                       initial={index == 0 ? 1 : 0}
-                      value={each.checked}
+                      value={eachChecked}
                       onPress={value => {
-                        this.clearSwitch(index, value);
+                        this.controlSwitch(index, value);
                       }}
                       hasPadding
                       options={[

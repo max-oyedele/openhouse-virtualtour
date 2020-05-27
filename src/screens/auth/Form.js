@@ -89,7 +89,7 @@ export default class FormScreen extends Component {
         <ImageBackground style={styles.container} source={Images.splashBackground}>
           <View style={styles.overlay} />
           <View style={{ width: '100%' }}>
-            <Header title='YOUR INFORMATION' titleColor={Colors.whiteColor} onPressBack={() => this.props.navigation.goBack(null)} />
+            <Header title='CONFIRM YOUR INFORMATION' titleColor={Colors.whiteColor} onPressBack={() => this.props.navigation.goBack(null)} />
           </View>
           <View style={styles.body}>
             <View style={styles.txtLabelContainer}>

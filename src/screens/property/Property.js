@@ -21,8 +21,7 @@ import { BlurView } from "@react-native-community/blur";
 import ViewMoreText from 'react-native-view-more-text';
 
 import Icon from 'react-native-vector-icons/FontAwesome';
-import MapView from 'react-native-maps';
-import { Marker } from 'react-native-maps';
+import MapView, { Marker } from 'react-native-maps';
 
 import {
   BrowseCard,
@@ -386,8 +385,7 @@ export default class PropertyScreen extends Component {
             </Marker>
           </MapView>
         </View>
-        {/* <View style={{ width: '100%', height: normalize(20, 'height') }}></View> */}
-
+        
       </ScrollView>
     );
   }

@@ -38,46 +38,14 @@ export default class SocialLoginScreen extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      logoTxt: 'By sign-in, you are indicating that you are agreeing to the terms of use of Virtual Plus Customer Agreement'
+      logoTxt: 'By downloading and sign-in to this application. You are indicating that you are indicating that you are agreeing with the terms of used and condition of Open House Marketing System'
     }
   }
 
-  componentDidMount() {        
-    //temp
-    //this.submit();
-  }
-  submit = async () => {
-    LoginInfo.uniqueid = 'ofWMyPXkyMhazypDEcAe9tTI54d2';
-    LoginInfo.fullname = 'tomas andersson';
-    LoginInfo.email = 'eastsea1020n@gmail.com';
-    LoginInfo.telephone = '+16505551234';
-    LoginInfo.photourl = '';
-    LoginInfo.providerid = 'google';
-    LoginInfo.email_verified = true;
-    LoginInfo.latitude = 40.776611;
-    LoginInfo.longitude = -73.345718;
-
-    let bodyFormData = new FormData();
-    bodyFormData.append('action', 'newaccount');
-    bodyFormData.append('uniqueid', LoginInfo.uniqueid); 
-    bodyFormData.append('fullname', LoginInfo.fullname); 
-    bodyFormData.append('email', LoginInfo.email); 
-    bodyFormData.append('telephone', LoginInfo.telephone); 
-    bodyFormData.append('photourl', LoginInfo.photourl); 
-    bodyFormData.append('providerid', LoginInfo.providerid);
-    bodyFormData.append('email_verified', LoginInfo.email_verified);
-    bodyFormData.append('latitude', LoginInfo.latitude);
-    bodyFormData.append('longitude', LoginInfo.longitude); 
-    bodyFormData.append('appid', 'com.openhousemarketingsystem.open');
-    bodyFormData.append('referredby', 0);
-        
-    await postLoginInfo(bodyFormData)
-      .then((res) => console.log('post login info success', res))
-      .catch((err) => console.log('post login info error', err))
-
-    this.props.navigation.navigate('Welcome');
-  }
-
+  componentDidMount() {    
+    
+  } 
+  
   onAppleSignin = async () => {
     await appleSignin()
       .then(async (res) => {
@@ -89,65 +57,50 @@ export default class SocialLoginScreen extends Component {
         LoginInfo.telephone = res.user.phoneNumber;
         LoginInfo.photourl = res.user.photoURL;
         LoginInfo.providerid = 'apple';
-        LoginInfo.email_verified = res.user.emailVerified;        
+        LoginInfo.email_verified = res.user.emailVerified;
 
-        if(res.user.displayName && res.user.email && res.user.phoneNumber){//essential fields
-          this.props.navigation.navigate('SMS');
-        }
-        else{
-          this.props.navigation.navigate('Form');
-        }        
+        this.props.navigation.navigate('Form');
       })
       .catch((err) => {
         Alert.alert('Apple SignIn is failed');
-        console.log('apple signin error', err)
+        console.log('apple signin error', err);
       })
   }
 
   onFBSignin = async () => {
-    await fbSignin()
-      .then(async (res) => {
-        //console.log('fb signin success', res);        
-        LoginInfo.uniqueid = res.user.uid;
-        LoginInfo.fullname = res.user.displayName;
-        LoginInfo.email = res.user.email;
-        LoginInfo.telephone = res.user.phoneNumber;
-        LoginInfo.photourl = res.user.photoURL;
-        LoginInfo.providerid = 'facebook';
-        LoginInfo.email_verified = res.user.emailVerified;        
-
-        if(res.user.displayName && res.user.email && res.user.phoneNumber){//essential fields
-          this.props.navigation.navigate('SMS');
-        }
-        else{
-          this.props.navigation.navigate('Form');
-        }        
-      })
-      .catch((err) => {
-        Alert.alert('Facebook SignIn is failed');
-        console.log('fb signin error', err)
-      })
+    // await fbSignin()
+    //   .then(async (res) => {
+    //     //console.log('fb signin success', res);        
+    //     LoginInfo.uniqueid = res.user.uid;
+    //     LoginInfo.fullname = res.user.displayName;
+    //     LoginInfo.email = res.user.email;
+    //     LoginInfo.telephone = res.user.phoneNumber;
+    //     LoginInfo.photourl = res.user.photoURL;
+    //     LoginInfo.providerid = 'facebook';
+    //     LoginInfo.email_verified = res.user.emailVerified;        
+    //
+    //     this.props.navigation.navigate('Form');
+    //   })
+    //   .catch((err) => {
+    //     Alert.alert('Facebook SignIn is failed');
+    //     console.log('fb signin error', err)
+    //   })
   }
 
   onGoogleSignin = async () => {
     await googleSignin()
       .then(async (res) => {
         //console.log('google signin success', res);
-        
+
         LoginInfo.uniqueid = res.user.uid;
         LoginInfo.fullname = res.user.displayName;
         LoginInfo.email = res.user.email;
         LoginInfo.telephone = res.user.phoneNumber;
         LoginInfo.photourl = res.user.photoURL;
         LoginInfo.providerid = 'google';
-        LoginInfo.email_verified = res.user.emailVerified;        
+        LoginInfo.email_verified = res.user.emailVerified;
 
-        if(res.user.displayName && res.user.email && res.user.phoneNumber){//essential fields
-          this.props.navigation.navigate('SMS');
-        }
-        else{
-          this.props.navigation.navigate('Form');
-        }        
+        this.props.navigation.navigate('Form');
       })
       .catch((err) => {
         Alert.alert('Google SignIn is failed');
@@ -156,14 +109,14 @@ export default class SocialLoginScreen extends Component {
   }
 
   onTwitterSignin = async () => {
-    await twitterSignin()
-      .then(async (res) => {
-        console.log('twitter signin success', res);        
-      })
-      .catch((err) => {
-        Alert.alert('Twitter SignIn is failed');
-        console.log('twitter signin error', err)
-      })
+    // await twitterSignin()
+    //   .then(async (res) => {
+    //     console.log('twitter signin success', res);        
+    //   })
+    //   .catch((err) => {
+    //     Alert.alert('Twitter SignIn is failed');
+    //     console.log('twitter signin error', err)
+    //   })
   }
 
   render() {
@@ -218,7 +171,7 @@ const styles = StyleSheet.create({
   modalBack: {
     backgroundColor: 'rgba(255,255,255,1)',
     width: wp(85),
-    height: hp(50),
+    height: hp(60),
     alignItems: 'center',
     borderRadius: 8,
     shadowColor: "#000",
@@ -272,7 +225,7 @@ const styles = StyleSheet.create({
     height: '80%'
   },
   txtContainer: {
-    width: '70%',
+    width: '80%',
     height: '25%',
     justifyContent: 'flex-start',
     alignItems: 'center',

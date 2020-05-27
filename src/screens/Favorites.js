@@ -9,6 +9,7 @@ import {
   TextInput,
   Alert,
   TouchableOpacity,
+  ActivityIndicator,
   Dimensions,
   ImageBackground,
   FlatList
@@ -35,226 +36,50 @@ export default class FavoritesScreen extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      spinner: false,
       tab: 'favorites',
-      favoritesData: [
-        // {
-        //   id: 'MLS.123456',
-        //   name: 'Dix Hills',
-        //   img: require('../assets/images/favoriteImg1.png'),
-        //   state: 'NY',
-        //   price: 420,
-        //   period: 'Monthly',
-        //   subTxt: 'Dix Hills',
-        //   address: '123 Main Street - First Floor',
-        //   number: 11746,
-        //   type: 'rent',
-        //   location: 'Toronto',
-        //   region: {
-        //     latitude: 37.78825,
-        //     longitude: -122.4324,
-        //     latitudeDelta: 0.0922,
-        //     longitudeDelta: 0.0421,
-        //   },
-        //   sqm: 230,
-        //   desc: 'This Stately Brick Colonial Was Completely Renovated In 2001, Boasting 5 Beds/5.5 Baths, 2 Story Grand Entry Foyer, Huge Granite Eat-In Kitchen W/ Center Island W/ Wine Fridge, Stainless Designer Appliances W/ Gas Cooking, Radiant Heated Floor & Double Wall Ovens. Office, Fam Room W/ Wood Burning/Gas Fplc & 4K Projector Theater System, Lr W/ Gas Flpc, FDR W/ Coffered Ceiling, Master Suite W/ Sitting Room & Marble Bathroom W/ Radiant Heated Floors. Gated 1 Acre Property W/ IG Pool/Cabana.',
-        //   detailImgs: [
-        //     { img: require('../assets/images/favoriteImg1.png') },
-        //     { img: require('../assets/images/favoriteImg2.png') },
-        //     { img: require('../assets/images/favoriteImg1.png') },
-        //     { img: require('../assets/images/favoriteImg2.png') },
-        //   ],
-        //   tags: [
-        //     {
-        //       label: 'Beds',
-        //       value: 3,
-        //       iconImg: Images.iconBlackBed
-        //     },
-        //     {
-        //       label: 'Baths',
-        //       value: 1,
-        //       iconImg: Images.iconBlackBath
-        //     },
-        //   ],
-        //   owner: {
-        //     name: 'Anthony Robinson Duran',
-        //     role: 'Licensed Real State Salesperson',
-        //     act: 'Brought By',
-        //     img: require('../assets/images/profileImg.png')
-        //   }
-        // },
-        // {
-        //   id: 'MLS.123457',
-        //   name: 'Historical Lake House',
-        //   img: require('../assets/images/favoriteImg2.png'),
-        //   state: 'NY',
-        //   price: 23,
-        //   period: 'Monthly',
-        //   subTxt: 'Dix Hills',
-        //   address: '123 Main Street - First Floor',
-        //   number: 11746,
-        //   type: 'rent',
-        //   location: 'Toronto',
-        //   region: {
-        //     latitude: 37.78825,
-        //     longitude: -122.4324,
-        //     latitudeDelta: 0.0922,
-        //     longitudeDelta: 0.0421,
-        //   },
-        //   sqm: 230,
-        //   desc: 'This Stately Brick Colonial Was Completely Renovated In 2001, Boasting 5 Beds/5.5 Baths, 2 Story Grand Entry Foyer, Huge Granite Eat-In Kitchen W/ Center Island W/ Wine Fridge, Stainless Designer Appliances W/ Gas Cooking, Radiant Heated Floor & Double Wall Ovens. Office, Fam Room W/ Wood Burning/Gas Fplc & 4K Projector Theater System, Lr W/ Gas Flpc, FDR W/ Coffered Ceiling, Master Suite W/ Sitting Room & Marble Bathroom W/ Radiant Heated Floors. Gated 1 Acre Property W/ IG Pool/Cabana.',
-        //   detailImgs: [
-        //     { img: require('../assets/images/favoriteImg1.png') },
-        //     { img: require('../assets/images/favoriteImg2.png') },
-        //     { img: require('../assets/images/favoriteImg1.png') },
-        //     { img: require('../assets/images/favoriteImg2.png') },
-        //   ],
-        //   tags: [
-        //     {
-        //       label: 'Beds',
-        //       value: 3,
-        //       iconImg: Images.iconBlackBed
-        //     },
-        //     {
-        //       label: 'Baths',
-        //       value: 2,
-        //       iconImg: Images.iconBlackBath
-        //     },
-        //   ],
-        //   owner: {
-        //     name: 'Anthony Robinson Duran',
-        //     role: 'Licensed Real State Salesperson',
-        //     act: 'Brought By',
-        //     img: require('../assets/images/profileImg.png')
-        //   }
-        // },
-        // {
-        //   id: 'MLS.123458',
-        //   name: '3 Bedroom Modern House',
-        //   img: require('../assets/images/favoriteImg1.png'),
-        //   state: 'NY',
-        //   price: 2.3,
-        //   period: 'Monthly',
-        //   subTxt: 'Dix Hills',
-        //   address: '123 Main Street - First Floor',
-        //   number: 11746,
-        //   type: 'rent',
-        //   location: 'Toronto',
-        //   region: {
-        //     latitude: 37.78825,
-        //     longitude: -122.4324,
-        //     latitudeDelta: 0.0922,
-        //     longitudeDelta: 0.0421,
-        //   },
-        //   sqm: 230,
-        //   desc: 'This Stately Brick Colonial Was Completely Renovated In 2001, Boasting 5 Beds/5.5 Baths, 2 Story Grand Entry Foyer, Huge Granite Eat-In Kitchen W/ Center Island W/ Wine Fridge, Stainless Designer Appliances W/ Gas Cooking, Radiant Heated Floor & Double Wall Ovens. Office, Fam Room W/ Wood Burning/Gas Fplc & 4K Projector Theater System, Lr W/ Gas Flpc, FDR W/ Coffered Ceiling, Master Suite W/ Sitting Room & Marble Bathroom W/ Radiant Heated Floors. Gated 1 Acre Property W/ IG Pool/Cabana.',
-        //   detailImgs: [
-        //     { img: require('../assets/images/favoriteImg1.png') },
-        //     { img: require('../assets/images/favoriteImg2.png') },
-        //     { img: require('../assets/images/favoriteImg1.png') },
-        //     { img: require('../assets/images/favoriteImg2.png') },
-        //   ],
-        //   tags: [
-        //     {
-        //       label: 'Beds',
-        //       value: 3,
-        //       iconImg: Images.iconBlackBed
-        //     },
-        //     {
-        //       label: 'Baths',
-        //       value: 2,
-        //       iconImg: Images.iconBlackBath
-        //     },
-        //   ],
-        //   owner: {
-        //     name: 'Anthony Robinson Duran',
-        //     role: 'Licensed Real State Salesperson',
-        //     act: 'Brought By',
-        //     img: require('../assets/images/profileImg.png')
-        //   }
-        // }
-      ],
+      favoritesData: [],
       viewedData: [],
-      // viewedData: [
-      //   {
-      //     id: 'MLS.123456',
-      //     name: '3 Bedroom Modern House',
-      //     img: require('../assets/images/favoriteImg1.png'),
-      //     state: 'NY',
-      //     price: 2.3,
-      //     period: 'Monthly',
-      //     subTxt: 'Dix Hills',
-      //     address: '123 Main Street - First Floor',
-      //     number: 11746,
-      //     type: 'rent',
-      //     location: 'Toronto',
-      //     region: {
-      //       latitude: 37.78825,
-      //       longitude: -122.4324,
-      //       latitudeDelta: 0.0922,
-      //       longitudeDelta: 0.0421,
-      //     },
-      //     sqm: 230,
-      //     desc: 'This Stately Brick Colonial Was Completely Renovated In 2001, Boasting 5 Beds/5.5 Baths, 2 Story Grand Entry Foyer, Huge Granite Eat-In Kitchen W/ Center Island W/ Wine Fridge, Stainless Designer Appliances W/ Gas Cooking, Radiant Heated Floor & Double Wall Ovens. Office, Fam Room W/ Wood Burning/Gas Fplc & 4K Projector Theater System, Lr W/ Gas Flpc, FDR W/ Coffered Ceiling, Master Suite W/ Sitting Room & Marble Bathroom W/ Radiant Heated Floors. Gated 1 Acre Property W/ IG Pool/Cabana.',
-      //     detailImgs: [
-      //       { img: require('../assets/images/favoriteImg1.png') },
-      //       { img: require('../assets/images/favoriteImg2.png') },
-      //       { img: require('../assets/images/favoriteImg1.png') },
-      //       { img: require('../assets/images/favoriteImg2.png') },
-      //     ],
-      //     tags: [
-      //       {
-      //         label: 'Beds',
-      //         value: 3,
-      //         iconImg: Images.iconBlackBed
-      //       },
-      //       {
-      //         label: 'Baths',
-      //         value: 2,
-      //         iconImg: Images.iconBlackBath
-      //       },
-      //     ],
-      //     owner: {
-      //       name: 'Anthony Robinson Duran',
-      //       role: 'Licensed Real State Salesperson',
-      //       act: 'Brought By',
-      //       img: require('../assets/images/profileImg.png')
-      //     }
-      //   }
-      // ]
-    }    
+    }
   }
 
   componentDidMount() {
-    this.listener = this.props.navigation.addListener('focus', this.componentDidFocus.bind(this));        
+    this.listener = this.props.navigation.addListener('focus', this.componentDidFocus.bind(this));
   }
 
   componentDidFocus = () => {
     this.getData();
   }
 
+  componentWillUnmount() {
+    //this.listener.remove()
+  }
+
   getData = () => {
     var dataParam = {
       action: 'properties_viewed_or_favorited',
       user_latitude: LoginInfo.latitude,
-      user_longitude: LoginInfo.longitude,      
+      user_longitude: LoginInfo.longitude,
       user_id: LoginInfo.uniqueid,
       page_type: this.state.tab,
     };
 
+    this.setState({ spinner: true });
     getContentByAction(dataParam)
-    .then((res)=>{
-      //console.log('data', res)     
-      var sortedRes = res.sort((a, b) => {return a.properties_displayorder - b.properties_displayorder})      
-      if(this.state.tab == 'favorites') this.setState({ favoritesData: sortedRes });
-      else if(this.state.tab == 'viewed') this.setState({ viewedData: sortedRes });
-    })
-    .catch((err)=>{
-      console.log('get data error', err)
-    })
-  }  
+      .then((res) => {
+        //console.log('data', res)     
+        var sortedRes = res.sort((a, b) => { return a.properties_displayorder - b.properties_displayorder })
+        if (this.state.tab == 'favorites') this.setState({ favoritesData: sortedRes, spinner: false });
+        else if (this.state.tab == 'viewed') this.setState({ viewedData: sortedRes, spinner: false });
+      })
+      .catch((err) => {
+        console.log('get data error', err);
+        this.setState({ spinner: false })
+      })
+  }
 
-  onPropertyPress = (propertyRecordNo) => { 
-    RouteParam.propertyRecordNo = propertyRecordNo;    
+  onPropertyPress = (propertyRecordNo) => {
+    RouteParam.propertyRecordNo = propertyRecordNo;
     this.props.navigation.navigate('PropertyStack');
   }
 
@@ -268,10 +93,11 @@ export default class FavoritesScreen extends Component {
         </View>
         <View style={styles.body}>
           <View style={styles.btnContainer}>
-            <Button btnTxt='FAVORITES' btnStyle={this.state.tab === 'favorites' ? btnBlueStyle : btnWhiteStyle} onPress={() => {this.setState({ tab: 'favorites' }, this.getData)}} />
-            <Button btnTxt='LAST VIEWED' btnStyle={this.state.tab === 'viewed' ? btnBlueStyle : btnWhiteStyle} onPress={() => {this.setState({ tab: 'viewed' }, this.getData)}} />
+            <Button btnTxt='FAVORITES' btnStyle={this.state.tab === 'favorites' ? btnBlueStyle : btnWhiteStyle} onPress={() => { this.setState({ tab: 'favorites' }, this.getData) }} />
+            <Button btnTxt='LAST VIEWED' btnStyle={this.state.tab === 'viewed' ? btnBlueStyle : btnWhiteStyle} onPress={() => { this.setState({ tab: 'viewed' }, this.getData) }} />
           </View>
           <View style={styles.listContainer}>
+            <ActivityIndicator style={{ position: 'absolute' }} animating={this.state.spinner} />
             {((this.state.tab === 'favorites' && this.state.favoritesData.length == 0) ||
               (this.state.tab === 'viewed' && this.state.viewedData.length == 0)) ?
               <View style={styles.emptyContainer}>
@@ -279,7 +105,7 @@ export default class FavoritesScreen extends Component {
                 <Text style={{ fontFamily: 'SFProText-Regular', fontSize: 12, color: Colors.passiveTxtColor, textAlign: 'center', marginTop: normalize(10, 'height') }}>Press the bookmark button to add an property</Text>
               </View>
               :
-              <FlatList                
+              <FlatList
                 showsVerticalScrollIndicator={false}
                 data={this.state.tab === 'favorites' ? this.state.favoritesData : this.state.viewedData}
                 renderItem={({ item }) => <PropertyCard cardStyle={{ width: width * 0.95, height: normalize(245, 'height'), marginBottom: normalize(10, 'height'), marginRight: 0 }} cardTheme={PropertyCardTheme[1]} item={item} onPress={() => this.onPropertyPress(item.property_recordno)} />}

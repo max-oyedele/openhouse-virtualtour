@@ -31,6 +31,8 @@ export default class PropertyCard extends Component {
   });
     
   render() {
+    if(this.props.item.property_main_photo_url == undefined || this.props.item.property_main_photo_url == '') return null;
+    
     return (
       <TouchableOpacity onPress={this.props.onPress}>
         <View style={{
@@ -116,15 +118,15 @@ export default class PropertyCard extends Component {
                     : this.props.cardTheme === 'name_tags_price' ?
                       (
                         <View style={{ width: '100%', height: '100%', flexDirection: 'row', alignItems: 'center', marginTop: normalize(-8, 'height') }}>
-                          <View style={{ width: '32%', height: '100%', flexDirection: 'row', alignItems: 'center' }}>
+                          <View style={{ height: '100%', flexDirection: 'row', alignItems: 'center'}}>
                             {/* <Image style={{ width: '30%', height: '100%' }} resizeMode='contain' source={this.props.item.tags[0].iconImg} /> */}
                             <Text style={{ fontFamily: 'SFProText-Regular', fontSize: RFPercentage(2), color: Colors.blackColor }}>{this.props.item.property_bedrooms}</Text>
                             <Text style={{ fontFamily: 'SFProText-Regular', fontSize: RFPercentage(2), color: Colors.blackColor, marginLeft: normalize(5) }}>Beds</Text>
                           </View>
-                          <View style={{ width: '5%', height: '100%', alignItems: 'center', marginLeft: normalize(10) }}>
-                            <Image style={{ width: '70%', height: '100%' }} source={Images.markDot} resizeMode='contain' />
+                          <View style={{ width: normalize(25), height: '100%', alignItems: 'center'}}>
+                            <Image style={{ width: '20%', height: '100%' }} source={Images.markDot} resizeMode='contain' />
                           </View>
-                          <View style={{ width: '32%', height: '100%', flexDirection: 'row', alignItems: 'center', marginLeft: normalize(10) }}>
+                          <View style={{ height: '100%', flexDirection: 'row', alignItems: 'center'}}>
                             {/* <Image style={{ width: '30%', height: '100%' }} resizeMode='contain' source={this.props.item.tags[1].iconImg} /> */}
                             <Text style={{ fontFamily: 'SFProText-Regular', fontSize: RFPercentage(2), color: Colors.blackColor }}>{this.props.item.property_bathrooms}</Text>
                             <Text style={{ fontFamily: 'SFProText-Regular', fontSize: RFPercentage(2), color: Colors.blackColor, marginLeft: normalize(5) }}>Baths</Text>

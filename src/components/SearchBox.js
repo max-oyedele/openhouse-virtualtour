@@ -18,7 +18,7 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 Platform.OS === 'ios' ? Icon.loadFont() : '';
 
 import PropTypes from 'prop-types';
-import { Colors, Images, SearchWordData } from "../constants";
+import { Colors, Images, SearchWordData, SearchBy } from "../constants";
 
 export default class SearchBox extends Component {
   constructor(props) {
@@ -28,13 +28,13 @@ export default class SearchBox extends Component {
     }
   }
 
-  // filterData = (query) => {
-  //   var filtered = SearchWordData.filter(each => {
-  //     var eachStr = each;
-  //     return eachStr.includes(query);
-  //   });
-  //   return filtered;
-  // }
+  filterData = (query) => {
+    var filtered = SearchWordData.filter(each => {
+      var eachStr = each;
+      return eachStr.includes(query);
+    });
+    return filtered;
+  }
 
   render() {
     const { query } = this.state;
@@ -61,10 +61,18 @@ export default class SearchBox extends Component {
               placeholder='Search'
               placeholderTextColor={Colors.weakBlackColor}
               onChangeText={(text) => this.setState({ query: text })}
-            />            
+              onKeyPress={(e) => {
+                console.log(e.nativeEvent.key);
+                if (e.nativeEvent.key == "done") {
+                  console.warn('enter');
+                  SearchBy.query = this.state.query;
+                  this.props.onSearch(this.state.query);
+                }
+              }}
+            />
           </View>
           <View style={styles.btnContainer}>
-            <TouchableOpacity onPress={this.props.onSearch(this.state.query)}>
+            <TouchableOpacity onPress={() => { SearchBy.query = this.state.query; this.props.onSearch(this.state.query);}}>
               <Icon
                 name='search'
                 size={20}
@@ -121,7 +129,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#ffffff',
     width: '95%',
     height: normalize(200, 'height'),
-    alignSelf: 'center',    
+    alignSelf: 'center',
     // borderColor: '#ff0000',
     // borderWidth: 1
   }

@@ -11,14 +11,16 @@ import {
   TouchableOpacity,
   Dimensions,
   ImageBackground,
+  ActivityIndicator,
   FlatList,
   Platform
 } from "react-native";
 import normalize from 'react-native-normalize';
-import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
+import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import { RFPercentage, RFValue } from "react-native-responsive-fontsize";
 
 import SwitchSelector from "react-native-switch-selector";
+import AsyncStorage from '@react-native-community/async-storage';
 
 import Icon from 'react-native-vector-icons/FontAwesome';
 Platform.OS === 'ios' ? Icon.loadFont() : '';
@@ -35,15 +37,16 @@ import {
   SignModal,
 } from '@components';
 
-import { Colors, Images, PropertyCardTheme, LoginInfo, RouteParam, SearchWordData, SearchBy } from '@constants';
+import { Colors, Images, PropertyCardTheme, LoginInfo, RouteParam, SearchWordData, SearchBy, PropertyTypeData } from '@constants';
 import { getContentByAction } from '../api/rest';
 
 export default class DashboardScreen extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      listingType: 's',
+      listingType: SearchBy.listingType,
       refresh: false,
+      spinner: false,
       toggleMenuVisible: false,
       categoryData: [
         // {
@@ -143,8 +146,8 @@ export default class DashboardScreen extends Component {
 
   componentDidMount() {
     this.getCategory();
-    this.getFeatureProperty(); 
-    this.getSearchWord();   
+    this.getFeatureProperty();
+    this.getSearchWord();
   }
 
   getCategory = () => {
@@ -156,70 +159,84 @@ export default class DashboardScreen extends Component {
     };
 
     getContentByAction(categoryParam)
-    .then((res)=>{
-      //console.log('category', res)
-      var sortedRes = res.sort((a, b) => {return a.properties_category_displayorder - b.properties_category_displayorder})
-      this.setState({ categoryData: sortedRes });
-    })
-    .catch((err)=>{
-      console.log('get category error', err)
-    })
+      .then((res) => {
+        //console.log('category', res)
+        var sortedRes = res.sort((a, b) => { return a.properties_category_displayorder - b.properties_category_displayorder })
+        sortedRes.forEach((each, index) => {
+          PropertyTypeData[index] = each;
+        })
+        this.setState({ categoryData: sortedRes });
+      })
+      .catch((err) => {
+        console.log('get category error', err)
+      })
   }
 
   getFeatureProperty = () => {
-    console.log('type', this.state.listingType);
     var featurePrpertyParam = {
       action: 'feature_properties',
       user_latitude: LoginInfo.latitude,
-      user_longitude: LoginInfo.longitude,      
+      user_longitude: LoginInfo.longitude,
       user_id: LoginInfo.uniqueid,
-      listingtype: this.state.listingType
+      listingtype: SearchBy.listingType
     };
 
+    console.log('feature-listingType', SearchBy.listingType);
+    this.setState({ spinner: true });
+
     getContentByAction(featurePrpertyParam)
-    .then((res)=>{
-      //console.log('feature property', res)
-      var sortedRes = res.sort((a, b) => {return a.properties_displayorder - b.properties_displayorder})
-      this.setState({ featurePropertyData: sortedRes });
-    })
-    .catch((err)=>{
-      console.log('get feature property error', err)
-    })
+      .then((res) => {
+        //console.log('feature property', res)
+        var sortedRes = res.sort((a, b) => { return a.properties_displayorder - b.properties_displayorder })
+        this.setState({ featurePropertyData: sortedRes });
+        this.setState({ spinner: false });
+      })
+      .catch((err) => {
+        console.log('get feature property error', err)
+        this.setState({ spinner: false });
+      })
   }
 
   getSearchWord = () => {
     var searchWordParam = {
       action: 'searchcities',
       user_latitude: LoginInfo.latitude,
-      user_longitude: LoginInfo.longitude,      
-      user_id: LoginInfo.uniqueid,      
+      user_longitude: LoginInfo.longitude,
+      user_id: LoginInfo.uniqueid,
     };
 
     getContentByAction(searchWordParam)
-    .then((res)=>{
-      res.forEach(each=>{
-        SearchWordData.push(each.search_city);
+      .then((res) => {
+        res.forEach(each => {
+          SearchWordData.push(each.search_city);
+        })
+        //console.log('searchWord', SearchWordData);
       })
-      //console.log('searchWord', SearchWordData);
-    })
-    .catch((err)=>{
-      console.log('get searchword error', err)
-    })
+      .catch((err) => {
+        console.log('get searchword error', err)
+      })
   }
 
-  onPropertyPress = (propertyRecordNo) => { 
-    RouteParam.propertyRecordNo = propertyRecordNo;    
+  onPropertyPress = (propertyRecordNo) => {
+    RouteParam.propertyRecordNo = propertyRecordNo;
     this.props.navigation.navigate('PropertyStack');
   }
 
-  onToggleMenu = () => {    
-    this.setState({ toggleMenuVisible: !this.state.toggleMenuVisible });        
+  onToggleMenu = () => {
+    this.setState({ toggleMenuVisible: !this.state.toggleMenuVisible });
   }
 
-  onSearch = (query) => { 
+  onLogout = () => {
+    this.setState({ toggleMenuVisible: !this.state.toggleMenuVisible });
+
+    AsyncStorage.removeItem('LoginInfo');
+    this.props.navigation.navigate('Auth');
+  }
+
+  onSearch = (query) => {
     SearchBy.query = query;
     console.log(SearchBy.query);
-    if(query == null ) this.props.navigation.navigate('SearchStack', {screen: 'SearchBy'});
+    if (query == null) this.props.navigation.navigate('SearchStack', { screen: 'SearchBy' });
     else this.props.navigation.navigate('SearchStack');
   }
 
@@ -227,7 +244,7 @@ export default class DashboardScreen extends Component {
     return (
       <View style={styles.container}>
         {this.state.toggleMenuVisible ?
-          <SideMenu navigation={this.props.navigation} onToggleMenu={this.onToggleMenu} />
+          <SideMenu navigation={this.props.navigation} onToggleMenu={this.onToggleMenu} onLogout={this.onLogout} />
           : null
         }
         <ScrollView showsVerticalScrollIndicator={false}>
@@ -242,7 +259,7 @@ export default class DashboardScreen extends Component {
               </TouchableOpacity>
             </View>
             <View style={styles.searchBoxContainer}>
-              <SearchBox boxStyle={{ width: width* 0.9, height: normalize(40, 'height'), backgroundColor: Colors.whiteColor, borderColor: Colors.blueColor, btnColor: Colors.blueColor }} onSearch={()=>this.onSearch} />
+              <SearchBox boxStyle={{ width: width * 0.9, height: normalize(40, 'height'), backgroundColor: Colors.whiteColor, borderColor: Colors.blueColor, btnColor: Colors.blueColor }} onSearch={this.onSearch} />
             </View>
           </ImageBackground>
 
@@ -251,8 +268,9 @@ export default class DashboardScreen extends Component {
               <SwitchSelector
                 initial={0}
                 onPress={value => {
-                  this.setState({ listingType: value });
-                  this.getFeatureProperty();                  
+                  this.setState({ listingType: value, featurePropertyData: [] });
+                  SearchBy.listingType = value;
+                  this.getFeatureProperty();
                 }}
                 backgroundColor='#E2E6EC'
                 height={50}
@@ -260,8 +278,8 @@ export default class DashboardScreen extends Component {
                 selectedColor={Colors.blueColor}
                 buttonColor='white'
                 options={[
-                  { label: "BUY", value: "r" },//?
-                  { label: "RENT", value: "s" }//?
+                  { label: "BUY", value: "S" },
+                  { label: "RENT", value: "R" }
                 ]}
               />
             </View>
@@ -286,16 +304,17 @@ export default class DashboardScreen extends Component {
                 <Text style={{ fontFamily: 'SFProText-Semibold', fontSize: 12, color: Colors.blackColor }}>FEATURE PROPERTIES NEAR YOU</Text>
               </View>
               <View style={styles.featureImgContainer}>
+                <ActivityIndicator style={{ position: 'absolute' }} animating={this.state.spinner} />
                 <FlatList
                   horizontal={true}
                   showsHorizontalScrollIndicator={false}
                   data={this.state.featurePropertyData}
-                  renderItem={({ item }) => <PropertyCard cardStyle={{ width: normalize(325), height: normalize(245, 'height'), marginTop: 0, marginRight: normalize(10) }} cardTheme={PropertyCardTheme[1]} item={item} listingType={this.state.listingType} onPress={() => this.onPropertyPress(item.property_recordno)} />}
+                  renderItem={({ item }) => <PropertyCard cardStyle={{ width: normalize(325), height: normalize(245, 'height'), marginTop: 0, marginRight: normalize(10) }} cardTheme={PropertyCardTheme[1]} item={item} listingType={SearchBy.listingType} onPress={() => this.onPropertyPress(item.property_recordno)} />}
                   keyExtractor={item => item.property_recordno}
                 />
               </View>
             </View>
-            
+
             {/* <View style={{ height: normalize(70, 'height') }}></View> */}
           </View>
         </ScrollView>
@@ -331,7 +350,7 @@ const styles = StyleSheet.create({
     width: '90%',
     alignSelf: 'center',
     marginTop: normalize(25, 'height'),
-  },  
+  },
   contentContainer: {
     //backgroundColor: '#e0e0e0',
     width: width,
@@ -375,5 +394,7 @@ const styles = StyleSheet.create({
   },
   featureImgContainer: {
     height: '90%',
+    justifyContent: 'center',
+    alignItems: 'center'
   },
 });

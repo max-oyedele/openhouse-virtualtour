@@ -9,6 +9,7 @@ import {
   TextInput,
   Alert,
   TouchableOpacity,
+  ActivityIndicator,
   Dimensions,
   ImageBackground,
   FlatList
@@ -30,254 +31,100 @@ import {
   SideMenu,
   SignModal,
 } from '@components';
-import { Colors, Images, PropertyCardTheme, LoginInfo, SearchBy, SearchWordData } from '@constants';
+import { Colors, Images, PropertyCardTheme, LoginInfo, SearchBy, SearchWordData, PropertyTypeData } from '@constants';
 import { getContentByAction } from '../../api/rest';
 
 export default class ResultListScreen extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      visiblePropertyType: false,
+      refresh: false,
+      spinner: false,
       visibleNumberOfRooms: false,
-      condition: {
-        fromPrice: 100,
-        toPrice: 1000,
-        bedRooms: 1,
-        bathRooms: 3,
-        distance: 13,
-        propertyType: [
-          {
-            name: 'Single Family Home',
-            checked: true
-          },
-          {
-            name: 'Multi-Family Home',
-            checked: false
-          },
-          {
-            name: 'Condominum',
-            checked: false
-          },
-          {
-            name: 'Co-Op',
-            checked: false
-          },
-          {
-            name: 'Timeshare',
-            checked: false
-          },
-          {
-            name: 'Rental Property',
-            checked: false
-          },
-          {
-            name: 'Commercial Property',
-            checked: false
-          },
-        ],
-        numberOfRooms: [
-          {
-            name: 'BEDS',
-            count: 1
-          },
-          {
-            name: 'BATHS',
-            count: 1
-          },
-        ]
-      },
-      resultData: [
-        // {
-        //   id: 'MLS.123456',
-        //   name: 'Dix Hills',
-        //   img: require('../../assets/images/favoriteImg1.png'),
-        //   state: 'NY',
-        //   price: 420,
-        //   period: 'Monthly',
-        //   subTxt: 'Dix Hills',
-        //   address: '123 Main Street - First Floor',
-        //   number: 11746,
-        //   type: 'rent',
-        //   location: 'Toronto',
-        //   region: {
-        //     latitude: 37.78825,
-        //     longitude: -122.4324,
-        //     latitudeDelta: 0.0922,
-        //     longitudeDelta: 0.0421,
-        //   },
-        //   sqm: 230,
-        //   desc: 'This Stately Brick Colonial Was Completely Renovated In 2001, Boasting 5 Beds/5.5 Baths, 2 Story Grand Entry Foyer, Huge Granite Eat-In Kitchen W/ Center Island W/ Wine Fridge, Stainless Designer Appliances W/ Gas Cooking, Radiant Heated Floor & Double Wall Ovens. Office, Fam Room W/ Wood Burning/Gas Fplc & 4K Projector Theater System, Lr W/ Gas Flpc, FDR W/ Coffered Ceiling, Master Suite W/ Sitting Room & Marble Bathroom W/ Radiant Heated Floors. Gated 1 Acre Property W/ IG Pool/Cabana.',
-        //   detailImgs: [
-        //     { img: require('../../assets/images/favoriteImg1.png') },
-        //     { img: require('../../assets/images/favoriteImg2.png') },
-        //     { img: require('../../assets/images/favoriteImg1.png') },
-        //     { img: require('../../assets/images/favoriteImg2.png') },
-        //   ],
-        //   tags: [
-        //     {
-        //       label: 'Beds',
-        //       value: 3,
-        //       iconImg: Images.iconBlackBed
-        //     },
-        //     {
-        //       label: 'Baths',
-        //       value: 1,
-        //       iconImg: Images.iconBlackBath
-        //     },
-        //   ],
-        //   owner: {
-        //     name: 'Anthony Robinson Duran',
-        //     role: 'Licensed Real State Salesperson',
-        //     act: 'Brought By',
-        //     img: require('../../assets/images/profileImg.png')
-        //   }
-        // },
-        // {
-        //   id: 'MLS.123457',
-        //   name: 'Historical Lake House',
-        //   img: require('../../assets/images/favoriteImg2.png'),
-        //   state: 'NY',
-        //   price: 23,
-        //   period: 'Monthly',
-        //   subTxt: 'Dix Hills',
-        //   address: '123 Main Street - First Floor',
-        //   number: 11746,
-        //   type: 'rent',
-        //   location: 'Toronto',
-        //   region: {
-        //     latitude: 37.78825,
-        //     longitude: -122.4324,
-        //     latitudeDelta: 0.0922,
-        //     longitudeDelta: 0.0421,
-        //   },
-        //   sqm: 230,
-        //   desc: 'This Stately Brick Colonial Was Completely Renovated In 2001, Boasting 5 Beds/5.5 Baths, 2 Story Grand Entry Foyer, Huge Granite Eat-In Kitchen W/ Center Island W/ Wine Fridge, Stainless Designer Appliances W/ Gas Cooking, Radiant Heated Floor & Double Wall Ovens. Office, Fam Room W/ Wood Burning/Gas Fplc & 4K Projector Theater System, Lr W/ Gas Flpc, FDR W/ Coffered Ceiling, Master Suite W/ Sitting Room & Marble Bathroom W/ Radiant Heated Floors. Gated 1 Acre Property W/ IG Pool/Cabana.',
-        //   detailImgs: [
-        //     { img: require('../../assets/images/favoriteImg1.png') },
-        //     { img: require('../../assets/images/favoriteImg2.png') },
-        //     { img: require('../../assets/images/favoriteImg1.png') },
-        //     { img: require('../../assets/images/favoriteImg2.png') },
-        //   ],
-        //   tags: [
-        //     {
-        //       label: 'Beds',
-        //       value: 3,
-        //       iconImg: Images.iconBlackBed
-        //     },
-        //     {
-        //       label: 'Baths',
-        //       value: 2,
-        //       iconImg: Images.iconBlackBath
-        //     },
-        //   ],
-        //   owner: {
-        //     name: 'Anthony Robinson Duran',
-        //     role: 'Licensed Real State Salesperson',
-        //     act: 'Brought By',
-        //     img: require('../../assets/images/profileImg.png')
-        //   }
-        // },
-        // {
-        //   id: 'MLS.123458',
-        //   name: '3 Bedroom Modern House',
-        //   img: require('../../assets/images/favoriteImg1.png'),
-        //   state: 'NY',
-        //   price: 2.3,
-        //   period: 'Monthly',
-        //   subTxt: 'Dix Hills',
-        //   address: '123 Main Street - First Floor',
-        //   number: 11746,
-        //   type: 'rent',
-        //   location: 'Toronto',
-        //   region: {
-        //     latitude: 37.78825,
-        //     longitude: -122.4324,
-        //     latitudeDelta: 0.0922,
-        //     longitudeDelta: 0.0421,
-        //   },
-        //   sqm: 230,
-        //   desc: 'This Stately Brick Colonial Was Completely Renovated In 2001, Boasting 5 Beds/5.5 Baths, 2 Story Grand Entry Foyer, Huge Granite Eat-In Kitchen W/ Center Island W/ Wine Fridge, Stainless Designer Appliances W/ Gas Cooking, Radiant Heated Floor & Double Wall Ovens. Office, Fam Room W/ Wood Burning/Gas Fplc & 4K Projector Theater System, Lr W/ Gas Flpc, FDR W/ Coffered Ceiling, Master Suite W/ Sitting Room & Marble Bathroom W/ Radiant Heated Floors. Gated 1 Acre Property W/ IG Pool/Cabana.',
-        //   detailImgs: [
-        //     { img: require('../../assets/images/favoriteImg1.png') },
-        //     { img: require('../../assets/images/favoriteImg2.png') },
-        //     { img: require('../../assets/images/favoriteImg1.png') },
-        //     { img: require('../../assets/images/favoriteImg2.png') },
-        //   ],
-        //   tags: [
-        //     {
-        //       label: 'Beds',
-        //       value: 3,
-        //       iconImg: Images.iconBlackBed
-        //     },
-        //     {
-        //       label: 'Baths',
-        //       value: 2,
-        //       iconImg: Images.iconBlackBath
-        //     },
-        //   ],
-        //   owner: {
-        //     name: 'Anthony Robinson Duran',
-        //     role: 'Licensed Real State Salesperson',
-        //     act: 'Brought By',
-        //     img: require('../../assets/images/profileImg.png')
-        //   }
-        // }
+      numberOfRooms: [
+        {
+          name: 'BEDS',
+          count: SearchBy.bedrooms
+        },
+        {
+          name: 'BATHS',
+          count: SearchBy.bathrooms
+        },
       ],
+      oldBedrooms: '',
+      oldBathrooms: '',
+      resultData: [],
     }
+
+    this.listener = this.props.navigation.addListener('focus', this.componentDidFocus.bind(this));
   }
 
   componentDidMount() {
+
+  }
+
+  componentDidFocus() {
+    let numberOfRooms = this.state.numberOfRooms;
+    numberOfRooms[0].count = SearchBy.bedrooms;
+    numberOfRooms[1].count = SearchBy.bathrooms;
+    this.setState({
+      numberOfRooms: numberOfRooms,
+      refresh: !this.state.refresh
+    });
+
     this.getSearchResult();
   }
 
-  onSearch = () => {
-    //this.props.navigation.navigate('Location');
-  }
+  componentWillUnmount() {
+    //if (this.listener) this.listener.remove();
+  }  
 
   getSearchResult = () => {
     var searchParam = {
       action: 'property_search',
       user_latitude: LoginInfo.latitude,
-      user_longitude: LoginInfo.longitude,      
-      user_id: LoginInfo.uniqueid,      
+      user_longitude: LoginInfo.longitude,
+      user_id: '123', //LoginInfo.uniqueid,      
       search_city: SearchBy.query,
       listingtype: SearchBy.listingType,
-      propertytype: SearchBy.propertyType,
+      propertytype: SearchBy.propertyTypeIndex,
       pricefrom: SearchBy.priceFrom,
       priceto: SearchBy.priceTo,
       bedrooms: SearchBy.bedrooms,
       bathrooms: SearchBy.bathrooms,
       distance: SearchBy.distance,
       sortby: SearchBy.sortBy,
-      ascdesc: SearchBy.ascdesc
+      ascdesc: SearchBy.sortOrder
     };
+    //console.log('param', searchParam);
+    this.setState({ spinner: true, resultData: [] });
 
     getContentByAction(searchParam)
-      .then((res) => {        
+      .then((res) => {
         console.log('searchData', res);
-        this.setState({ resultData: res });
+        var sortedRes = res.sort((a, b) => { return a.properties_displayorder - b.properties_displayorder })
+        this.setState({ resultData: sortedRes, spinner: false });
       })
       .catch((err) => {
-        console.log('get search data error', err)
+        console.log('get search data error', err);
+        this.setState({ spinner: false });
       })
   }
 
-  getPropertyType = () => {
-    var propertyTypes = this.state.condition.propertyType;
-    var retValue = propertyTypes[0].name;
+  onSearch = () => {
+    //this.props.navigation.navigate('Location');
+  }
 
-    propertyTypes.forEach(element => {
-      if (element.checked) retValue = element.name;
-    });
-
-    return retValue;
+  onApply = () => {    
+    this.setState({ visibleNumberOfRooms: false })
+    this.getSearchResult();    
   }
 
   render() {
     return (
       <View style={styles.container}>
         <View style={{ width: '100%' }}>
-          <Header title='DIX HILLS, NY' titleColor={Colors.blackColor} rightIcon={Images.iconMap} onPressBack={() => this.props.navigation.goBack(null)} onPressRightIcon={() => this.props.navigation.navigate('ResultMap')} />
+          <Header title={SearchBy.query.toUpperCase()} titleColor={Colors.blackColor} rightIcon={Images.iconMap} onPressBack={() => this.props.navigation.goBack(null)} onPressRightIcon={() => this.props.navigation.navigate('ResultMap')} />
         </View>
 
         <View style={styles.body}>
@@ -300,13 +147,22 @@ export default class ResultListScreen extends Component {
                       <Text style={{ fontFamily: 'SFProText-Regular', fontSize: RFPercentage(1.8), color: Colors.passiveTxtColor }}>PROPERTY TYPE</Text>
                     </View>
                     <View style={{ width: '100%', height: '50%', justifyContent: 'center' }}>
-                      <Text style={{ fontFamily: 'SFProText-Regular', fontSize: RFPercentage(2.2), color: Colors.blackColor }}>{this.getPropertyType()}</Text>
+                      <Text style={{ fontFamily: 'SFProText-Regular', fontSize: RFPercentage(2.2), color: Colors.blackColor }}>{PropertyTypeData[SearchBy.propertyTypeIndex].properties_category_short_desc}</Text>
                     </View>
                   </TouchableOpacity>
 
-                  {this.state.condition.numberOfRooms.map((each, index) => {
+                  {this.state.numberOfRooms.map((each, index) => {
                     return (
-                      <TouchableOpacity key={each.name} style={{ width: '25%', height: '100%', borderColor: Colors.borderColor, borderLeftWidth: normalize(0.5) }} onPress={() => this.setState({ visibleNumberOfRooms: true })}>
+                      <TouchableOpacity key={index} style={{ width: '25%', height: '100%', borderColor: Colors.borderColor, borderLeftWidth: normalize(0.5) }}
+                        onPress={() => {
+                          this.setState({
+                            visibleNumberOfRooms: true,
+                            oldBedrooms: SearchBy.bedrooms,
+                            oldBathrooms: SearchBy.bathrooms
+                          })
+                        }
+                        }
+                      >
                         <View style={{ width: '100%', height: '50%', justifyContent: 'center', alignItems: 'center' }}>
                           <Text style={{ fontFamily: 'SFProText-Regular', fontSize: RFPercentage(1.8), color: Colors.passiveTxtColor }}>{each.name}</Text>
                         </View>
@@ -323,12 +179,20 @@ export default class ResultListScreen extends Component {
           </View>
 
           <View style={styles.listContainer}>
-            <FlatList
-              showsVerticalScrollIndicator={false}
-              data={this.state.resultData}
-              renderItem={({ item }) => <PropertyCard cardStyle={{ width: width * 0.95, height: normalize(245, 'height'), marginBottom: normalize(10, 'height'), marginRight: 0 }} cardTheme={PropertyCardTheme[1]} item={item} onPress={this.onPropertyPress} />}
-              keyExtractor={item => item.id}
-            />
+            <ActivityIndicator style={{ position: 'absolute' }} animating={this.state.spinner} />
+            {
+              this.state.resultData.length == 0 && this.state.spinner == false ? 
+                <View style={styles.emptyContainer}>
+                  <Text style={{ fontFamily: 'SFProText-Semibold', fontSize: 14, color: Colors.blackColor }}>No Result Data</Text>
+                </View>
+                :
+                <FlatList
+                  showsVerticalScrollIndicator={false}
+                  data={this.state.resultData}
+                  renderItem={({ item }) => <PropertyCard cardStyle={{ width: width * 0.95, height: normalize(245, 'height'), marginBottom: normalize(10, 'height'), marginRight: 0 }} cardTheme={PropertyCardTheme[1]} item={item} onPress={this.onPropertyPress} />}
+                  keyExtractor={item => item.property_recordno}
+                />
+            }
           </View>
         </View>
 
@@ -346,7 +210,15 @@ export default class ResultListScreen extends Component {
             </View>
             <TouchableOpacity
               style={{ width: '15%', height: '100%', marginTop: normalize(3, 'height'), alignItems: 'flex-end' }}
-              onPress={() => this.setState({ visibleNumberOfRooms: false })}
+              onPress={() => {
+                let numberOfRooms = this.state.numberOfRooms;
+                numberOfRooms[0].count = this.state.oldBedrooms;
+                numberOfRooms[1].count = this.state.oldBathrooms;
+                this.setState({
+                  visibleNumberOfRooms: false,
+                  numberOfRooms: numberOfRooms
+                })
+              }}
             >
               <Image style={{ width: '50%', height: '50%' }} source={Images.iconWhiteClose} resizeMode='contain' />
             </TouchableOpacity>
@@ -355,18 +227,21 @@ export default class ResultListScreen extends Component {
           <View style={styles.modalBodyBack}>
             <View style={styles.modalBody}>
               {
-                this.state.condition.numberOfRooms.map((each, index) => {
+                this.state.numberOfRooms.map((each, index) => {
                   return (
-                    <View style={styles.eachLine}>
+                    <View key={index} style={styles.eachLine}>
                       <View style={{ width: '50%', height: '100%', justifyContent: 'center', paddingLeft: normalize(10) }}>
                         <Text style={{ fontFamily: 'SFProText-Regular', fontSize: RFPercentage(2.2), color: Colors.blackColor }}>{each.name}</Text>
                       </View>
                       <View style={{ width: '50%', height: '100%', flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-end', paddingRight: normalize(10) }}>
                         <View style={{ width: '20%', height: '100%', justifyContent: 'center', alignItems: 'center' }}>
                           <TouchableOpacity style={{ width: '70%', height: '50%' }} onPress={() => {
-                            let condition = this.state.condition;
-                            condition.numberOfRooms[index].count = each.count > 1 ? each.count - 1 : 1;
-                            this.setState({ condition: condition });
+                            let numberOfRooms = this.state.numberOfRooms;
+                            numberOfRooms[index].count = each.count > 0 ? each.count - 1 : 0;
+                            this.setState({ numberOfRooms: numberOfRooms });
+
+                            if (index == 0) SearchBy.bedrooms = numberOfRooms[index].count;
+                            else if (index == 1) SearchBy.bathrooms = numberOfRooms[index].count;
                           }}>
                             <Image style={{ width: '100%', height: '100%' }} source={Images.iconMinus} resizeMode='contain' />
                           </TouchableOpacity>
@@ -376,9 +251,12 @@ export default class ResultListScreen extends Component {
                         </View>
                         <View style={{ width: '20%', height: '100%', justifyContent: 'center', alignItems: 'center' }}>
                           <TouchableOpacity style={{ width: '70%', height: '50%' }} onPress={() => {
-                            let condition = this.state.condition;
-                            condition.numberOfRooms[index].count = each.count + 1;
-                            this.setState({ condition: condition });
+                            let numberOfRooms = this.state.numberOfRooms;
+                            numberOfRooms[index].count = each.count + 1;
+                            this.setState({ numberOfRooms: numberOfRooms });
+
+                            if (index == 0) SearchBy.bedrooms = numberOfRooms[index].count;
+                            else if (index == 1) SearchBy.bathrooms = numberOfRooms[index].count;
                           }}>
                             <Image style={{ width: '100%', height: '100%' }} source={Images.iconPlus} resizeMode='contain' />
                           </TouchableOpacity>
@@ -391,7 +269,7 @@ export default class ResultListScreen extends Component {
             </View>
 
             <View style={styles.modalBtnContainer}>
-              <Button btnTxt='Apply' btnStyle={{ width: '100%', height: normalize(50, 'height'), color: 'blue' }} onPress={() => this.setState({ visibleNumberOfRooms: false })} />
+              <Button btnTxt='Apply' btnStyle={{ width: '100%', height: normalize(50, 'height'), color: 'blue' }} onPress={this.onApply} />
             </View>
           </View>
         </Overlay>
@@ -478,8 +356,17 @@ const styles = StyleSheet.create({
     width: '95%',
     height: '70%',
     justifyContent: 'center',
+    alignItems: 'center',
     alignSelf: 'center',
     marginTop: normalize(10, 'height'),
+    //borderWidth: 1
+  },
+  emptyContainer: {
+    width: '60%',
+    height: '30%',
+    justifyContent: 'center',
+    alignItems: 'center',
+    alignSelf: 'center',
     //borderWidth: 1
   },
 

@@ -4,6 +4,7 @@ import {
   View,
   Animated,
   ScrollView,
+  Keyboard,
   KeyboardAvoidingView,
   Text,
   Image,
@@ -15,16 +16,14 @@ import {
   DeviceEventEmitter,
 } from "react-native";
 import normalize from "react-native-normalize";
+import AsyncStorage from '@react-native-community/async-storage';
 
-import { postLoginInfo } from '../../api/rest';
-import { signInWithPhoneNumber } from '../../api/Firebase';
-import auth from '@react-native-firebase/auth'
-
-import { Colors, Images, LoginInfo, RouteParam } from '@constants';
 import {
   Button,
   Header,
 } from '@components';
+import { Colors, Images, LoginInfo, RouteParam } from '@constants';
+import { postLoginInfo } from '../../api/rest';
 
 export default class SMSScreen extends Component {
   constructor(props) {
@@ -62,11 +61,12 @@ export default class SMSScreen extends Component {
           LoginInfo.email = RouteParam.loginEssentialInfo.email;
           LoginInfo.telephone = RouteParam.loginEssentialInfo.telephone;
 
+          Keyboard.dismiss();
           this.submit();
         })
         .catch(error => {
           console.log('verification error', error);
-          Alert.alert('Verification Code is wrong!');
+          Alert.alert('Invalid Activation Code. \n You\'ve entered an invalid activation code. \n Please try again');
         })
     } else {
       Alert.alert('Please enter a 6 digit OTP code.')
@@ -89,10 +89,13 @@ export default class SMSScreen extends Component {
     bodyFormData.append('referredby', 0);
 
     await postLoginInfo(bodyFormData)
-      .then((res) => console.log('post login info success', res))
-      .catch((err) => console.log('post login info error', err))
+      .then((res) => {
+        console.log('post login info success', res);
 
-    this.props.navigation.navigate('Welcome');
+        AsyncStorage.setItem('LoginInfo', JSON.stringify(LoginInfo));
+        this.props.navigation.navigate('Welcome');
+      })
+      .catch((err) => console.log('post login info error', err))
   }
 
   render() {
