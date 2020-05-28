@@ -165,8 +165,10 @@ export default class ResultListScreen extends Component {
     this.props.navigation.navigate('PropertyStack');
   }
 
-  onSearch = () => {
-    //this.props.navigation.navigate('Location');
+  onSearch = (query) => {
+    //console.log(SearchBy.query);
+    SearchBy.query = query;
+    this.getSearchByQuery();
   }
 
   onApply = () => {
@@ -191,8 +193,9 @@ export default class ResultListScreen extends Component {
                   <Image style={{ width: '100%', height: '100%' }} source={Images.iconFilter} resizeMode='contain' />
                 </TouchableOpacity>
               </View>
-
-              <SearchBox boxStyle={{ width: width * 0.9, height: normalize(35, 'height'), backgroundColor: Colors.searchBackColor, borderColor: Colors.searchBackColor, btnColor: Colors.weakBlackColor }} onSearch={this.onSearch} />
+              <View style={styles.searchBoxContainer}>
+                <SearchBox boxStyle={{ width: width * 0.9, height: normalize(35, 'height'), backgroundColor: Colors.searchBackColor, borderColor: Colors.searchBackColor, btnColor: Colors.weakBlackColor }} onSearch={this.onSearch} />
+              </View>
 
               <View style={styles.conditionContainer}>
                 <View style={styles.conditionInnerContainer}>
@@ -389,6 +392,11 @@ const styles = StyleSheet.create({
     paddingLeft: normalize(10),
     marginBottom: normalize(5, 'height'),
     //borderWidth: 1
+  },
+  searchBoxContainer: {
+    width: '95%',    
+    height: '22%',   
+    //borderWidth: 1    
   },
   conditionContainer: {
     width: '95%',

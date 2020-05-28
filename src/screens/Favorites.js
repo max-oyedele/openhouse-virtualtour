@@ -98,8 +98,9 @@ export default class FavoritesScreen extends Component {
           </View>
           <View style={styles.listContainer}>
             <ActivityIndicator style={{ position: 'absolute' }} animating={this.state.spinner} />
-            {((this.state.tab === 'favorites' && this.state.favoritesData.length == 0) ||
-              (this.state.tab === 'viewed' && this.state.viewedData.length == 0)) ?
+            {(((this.state.tab === 'favorites' && this.state.favoritesData.length == 0) ||
+              (this.state.tab === 'viewed' && this.state.viewedData.length == 0)) && 
+              this.state.spinner == false) ?
               <View style={styles.emptyContainer}>
                 <Text style={{ fontFamily: 'SFProText-Semibold', fontSize: 14, color: Colors.blackColor }}>Add Properties</Text>
                 <Text style={{ fontFamily: 'SFProText-Regular', fontSize: 12, color: Colors.passiveTxtColor, textAlign: 'center', marginTop: normalize(10, 'height') }}>Press the bookmark button to add an property</Text>
@@ -151,6 +152,7 @@ const styles = StyleSheet.create({
     //height: '62%',
     height: '75%',
     justifyContent: 'center',
+    alignItems: 'center',
     alignSelf: 'center',
     marginTop: normalize(18, 'height'),
     //borderWidth: 1

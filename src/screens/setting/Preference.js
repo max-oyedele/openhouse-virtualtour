@@ -64,7 +64,7 @@ export default class PreferenceScreen extends Component {
   }
 
   render() {
-    const isOptionOverFlow = Preferences[this.state.selectedPreferenceIndex].options.length > 8 ? true : false;
+    const isOptionOverFlow = PreferencesData[this.state.selectedPreferenceIndex].options.length > 8 ? true : false;
     return (
       <View style={styles.container}>
         <View style={{ width: '100%' }}>

@@ -17,7 +17,6 @@ import normalize from 'react-native-normalize';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import { RFPercentage, RFValue } from "react-native-responsive-fontsize";
 
-import { Colors, Images } from '@constants';
 import {
   BrowseCard,
   Button,
@@ -29,19 +28,12 @@ import {
   SideMenu,
   SignModal,
 } from '@components';
+import { Colors, Images, RouteParam } from '@constants';
 
 export default class RealtorProfileScreen extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      realtor: {
-        name: 'Anthony Robinson Duran',
-        role: 'Licensed Real Estate Salesperson',
-        company: 'Real Estate Company',
-        img: require('../../assets/images/realtorProfileImg.png'),
-        activeListings: 16,
-        sold: 64
-      },
+    this.state = {      
       propertiesByMeData: [
         {
           id: 'MLS.123456',
@@ -199,12 +191,12 @@ export default class RealtorProfileScreen extends Component {
         <View style={styles.body}>
           <View style={styles.imgAndNameContainer}>
             <View style={styles.imgContainer}>
-              <Image style={{ width: '100%', height: '100%', borderRadius: 10 }} source={this.state.realtor.img} resizeMode='stretch' />
+              <Image style={{ width: '100%', height: '100%', borderRadius: 10 }} source={{uri: RouteParam.agent.img}} resizeMode='stretch' />
             </View>
             <View style={styles.nameContainer}>
-              <View style={{ width: '100%', height: '20%', justifyContent: 'center' }}><Text style={{ fontFamily: 'SFProText-Bold', fontSize: RFPercentage(2.2), color: Colors.blackColor }}>{this.state.realtor.name}</Text></View>
-              <View style={{ width: '100%', height: '20%', justifyContent: 'center' }}><Text style={{ fontFamily: 'SFProText-Regular', fontSize: RFPercentage(1.8), color: Colors.passiveTxtColor }}>{this.state.realtor.role}</Text></View>
-              <View style={{ width: '100%', height: '20%', justifyContent: 'center' }}><Text style={{ fontFamily: 'SFProText-Regular', fontSize: RFPercentage(1.8), color: Colors.passiveTxtColor }}>{this.state.realtor.company}</Text></View>
+              <View style={{ width: '100%', height: '20%', justifyContent: 'center' }}><Text style={{ fontFamily: 'SFProText-Bold', fontSize: RFPercentage(2.2), color: Colors.blackColor }}>{RouteParam.agent.fullname}</Text></View>
+              <View style={{ width: '100%', height: '20%', justifyContent: 'center' }}><Text style={{ fontFamily: 'SFProText-Regular', fontSize: RFPercentage(1.8), color: Colors.passiveTxtColor }}>{RouteParam.agent.title}</Text></View>
+              <View style={{ width: '100%', height: '20%', justifyContent: 'center' }}><Text style={{ fontFamily: 'SFProText-Regular', fontSize: RFPercentage(1.8), color: Colors.passiveTxtColor }}>{RouteParam.agent.company}</Text></View>
             </View>
           </View>
 
@@ -225,7 +217,7 @@ export default class RealtorProfileScreen extends Component {
                 <Text style={{ fontFamily: 'SFProText-Semibold', fontSize: RFPercentage(2.2), color: Colors.blackColor }}>ACTIVE LISTINGS</Text>
               </View>
               <View style={{ width: '90%', height: '30%', justifyContent: 'center', alignItems: 'center' }}>
-                <Text style={{ fontFamily: 'SFProText-Regular', fontSize: RFPercentage(3.2), color: Colors.blackColor }}>{this.state.realtor.activeListings}</Text>
+                <Text style={{ fontFamily: 'SFProText-Regular', fontSize: RFPercentage(3.2), color: Colors.blackColor }}>{RouteParam.agent.activeListing}</Text>
               </View>
             </TouchableOpacity>
             <TouchableOpacity style={styles.soldContainer} onPress={() => this.props.navigation.navigate('MyListing', { tab: 'sold-rented' })}>
@@ -233,7 +225,7 @@ export default class RealtorProfileScreen extends Component {
                 <Text style={{ fontFamily: 'SFProText-Semibold', fontSize: RFPercentage(2.2), color: Colors.blackColor }}>SOLD</Text>
               </View>
               <View style={{ width: '90%', height: '30%', justifyContent: 'center', alignItems: 'center' }}>
-                <Text style={{ fontFamily: 'SFProText-Regular', fontSize: RFPercentage(3.2), color: Colors.blackColor }}>{this.state.realtor.sold}</Text>
+                <Text style={{ fontFamily: 'SFProText-Regular', fontSize: RFPercentage(3.2), color: Colors.blackColor }}>{RouteParam.agent.sold}</Text>
               </View>
             </TouchableOpacity>
           </View>

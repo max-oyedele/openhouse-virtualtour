@@ -53,7 +53,7 @@ export default class SignatureScreen extends Component {
         <SignModal
           visible={this.state.visibleSignForm}
           onClose={() => this.setState({ visibleSignForm: false })}
-          onSignOK={() => this.props.navigation.navigate('VideoProperty')}
+          onSignOK={() => console.log('where to go')}
         />
         <View style={{ width: '100%' }}>
           <Header title='AGENCY DISCLOSURE FORM' titleColor={Colors.blackColor} onPressBack={() => this.props.navigation.goBack(null)} />

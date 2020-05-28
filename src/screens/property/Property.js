@@ -9,6 +9,7 @@ import {
   TextInput,
   Alert,
   FlatList,
+  ActivityIndicator,
   TouchableOpacity,
   Dimensions,
   ImageBackground
@@ -43,82 +44,42 @@ export default class PropertyScreen extends Component {
     super(props);
     this.state = {
       isFavorite: false,
-      property: {
-        // id: 'MLS. 123456',
-        // name: '3 Bedroom Modern House',
-        // img: require('../../assets/images/propertyImg.png'),
-        // state: 'NY',
-        // price: 2.3,
-        // period: 'Monthly',
-        // subTxt: 'Dix Hills',
-        // address: '123 Main Street - First Floor',
-        // number: 11746,
-        // type: 'rent',
-        // location: 'Toronto',
-        // region: {
-        //   latitude: 37.78825,
-        //   longitude: -122.4324,
-        //   latitudeDelta: 0.0922,
-        //   longitudeDelta: 0.0421,
-        // },
-        // sqm: 230,
-        // desc: 'This Stately Brick Colonial Was Completely Renovated In 2001, Boasting 5 Beds/5.5 Baths, 2 Story Grand Entry Foyer, Huge Granite Eat-In Kitchen W/ Center Island W/ Wine Fridge, Stainless Designer Appliances W/ Gas Cooking, Radiant Heated Floor & Double Wall Ovens. Office, Fam Room W/ Wood Burning/Gas Fplc & 4K Projector Theater System, Lr W/ Gas Flpc, FDR W/ Coffered Ceiling, Master Suite W/ Sitting Room & Marble Bathroom W/ Radiant Heated Floors. Gated 1 Acre Property W/ IG Pool/Cabana.',
-        // detailImgs: [
-        //   { img: require('../../assets/images/favoriteImg1.png') },
-        //   { img: require('../../assets/images/favoriteImg2.png') },
-        //   { img: require('../../assets/images/featureImg1.png') },
-        //   { img: require('../../assets/images/featureImg2.png') },
-        // ],
-        // tags: [
-        //   {
-        //     label: 'Beds',
-        //     value: 3,
-        //     iconImg: Images.iconWhiteBed
-        //   },
-        //   {
-        //     label: 'Baths',
-        //     value: 2,
-        //     iconImg: Images.iconWhiteBath
-        //   },
-        // ],
-        // owner: {
-        //   name: 'Anthony Robinson Duran',
-        //   role: 'Licensed Real State Salesperson',
-        //   act: 'Brought By',
-        //   img: require('../../assets/images/profileImg.png')
-        // }
-      },
+      property: {},
       propertyPhotoData: [],
       agentCard: '',
       sticky: false,
+      spinner: false
     }
   }
 
-  componentDidMount() {   
+  componentDidMount() {
     this.getProperty();
     this.getPropertyPhoto();
-    this.getAgentCard();    
-  }  
+    this.getAgentCard();
+  }
 
   getProperty = () => {
     var propertyParam = {
       action: 'property_detail',
       user_latitude: LoginInfo.latitude,
-      user_longitude: LoginInfo.longitude,      
+      user_longitude: LoginInfo.longitude,
       user_id: LoginInfo.uniqueid,
-      property_recordno: RouteParam.propertyRecordNo,//this.props.route.params.propertyRecordNo
+      property_recordno: RouteParam.propertyRecordNo,
     };
 
+    this.setState({ spinner: true });
     getContentByAction(propertyParam)
       .then((res) => {
-        console.log('property', res)
-        this.setState({ 
+        //console.log('property', res)
+        this.setState({
           property: res[0],
-          isFavorite: res[0].property_isFavorite
+          isFavorite: res[0].property_isFavorite,
+          spinner: false
         });
       })
       .catch((err) => {
-        console.log('get feature property error', err)
+        console.log('get feature property error', err);
+        this.setState({ spinner: false });
       })
   }
 
@@ -126,7 +87,7 @@ export default class PropertyScreen extends Component {
     var photoParam = {
       action: 'property_photos',
       user_latitude: LoginInfo.latitude,
-      user_longitude: LoginInfo.longitude,      
+      user_longitude: LoginInfo.longitude,
       user_id: LoginInfo.uniqueid,
       property_recordno: RouteParam.propertyRecordNo,//this.props.route.params.propertyRecordNo
     };
@@ -145,7 +106,7 @@ export default class PropertyScreen extends Component {
     var cardParam = {
       action: 'agent_card',
       user_latitude: LoginInfo.latitude,
-      user_longitude: LoginInfo.longitude,      
+      user_longitude: LoginInfo.longitude,
       user_id: LoginInfo.uniqueid,
       user_assigned_agent: 0, //hard code
       property_recordno: RouteParam.propertyRecordNo,//this.props.route.params.propertyRecordNo
@@ -171,25 +132,36 @@ export default class PropertyScreen extends Component {
     var favoriteParam = {
       action: 'favorites_properties',
       user_latitude: LoginInfo.latitude,
-      user_longitude: LoginInfo.longitude,      
+      user_longitude: LoginInfo.longitude,
       user_id: LoginInfo.uniqueid,
       user_action: addRemoveFlag,
       property_recordno: RouteParam.propertyRecordNo,//this.props.route.params.propertyRecordNo
     };
 
     let bodyFormData = new FormData();
-    bodyFormData.append('action', favoriteParam.action);    
+    bodyFormData.append('action', favoriteParam.action);
     bodyFormData.append('user_latitude', favoriteParam.user_latitude);
-    bodyFormData.append('user_longitude', favoriteParam.user_longitude); 
-    bodyFormData.append('user_id', favoriteParam.user_id); 
-    bodyFormData.append('user_action', favoriteParam.user_action); 
+    bodyFormData.append('user_longitude', favoriteParam.user_longitude);
+    bodyFormData.append('user_id', favoriteParam.user_id);
+    bodyFormData.append('user_action', favoriteParam.user_action);
     bodyFormData.append('property_recordno', favoriteParam.property_recordno);
-        
+
     await postSaveOrRemoveProperty(bodyFormData)
       .then((res) => console.log('post save or remove favorite success', res))
       .catch((err) => console.log('post save or remove favorite error', err))
-    
+
     this.setState({ isFavorite: !this.state.isFavorite });
+  }
+
+  onOpenVirtual = () => {
+    RouteParam.agent.fullname = this.state.agentCard.agent_fullname;
+    RouteParam.agent.title = this.state.agentCard.agent_title;
+    RouteParam.agent.company = 'Real Estate Company'; //this.state.agentCard.agent_company;
+    RouteParam.agent.img = this.state.agentCard.agent_photourl;
+    RouteParam.agent.activeListing = 16; //this.state.agentCard.activeListing;
+    RouteParam.agent.sold = 64; //this.state.agentCard.sold;
+
+    this.props.navigation.navigate('OpenVirtual')
   }
 
   renderViewMore(onPress) {
@@ -224,6 +196,7 @@ export default class PropertyScreen extends Component {
       <ScrollView
         ref={ref => this.scrollRef = ref}
         style={styles.container}
+        bounces={false}
         showsVerticalScrollIndicator={false}
         stickyHeaderIndices={[0]}
         onScroll={this.handleScroll}
@@ -248,6 +221,7 @@ export default class PropertyScreen extends Component {
               )
           }
 
+          <ActivityIndicator style={{ position: 'absolute' }} animating={this.state.spinner} />
 
           <View style={[styles.labelTagLine, this.state.sticky ? { marginTop: normalize(390, 'height') } : { marginTop: normalize(347, 'height') }]}>
             <LabelTag tagTxt={this.state.property.property_listing_type === 'R' ? 'For Rent' : 'For Sale'} tagStyle={{ width: normalize(85), height: normalize(25, 'height') }} />
@@ -306,7 +280,7 @@ export default class PropertyScreen extends Component {
         </ImageBackground>
 
         <View style={styles.enterBtnContainer}>
-          <Button btnTxt='Walk Around! Enter Virtual Open House' btnStyle={{ width: '100%', height: normalize(50, 'height'), color: 'blue' }} onPress={() => this.props.navigation.navigate('OpenVirtual')} />
+          <Button btnTxt='Walk Around! Enter Virtual Open House' btnStyle={{ width: '100%', height: normalize(50, 'height'), color: 'blue' }} onPress={() => this.onOpenVirtual()} />
         </View>
 
         <View style={styles.descContainer}>
@@ -328,12 +302,15 @@ export default class PropertyScreen extends Component {
         </View>
 
         <View style={styles.callCardContainer}>
-          <CallCard
-            userName={this.state.agentCard.agent_fullname}
-            userRole={this.state.agentCard.agent_title}
-            userAct='Presented By'
-            userImg={{ uri: this.state.agentCard.agent_photourl }}
-          />
+          {
+            this.state.agentCard != '' &&
+            <CallCard
+              userName={this.state.agentCard.agent_fullname}
+              userRole={this.state.agentCard.agent_title}
+              userAct='Presented By'
+              userImg={{ uri: this.state.agentCard.agent_photourl }}
+            />
+          }
         </View>
 
         <View style={styles.photoContainer}>
@@ -352,7 +329,7 @@ export default class PropertyScreen extends Component {
             }}
           />
         </View>
-        <View style={styles.mapContainer}>        
+        <View style={styles.mapContainer}>
           <MapView
             initialRegion={{
               latitude: this.state.property.property_latitude,
@@ -376,16 +353,16 @@ export default class PropertyScreen extends Component {
               coordinate={{
                 latitude: this.state.property.property_latitude,
                 longitude: this.state.property.property_longitude
-              }}              
+              }}
               title={this.state.property.property_city}
             >
-              <View style={{width: normalize(20), height: normalize(30, 'height')}}>
-                <Image style={{width: '100%', height: '100%'}} source={Images.marker} />
+              <View style={{ width: normalize(20), height: normalize(30, 'height') }}>
+                <Image style={{ width: '100%', height: '100%' }} source={Images.marker} />
               </View>
             </Marker>
           </MapView>
         </View>
-        
+
       </ScrollView>
     );
   }
@@ -408,6 +385,8 @@ const styles = StyleSheet.create({
     //height: height * 0.75,
     height: height,
     //justifyContent: 'space-between',
+    justifyContent: 'center',
+    alignItems: 'center',
     //borderWidth: 1
   },
 

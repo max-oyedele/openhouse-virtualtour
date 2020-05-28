@@ -21,7 +21,8 @@ export const RouteParam = {
   loginEssentialInfo: {},
   confirmResult: {},
   searchKind: '',  
-  propertyRecordNo: '',  
+  propertyRecordNo: '',
+  agent: {},
 }
 
 export const SearchWordData = [];

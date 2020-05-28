@@ -142,12 +142,24 @@ export default class DashboardScreen extends Component {
         // },
       ]
     }
+
+    this.listener = this.props.navigation.addListener('focus', this.componentDidFocus.bind(this));
   }
 
   componentDidMount() {
     this.getCategory();
     this.getFeatureProperty();
     this.getSearchWord();
+  }
+
+  componentDidFocus() {
+    SearchBy.query = '';
+    this.scrollRef.scrollTo({y:0, animated: true});
+    this.setState({ refresh: !this.state.refresh });
+  }
+
+  componentWillUnmount() {
+    //this.listener.remove()
   }
 
   getCategory = () => {
@@ -168,7 +180,7 @@ export default class DashboardScreen extends Component {
         this.setState({ categoryData: sortedRes });
       })
       .catch((err) => {
-        console.log('get category error', err)
+        console.log('get category error', err);
       })
   }
 
@@ -208,9 +220,8 @@ export default class DashboardScreen extends Component {
     getContentByAction(searchWordParam)
       .then((res) => {
         res.forEach(each => {
-          SearchWordData.push(each.search_city);
-        })
-        //console.log('searchWord', SearchWordData);
+          if(SearchWordData.indexOf(each.search_city) == -1) SearchWordData.push(each.search_city);
+        })        
       })
       .catch((err) => {
         console.log('get searchword error', err)
@@ -218,8 +229,8 @@ export default class DashboardScreen extends Component {
   }
 
   onCategoryPress = (categoryId) => {
-    SearchBy.propertyType = categoryId;  
-    RouteParam.searchKind = 'searchByCategory';  
+    SearchBy.propertyType = categoryId;
+    RouteParam.searchKind = 'searchByCategory';
     this.props.navigation.navigate('SearchStack');
   }
 
@@ -243,7 +254,7 @@ export default class DashboardScreen extends Component {
     //console.log(SearchBy.query);
     SearchBy.query = query;
     RouteParam.searchKind = 'searchByQuery';
-    if (query)this.props.navigation.navigate('SearchStack');
+    if (query) this.props.navigation.navigate('SearchStack');
   }
 
   render() {
@@ -253,7 +264,11 @@ export default class DashboardScreen extends Component {
           <SideMenu navigation={this.props.navigation} onToggleMenu={this.onToggleMenu} onLogout={this.onLogout} />
           : null
         }
-        <ScrollView showsVerticalScrollIndicator={false}>
+        <ScrollView
+          ref={ref => this.scrollRef = ref}
+          bounces={false}
+          showsVerticalScrollIndicator={false}
+        >
           <ImageBackground style={styles.backImgContainer} source={require('../assets/images/dashboardBackground.png')}>
             <View style={styles.sideMenuIcon}>
               <TouchableOpacity onPress={() => this.setState({ toggleMenuVisible: !this.state.toggleMenuVisible })}>
@@ -299,7 +314,7 @@ export default class DashboardScreen extends Component {
                   horizontal={true}
                   showsHorizontalScrollIndicator={false}
                   data={this.state.categoryData}
-                  renderItem={({ item, index }) => <BrowseCard item={item} onPress={() => this.onCategoryPress(item.properties_category_id)}/>}
+                  renderItem={({ item, index }) => <BrowseCard item={item} onPress={() => this.onCategoryPress(item.properties_category_id)} />}
                   keyExtractor={item => item.properties_category_id}
                 />
               </View>

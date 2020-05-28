@@ -28,6 +28,7 @@ import {
   SignModal,
 } from '@components';
 import { RFPercentage } from "react-native-responsive-fontsize";
+import { SearchBy } from "../../constants";
 
 export default class LocationScreen extends Component {
   constructor(props) {

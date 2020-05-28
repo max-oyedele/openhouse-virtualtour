@@ -16,7 +16,6 @@ import normalize from 'react-native-normalize';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import { RFPercentage, RFValue } from "react-native-responsive-fontsize";
 
-import { Colors, Images } from '@constants';
 import {
   BrowseCard,
   Button,
@@ -28,15 +27,13 @@ import {
   SideMenu,
   SignModal,
 } from '@components';
+import { Colors, Images, RouteParam } from '@constants';
 
 export default class OpenVirtualHomeScreen extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      realtor: {
-        name: '',
-        img: require('../../assets/images/realtorProfileImg.png')
-      }
+      
     }
   }
 
@@ -46,7 +43,7 @@ export default class OpenVirtualHomeScreen extends Component {
 
   render() {
     return (
-      <ImageBackground style={styles.container} source={this.state.realtor.img}>
+      <ImageBackground style={styles.container} source={{uri: RouteParam.agent.img}}>
         <View style={{ width: '100%' }}>
           <Header title='' titleColor={Colors.whiteColor} onPressBack={() => this.props.navigation.goBack(null)} />
         </View>
