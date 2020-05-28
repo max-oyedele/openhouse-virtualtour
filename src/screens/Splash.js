@@ -45,6 +45,8 @@ export default class SplashScreen extends Component {
 
   componentDidMount() {
     //this.getLocation();
+
+
     this.submit();
     setTimeout(() => { this.props.navigation.navigate('Main') }, 1000);
   }
@@ -108,12 +110,12 @@ export default class SplashScreen extends Component {
   }
 
   submit = async () => {
-    LoginInfo.uniqueid = 'ofWMyPXkyMhazypDEcAe9tTI54d2';
-    LoginInfo.fullname = 'tomas andersson';
-    LoginInfo.email = 'eastsea1020n@gmail.com';
-    LoginInfo.telephone = '+16505551234';
+    LoginInfo.uniqueid = '123';
+    LoginInfo.fullname = 'anthony robinson';
+    LoginInfo.email = 'opendemo@icloud.com';
+    LoginInfo.telephone = '+13059007270';
     LoginInfo.photourl = '';
-    LoginInfo.providerid = 'google';
+    LoginInfo.providerid = 'apple';
     LoginInfo.email_verified = true;
     LoginInfo.latitude = 40.776611;
     LoginInfo.longitude = -73.345718;

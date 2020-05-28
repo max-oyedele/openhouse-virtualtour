@@ -36,7 +36,7 @@ import {
   SideMenu,
   SignModal,
 } from '@components';
-import { Colors, Images, PropertyCardTheme, LoginInfo, SearchBy, SearchWordData, PropertyTypeData } from '@constants';
+import { Colors, Images, PropertyCardTheme, LoginInfo, RouteParam, SearchBy, SearchWordData, PropertyTypeData } from '@constants';
 import { getContentByAction } from '../../api/rest';
 
 export default class ResultMapScreen extends Component {
@@ -79,19 +79,37 @@ export default class ResultMapScreen extends Component {
       sortOrder: SearchBy.sortOrder,
       oldSortBy: SearchBy.sortBy,
       oldSortOrder: SearchBy.sortOrder,
+      headerTitle: ''
     }
+
+    this.listener = this.props.navigation.addListener('focus', this.componentDidFocus.bind(this));
   }
 
   componentDidMount() {
-    this.getSearchResult();
+    
   }
 
-  getSearchResult = () => {
+  componentDidFocus(){
+    if (RouteParam.searchKind === 'searchByQuery') {
+      this.setState({ headerTitle: SearchBy.query})
+      this.getSearchByQuery();
+    }
+    else if (RouteParam.searchKind === 'searchByCategory'){
+      this.setState({ headerTitle: PropertyTypeData[SearchBy.propertyTypeIndex].properties_category_short_desc});
+      this.getSearchByCategory();
+    } 
+  }
+
+  componentWillUnmount() {
+    //if (this.listener) this.listener.remove();
+  }
+  
+  getSearchByQuery = () => {
     var searchParam = {
       action: 'property_search',
       user_latitude: LoginInfo.latitude,
       user_longitude: LoginInfo.longitude,
-      user_id: '123', //LoginInfo.uniqueid,      
+      user_id: LoginInfo.uniqueid,
       search_city: SearchBy.query,
       listingtype: SearchBy.listingType,
       propertytype: SearchBy.propertyTypeIndex,
@@ -108,29 +126,73 @@ export default class ResultMapScreen extends Component {
 
     getContentByAction(searchParam)
       .then((res) => {
+        if (res[0].error) {
+          this.setState({ spinner: false });
+          return;
+        }
+
         //console.log('searchData', res);
         var sortedRes = res.sort((a, b) => { return a.properties_displayorder - b.properties_displayorder })
-
-        var markerData = [];
-        res.forEach((each) => {
-          markerData.push({
-            coordinate: {
-              latitude: each.property_latitude,
-              longitude: each.property_longitude
-            },
-            title: each.property_address1
-          })
-        });
         this.setState({
           resultData: sortedRes,
-          markerData: markerData,
           spinner: false
         })
+
+        this.getMarkerData(sortedRes);
       })
       .catch((err) => {
         console.log('get search data error', err);
         this.setState({ spinner: false });
       })
+  }
+
+  getSearchByCategory = () => {
+    var searchParam = {
+      action: 'property_search_by_category',
+      user_latitude: LoginInfo.latitude,
+      user_longitude: LoginInfo.longitude,
+      user_id: LoginInfo.uniqueid,
+      propertytype: SearchBy.propertyTypeIndex,
+    };
+    //console.log('param', searchParam);
+    this.setState({ spinner: true, resultData: [] });
+
+    getContentByAction(searchParam)
+      .then((res) => {
+        //console.log('searchData', res);        
+        if (res[0].error) {
+          this.setState({ spinner: false });
+          return;
+        }
+
+        var sortedRes = res.sort((a, b) => { return a.properties_displayorder - b.properties_displayorder })
+        this.setState({ resultData: sortedRes, spinner: false });
+
+        this.getMarkerData(sortedRes);
+      })
+      .catch((err) => {
+        console.log('get search data error', err);
+        this.setState({ spinner: false });
+      })
+  }
+
+  getMarkerData = (res) => {
+    var markerData = [];
+    res.forEach((each) => {
+      markerData.push({
+        coordinate: {
+          latitude: each.property_latitude,
+          longitude: each.property_longitude
+        },
+        title: each.property_address1
+      })
+    });
+    this.setState({ markerData: markerData });
+  }
+
+  onPropertyPress = (propertyRecordNo) => {
+    RouteParam.propertyRecordNo = propertyRecordNo;
+    this.props.navigation.navigate('PropertyStack');
   }
 
   onSearch = () => {
@@ -142,7 +204,7 @@ export default class ResultMapScreen extends Component {
     SearchBy.sortOrder = this.state.sortOrder;
 
     this.setState({ visibleModal: false })
-    this.getSearchResult();
+    this.getSearchByQuery();
     //console.log('searchBy', SearchBy);
   }
 
@@ -200,18 +262,18 @@ export default class ResultMapScreen extends Component {
         <View style={styles.listContainer}>
           <ActivityIndicator style={{ position: 'absolute' }} animating={this.state.spinner} />
           {
-            this.state.resultData.length == 0 && this.state.spinner == false ? 
-            <View style={styles.emptyContainer}>
-              <Text style={{ fontFamily: 'SFProText-Semibold', fontSize: 14, color: Colors.blackColor }}>No Result Data</Text>
-            </View>
-            :
-            <FlatList
-              horizontal={true}
-              showsHorizontalScrollIndicator={false}
-              data={this.state.resultData}
-              renderItem={({ item }) => <PropertyCard cardStyle={{ width: normalize(325), height: normalize(245, 'height'), marginTop: normalize(10, 'height'), marginRight: normalize(10) }} cardTheme={PropertyCardTheme[1]} item={item} onPress={this.onPropertyPress} />}
-              keyExtractor={item => item.property_recordno}
-            />
+            this.state.resultData.length == 0 && this.state.spinner == false ?
+              <View style={styles.emptyContainer}>
+                <Text style={{ fontFamily: 'SFProText-Semibold', fontSize: 14, color: Colors.blackColor }}>No Result Data</Text>
+              </View>
+              :
+              <FlatList
+                horizontal={true}
+                showsHorizontalScrollIndicator={false}
+                data={this.state.resultData}
+                renderItem={({ item }) => <PropertyCard cardStyle={{ width: normalize(325), height: normalize(245, 'height'), marginTop: normalize(10, 'height'), marginRight: normalize(10) }} cardTheme={PropertyCardTheme[1]} item={item} onPress={() => this.onPropertyPress(item.property_recordno)} />}
+                keyExtractor={item => item.property_recordno}
+              />
           }
         </View>
 

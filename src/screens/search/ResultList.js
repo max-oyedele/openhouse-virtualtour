@@ -31,7 +31,7 @@ import {
   SideMenu,
   SignModal,
 } from '@components';
-import { Colors, Images, PropertyCardTheme, LoginInfo, SearchBy, SearchWordData, PropertyTypeData } from '@constants';
+import { Colors, Images, PropertyCardTheme, LoginInfo, RouteParam, SearchBy, SearchWordData, PropertyTypeData } from '@constants';
 import { getContentByAction } from '../../api/rest';
 
 export default class ResultListScreen extends Component {
@@ -54,6 +54,7 @@ export default class ResultListScreen extends Component {
       oldBedrooms: '',
       oldBathrooms: '',
       resultData: [],
+      headerTitle: ''
     }
 
     this.listener = this.props.navigation.addListener('focus', this.componentDidFocus.bind(this));
@@ -72,19 +73,26 @@ export default class ResultListScreen extends Component {
       refresh: !this.state.refresh
     });
 
-    this.getSearchResult();
+    if (RouteParam.searchKind === 'searchByQuery') {
+      this.setState({ headerTitle: SearchBy.query})
+      this.getSearchByQuery();
+    }
+    else if (RouteParam.searchKind === 'searchByCategory'){
+      this.setState({ headerTitle: PropertyTypeData[SearchBy.propertyTypeIndex].properties_category_short_desc});
+      this.getSearchByCategory();
+    } 
   }
 
   componentWillUnmount() {
     //if (this.listener) this.listener.remove();
-  }  
+  }
 
-  getSearchResult = () => {
+  getSearchByQuery = () => {
     var searchParam = {
       action: 'property_search',
       user_latitude: LoginInfo.latitude,
       user_longitude: LoginInfo.longitude,
-      user_id: '123', //LoginInfo.uniqueid,      
+      user_id: LoginInfo.uniqueid,
       search_city: SearchBy.query,
       listingtype: SearchBy.listingType,
       propertytype: SearchBy.propertyTypeIndex,
@@ -101,9 +109,15 @@ export default class ResultListScreen extends Component {
 
     getContentByAction(searchParam)
       .then((res) => {
-        console.log('searchData', res);
+        if (res[0].error) {
+          this.setState({ spinner: false });
+          return;
+        }
+
         var sortedRes = res.sort((a, b) => { return a.properties_displayorder - b.properties_displayorder })
         this.setState({ resultData: sortedRes, spinner: false });
+
+        //console.log('searchData', res);        
       })
       .catch((err) => {
         console.log('get search data error', err);
@@ -111,20 +125,53 @@ export default class ResultListScreen extends Component {
       })
   }
 
+  getSearchByCategory = () => {
+    var searchParam = {
+      action: 'property_search_by_category',
+      user_latitude: LoginInfo.latitude,
+      user_longitude: LoginInfo.longitude,
+      user_id: LoginInfo.uniqueid,
+      propertytype: SearchBy.propertyTypeIndex,
+    };
+    //console.log('param', searchParam);
+    this.setState({ spinner: true, resultData: [] });
+
+    getContentByAction(searchParam)
+      .then((res) => {
+        //console.log('searchData', res);        
+        if (res[0].error) {
+          this.setState({ spinner: false });
+          return;
+        }
+
+        var sortedRes = res.sort((a, b) => { return a.properties_displayorder - b.properties_displayorder })
+        this.setState({ resultData: sortedRes, spinner: false });        
+      })
+      .catch((err) => {
+        console.log('get search data error', err);
+        this.setState({ spinner: false });
+      })
+  }  
+
+  onPropertyPress = (propertyRecordNo) => {
+    RouteParam.propertyRecordNo = propertyRecordNo;
+    this.props.navigation.navigate('PropertyStack');
+  }
+
   onSearch = () => {
     //this.props.navigation.navigate('Location');
   }
 
-  onApply = () => {    
+  onApply = () => {
     this.setState({ visibleNumberOfRooms: false })
-    this.getSearchResult();    
+    this.getSearchByQuery();
   }
 
   render() {
     return (
       <View style={styles.container}>
         <View style={{ width: '100%' }}>
-          <Header title={SearchBy.query.toUpperCase()} titleColor={Colors.blackColor} rightIcon={Images.iconMap} onPressBack={() => this.props.navigation.goBack(null)} onPressRightIcon={() => this.props.navigation.navigate('ResultMap')} />
+          <Header title={this.state.headerTitle.toUpperCase()} titleColor={Colors.blackColor} rightIcon={Images.iconMap} onPressBack={() => this.props.navigation.goBack(null)} onPressRightIcon={() => this.props.navigation.navigate('ResultMap')} />
         </View>
 
         <View style={styles.body}>
@@ -181,7 +228,7 @@ export default class ResultListScreen extends Component {
           <View style={styles.listContainer}>
             <ActivityIndicator style={{ position: 'absolute' }} animating={this.state.spinner} />
             {
-              this.state.resultData.length == 0 && this.state.spinner == false ? 
+              this.state.resultData.length == 0 && this.state.spinner == false ?
                 <View style={styles.emptyContainer}>
                   <Text style={{ fontFamily: 'SFProText-Semibold', fontSize: 14, color: Colors.blackColor }}>No Result Data</Text>
                 </View>
@@ -189,7 +236,7 @@ export default class ResultListScreen extends Component {
                 <FlatList
                   showsVerticalScrollIndicator={false}
                   data={this.state.resultData}
-                  renderItem={({ item }) => <PropertyCard cardStyle={{ width: width * 0.95, height: normalize(245, 'height'), marginBottom: normalize(10, 'height'), marginRight: 0 }} cardTheme={PropertyCardTheme[1]} item={item} onPress={this.onPropertyPress} />}
+                  renderItem={({ item }) => <PropertyCard cardStyle={{ width: width * 0.95, height: normalize(245, 'height'), marginBottom: normalize(10, 'height'), marginRight: 0 }} cardTheme={PropertyCardTheme[1]} item={item} onPress={() => this.onPropertyPress(item.property_recordno)} />}
                   keyExtractor={item => item.property_recordno}
                 />
             }
