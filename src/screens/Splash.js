@@ -40,14 +40,16 @@ export default class SplashScreen extends Component {
     super(props);
     this.state = {
       logoTxt: 'In-Person & Virtual \n Digital Sign-in Platform'
-    }    
+    }
   }
 
   componentDidMount() {
-    this.getLocation();
+    //this.getLocation();
+    this.submit();
+    setTimeout(() => { this.props.navigation.navigate('Main') }, 1000);
   }
 
-  componentWillUnmount(){
+  componentWillUnmount() {
     //if(this.listener) this.listener.remove();
   }
 
@@ -60,7 +62,7 @@ export default class SplashScreen extends Component {
         //console.log(location);
         LoginInfo.latitude = location.latitude;
         LoginInfo.longitude = location.longitude;
-        
+
         this.isLoggedInProc();
       })
       .catch(error => {
@@ -76,7 +78,7 @@ export default class SplashScreen extends Component {
       })
   }
 
-  isLoggedInProc = () => {    
+  isLoggedInProc = () => {
     AsyncStorage.getItem('LoginInfo')
       .then(async (loginInfo) => {
         if (loginInfo) {
@@ -91,17 +93,17 @@ export default class SplashScreen extends Component {
           LoginInfo.email_verified = info.email_verified;
           // LoginInfo.latitude = info.latitude;
           // LoginInfo.longitude = info.longitude;
-          
+
           this.submit();
-          setTimeout(() => {this.props.navigation.navigate('Main')}, 1000);
-        }        
-        else{
-          setTimeout(() => {this.props.navigation.navigate('Auth')}, 1000);
+          setTimeout(() => { this.props.navigation.navigate('Main') }, 1000);
+        }
+        else {
+          setTimeout(() => { this.props.navigation.navigate('Auth') }, 1000);
         }
       })
-      .catch((err)=>{
+      .catch((err) => {
         console.log('get login info error', err);
-        setTimeout(() => {this.props.navigation.navigate('Auth')}, 1000);
+        setTimeout(() => { this.props.navigation.navigate('Auth') }, 1000);
       })
   }
 
@@ -132,7 +134,7 @@ export default class SplashScreen extends Component {
 
     await postLoginInfo(bodyFormData)
       .then((res) => console.log('post login info success', res))
-      .catch((err) => console.log('post login info error', err))    
+      .catch((err) => console.log('post login info error', err))
   }
 
   render() {
