@@ -30,7 +30,7 @@ import {
   SideMenu,
   SignModal
 } from '@components';
-import { Colors, Images, PropertyCardTheme, SearchBy } from '@constants';
+import { Colors, Images, SearchBy } from '@constants';
 
 export default class SearchByScreen extends Component {
   constructor(props) {
@@ -66,7 +66,7 @@ export default class SearchByScreen extends Component {
       Alert.alert('Please enter the price');
       return;
     }
-    
+
     //SearchBy.query = this.state.query;
     SearchBy.priceFrom = this.state.priceFrom;
     SearchBy.priceTo = this.state.priceTo;
@@ -156,7 +156,7 @@ export default class SearchByScreen extends Component {
                     <View style={{ width: '20%', height: '100%', justifyContent: 'center', alignItems: 'center' }}>
                       <TouchableOpacity style={{ width: '70%', height: '50%' }} onPress={() => {
                         let numberOfRooms = this.state.numberOfRooms;
-                        numberOfRooms[index].count = each.count > 0 ? each.count - 1 : 0;
+                        numberOfRooms[index].count = each.count > 1 ? each.count - 1 : 1;
                         this.setState({ numberOfRooms: numberOfRooms });
                       }}>
                         <Image style={{ width: '100%', height: '100%' }} source={Images.iconMinus} resizeMode='contain' />

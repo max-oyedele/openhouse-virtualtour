@@ -4,12 +4,6 @@ import DefinedImages from './Images';
 export const Colors = CustomColors;
 export const Images = DefinedImages;
 
-export const PropertyCardTheme = [
-  'name_subtxt_price_location_sqm',
-  'name_tags_price',
-  'price_tags'
-];
-
 export const LoginInfo = {
   uniqueid: '',
   fullname: '',
@@ -35,11 +29,11 @@ export const SearchWordData = [];
 export const SearchBy = {
   query: '',
   listingType: 'S',
-  propertyTypeIndex: 1,
+  propertyType: 1,
   priceFrom: 1,
   priceTo: 10000000,
-  bedrooms: 0,
-  bathrooms: 0,
+  bedrooms: 1,
+  bathrooms: 1,
   distance: 1000000,
   sortBy: 'property_price',
   sortOrder: 'asc'

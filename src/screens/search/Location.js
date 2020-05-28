@@ -15,7 +15,7 @@ import {
 } from "react-native";
 import normalize from 'react-native-normalize';
 
-import { Colors, Images, PropertyCardTheme } from '@constants';
+import { Colors, Images } from '@constants';
 import {
   BrowseCard,
   Button,

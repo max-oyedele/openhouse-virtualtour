@@ -37,7 +37,7 @@ import {
   SignModal,
 } from '@components';
 
-import { Colors, Images, PropertyCardTheme, LoginInfo, RouteParam, SearchWordData, SearchBy, PropertyTypeData } from '@constants';
+import { Colors, Images, LoginInfo, RouteParam, SearchWordData, SearchBy, PropertyTypeData } from '@constants';
 import { getContentByAction } from '../api/rest';
 
 export default class DashboardScreen extends Component {
@@ -217,8 +217,8 @@ export default class DashboardScreen extends Component {
       })
   }
 
-  onCategoryPress = (categoryIndex) => {
-    SearchBy.propertyTypeIndex = categoryIndex;  
+  onCategoryPress = (categoryId) => {
+    SearchBy.propertyType = categoryId;  
     RouteParam.searchKind = 'searchByCategory';  
     this.props.navigation.navigate('SearchStack');
   }
@@ -299,7 +299,7 @@ export default class DashboardScreen extends Component {
                   horizontal={true}
                   showsHorizontalScrollIndicator={false}
                   data={this.state.categoryData}
-                  renderItem={({ item, index }) => <BrowseCard item={item} onPress={() => this.onCategoryPress(index)}/>}
+                  renderItem={({ item, index }) => <BrowseCard item={item} onPress={() => this.onCategoryPress(item.properties_category_id)}/>}
                   keyExtractor={item => item.properties_category_id}
                 />
               </View>
@@ -315,7 +315,7 @@ export default class DashboardScreen extends Component {
                   horizontal={true}
                   showsHorizontalScrollIndicator={false}
                   data={this.state.featurePropertyData}
-                  renderItem={({ item }) => <PropertyCard cardStyle={{ width: normalize(325), height: normalize(245, 'height'), marginTop: 0, marginRight: normalize(10) }} cardTheme={PropertyCardTheme[1]} item={item} listingType={SearchBy.listingType} onPress={() => this.onPropertyPress(item.property_recordno)} />}
+                  renderItem={({ item }) => <PropertyCard cardStyle={{ width: normalize(325), height: normalize(245, 'height'), marginTop: 0, marginRight: normalize(10) }} item={item} listingType={SearchBy.listingType} onPress={() => this.onPropertyPress(item.property_recordno)} />}
                   keyExtractor={item => item.property_recordno}
                 />
               </View>

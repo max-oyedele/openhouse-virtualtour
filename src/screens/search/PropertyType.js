@@ -28,7 +28,7 @@ import {
   SideMenu,
   SignModal,
 } from '@components';
-import { Colors, Images, PropertyCardTheme, LoginInfo, SearchBy, PropertyTypeData } from '@constants';
+import { Colors, Images, LoginInfo, SearchBy, PropertyTypeData } from '@constants';
 
 export default class PropertyTypeScreen extends Component {
   constructor(props) {
@@ -46,7 +46,7 @@ export default class PropertyTypeScreen extends Component {
   getCheckedList = () => {    
     var propertyTypeCheckedList = [];
     PropertyTypeData.forEach((each, index) => {
-      if(index == SearchBy.propertyTypeIndex) propertyTypeCheckedList[index] = 1;
+      if(each.properties_category_id == SearchBy.propertyType) propertyTypeCheckedList[index] = 1;
       else propertyTypeCheckedList[index] = 0;
     });  
     this.setState({propertyTypeCheckedList: propertyTypeCheckedList});
@@ -60,17 +60,17 @@ export default class PropertyTypeScreen extends Component {
       propertyTypeCheckedList.map((each, index) => {
         if (index != selectedIndex) propertyTypeCheckedList[index] = 0;
       })
-      SearchBy.propertyTypeIndex = selectedIndex;
+      SearchBy.propertyType = PropertyTypeData[selectedIndex].properties_category_id;
     }
 
     if (!selectedValue) {
       let nonSelectedCount = 0;
       propertyTypeCheckedList.map((each, index) => {
-        if (!each.checked) nonSelectedCount++;
+        if (!each) nonSelectedCount++;
       })
       if (nonSelectedCount == propertyTypeCheckedList.length) {
         propertyTypeCheckedList[0] = 1;
-        SearchBy.propertyTypeIndex = 0;
+        SearchBy.propertyType = PropertyTypeData[0].properties_category_id;
       }
     }
 

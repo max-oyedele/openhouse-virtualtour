@@ -17,7 +17,7 @@ import normalize from 'react-native-normalize';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import { RFPercentage, RFValue } from "react-native-responsive-fontsize";
 
-import { Colors, Images, PropertyCardTheme } from '@constants';
+import { Colors, Images } from '@constants';
 import {
   BrowseCard,
   Button,
@@ -253,7 +253,7 @@ export default class MyListingScreen extends Component {
               <FlatList
                 showsVerticalScrollIndicator={false}
                 data={this.state.tab === 'active' ? this.state.activeData : this.state.soldRentedData}
-                renderItem={({ item }) => <PropertyCard cardStyle={{ width: width * 0.95, height: normalize(245, 'height'), marginBottom: normalize(10, 'height'), marginRight: 0 }} cardTheme={PropertyCardTheme[1]} item={item} onPress={this.onPropertyPress} />}
+                renderItem={({ item }) => <PropertyCard cardStyle={{ width: width * 0.95, height: normalize(245, 'height'), marginBottom: normalize(10, 'height'), marginRight: 0 }} item={item} onPress={this.onPropertyPress} />}
                 keyExtractor={item => item.id}
               />
             }

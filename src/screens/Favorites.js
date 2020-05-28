@@ -29,7 +29,7 @@ import {
   SideMenu,
   SignModal,
 } from '@components';
-import { Colors, Images, PropertyCardTheme, RouteParam, LoginInfo } from '@constants';
+import { Colors, Images, RouteParam, LoginInfo } from '@constants';
 import { getContentByAction } from '../api/rest';
 
 export default class FavoritesScreen extends Component {
@@ -108,7 +108,7 @@ export default class FavoritesScreen extends Component {
               <FlatList
                 showsVerticalScrollIndicator={false}
                 data={this.state.tab === 'favorites' ? this.state.favoritesData : this.state.viewedData}
-                renderItem={({ item }) => <PropertyCard cardStyle={{ width: width * 0.95, height: normalize(245, 'height'), marginBottom: normalize(10, 'height'), marginRight: 0 }} cardTheme={PropertyCardTheme[1]} item={item} onPress={() => this.onPropertyPress(item.property_recordno)} />}
+                renderItem={({ item }) => <PropertyCard cardStyle={{ width: width * 0.95, height: normalize(245, 'height'), marginBottom: normalize(10, 'height'), marginRight: 0 }} item={item} onPress={() => this.onPropertyPress(item.property_recordno)} />}
                 keyExtractor={item => item.id}
               />
             }

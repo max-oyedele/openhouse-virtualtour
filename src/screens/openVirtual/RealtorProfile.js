@@ -17,7 +17,7 @@ import normalize from 'react-native-normalize';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import { RFPercentage, RFValue } from "react-native-responsive-fontsize";
 
-import { Colors, Images, PropertyCardTheme } from '@constants';
+import { Colors, Images } from '@constants';
 import {
   BrowseCard,
   Button,
@@ -251,7 +251,7 @@ export default class RealtorProfileScreen extends Component {
                 horizontal={true}
                 showsHorizontalScrollIndicator={false}
                 data={this.state.propertiesByMeData}
-                renderItem={({ item }) => <PropertyCard cardStyle={{ width: normalize(325), height: normalize(245, 'height'), marginRight: normalize(10) }} cardTheme={PropertyCardTheme[1]} item={item} onPress={this.onPropertyPress} />}
+                renderItem={({ item }) => <PropertyCard cardStyle={{ width: normalize(325), height: normalize(245, 'height'), marginRight: normalize(10) }} item={item} onPress={this.onPropertyPress} />}
                 keyExtractor={item => item.id}
               />
             }

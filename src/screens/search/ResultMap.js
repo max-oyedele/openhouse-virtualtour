@@ -36,7 +36,7 @@ import {
   SideMenu,
   SignModal,
 } from '@components';
-import { Colors, Images, PropertyCardTheme, LoginInfo, RouteParam, SearchBy, SearchWordData, PropertyTypeData } from '@constants';
+import { Colors, Images, LoginInfo, RouteParam, SearchBy, SearchWordData, PropertyTypeData } from '@constants';
 import { getContentByAction } from '../../api/rest';
 
 export default class ResultMapScreen extends Component {
@@ -95,7 +95,7 @@ export default class ResultMapScreen extends Component {
       this.getSearchByQuery();
     }
     else if (RouteParam.searchKind === 'searchByCategory'){
-      this.setState({ headerTitle: PropertyTypeData[SearchBy.propertyTypeIndex].properties_category_short_desc});
+      this.setState({ headerTitle: this.getPropertyTypeFromId(SearchBy.propertyType).properties_category_short_desc});
       this.getSearchByCategory();
     } 
   }
@@ -103,7 +103,7 @@ export default class ResultMapScreen extends Component {
   componentWillUnmount() {
     //if (this.listener) this.listener.remove();
   }
-  
+
   getSearchByQuery = () => {
     var searchParam = {
       action: 'property_search',
@@ -112,7 +112,7 @@ export default class ResultMapScreen extends Component {
       user_id: LoginInfo.uniqueid,
       search_city: SearchBy.query,
       listingtype: SearchBy.listingType,
-      propertytype: SearchBy.propertyTypeIndex,
+      propertytype: SearchBy.propertyType,
       pricefrom: SearchBy.priceFrom,
       priceto: SearchBy.priceTo,
       bedrooms: SearchBy.bedrooms,
@@ -152,7 +152,7 @@ export default class ResultMapScreen extends Component {
       user_latitude: LoginInfo.latitude,
       user_longitude: LoginInfo.longitude,
       user_id: LoginInfo.uniqueid,
-      propertytype: SearchBy.propertyTypeIndex,
+      propertytype: SearchBy.propertyType,
     };
     //console.log('param', searchParam);
     this.setState({ spinner: true, resultData: [] });
@@ -190,6 +190,13 @@ export default class ResultMapScreen extends Component {
     this.setState({ markerData: markerData });
   }
 
+  getPropertyTypeFromId = (categoryId) => {
+    var propertyType = PropertyTypeData.filter((each)=>each.properties_category_id == categoryId);
+    var retValue = propertyType[0];
+    retValue.properties_category_short_desc = retValue.properties_category_short_desc ? retValue.properties_category_short_desc : 'No title';
+    return retValue;
+  }
+
   onPropertyPress = (propertyRecordNo) => {
     RouteParam.propertyRecordNo = propertyRecordNo;
     this.props.navigation.navigate('PropertyStack');
@@ -214,14 +221,9 @@ export default class ResultMapScreen extends Component {
 
         <View style={styles.body}>
           <View style={{ width: '100%', zIndex: 1 }}>
-            <Header title='MAP' titleColor={Colors.blackColor} rightIcon={Images.iconSort} onPressBack={() => this.props.navigation.goBack(null)} onPressRightIcon={() => this.setState({ visibleModal: true, oldSortBy: this.state.sortBy, oldSortOrder: this.state.sortOrder })} />
+            <Header title={this.state.headerTitle.toUpperCase()} titleColor={Colors.blackColor} rightIcon={Images.iconSort} onPressBack={() => this.props.navigation.goBack(null)} onPressRightIcon={() => this.setState({ visibleModal: true, oldSortBy: this.state.sortBy, oldSortOrder: this.state.sortOrder })} />
           </View>
-          <View style={styles.searchShadowContainer}>
-            <View style={styles.searchInnerContainer}>
-              <SearchBox boxStyle={{ width: width * 0.9, height: normalize(35, 'height'), backgroundColor: Colors.searchBackColor, borderColor: Colors.searchBackColor, btnColor: Colors.weakBlackColor }} onSearch={this.onSearch} />
-            </View>
-          </View>
-
+          
           <View style={styles.mapContainer}>
             <MapView
               initialRegion={{
@@ -271,7 +273,7 @@ export default class ResultMapScreen extends Component {
                 horizontal={true}
                 showsHorizontalScrollIndicator={false}
                 data={this.state.resultData}
-                renderItem={({ item }) => <PropertyCard cardStyle={{ width: normalize(325), height: normalize(245, 'height'), marginTop: normalize(10, 'height'), marginRight: normalize(10) }} cardTheme={PropertyCardTheme[1]} item={item} onPress={() => this.onPropertyPress(item.property_recordno)} />}
+                renderItem={({ item }) => <PropertyCard cardStyle={{ width: normalize(325), height: normalize(245, 'height'), marginTop: normalize(10, 'height'), marginRight: normalize(10) }} item={item} onPress={() => this.onPropertyPress(item.property_recordno)} />}
                 keyExtractor={item => item.property_recordno}
               />
           }

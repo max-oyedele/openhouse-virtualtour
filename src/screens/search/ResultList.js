@@ -31,7 +31,7 @@ import {
   SideMenu,
   SignModal,
 } from '@components';
-import { Colors, Images, PropertyCardTheme, LoginInfo, RouteParam, SearchBy, SearchWordData, PropertyTypeData } from '@constants';
+import { Colors, Images, LoginInfo, RouteParam, SearchBy, SearchWordData, PropertyTypeData } from '@constants';
 import { getContentByAction } from '../../api/rest';
 
 export default class ResultListScreen extends Component {
@@ -78,7 +78,7 @@ export default class ResultListScreen extends Component {
       this.getSearchByQuery();
     }
     else if (RouteParam.searchKind === 'searchByCategory'){
-      this.setState({ headerTitle: PropertyTypeData[SearchBy.propertyTypeIndex].properties_category_short_desc});
+      this.setState({ headerTitle: this.getPropertyTypeFromId(SearchBy.propertyType).properties_category_short_desc});
       this.getSearchByCategory();
     } 
   }
@@ -95,7 +95,7 @@ export default class ResultListScreen extends Component {
       user_id: LoginInfo.uniqueid,
       search_city: SearchBy.query,
       listingtype: SearchBy.listingType,
-      propertytype: SearchBy.propertyTypeIndex,
+      propertytype: SearchBy.propertyType,
       pricefrom: SearchBy.priceFrom,
       priceto: SearchBy.priceTo,
       bedrooms: SearchBy.bedrooms,
@@ -131,7 +131,7 @@ export default class ResultListScreen extends Component {
       user_latitude: LoginInfo.latitude,
       user_longitude: LoginInfo.longitude,
       user_id: LoginInfo.uniqueid,
-      propertytype: SearchBy.propertyTypeIndex,
+      propertytype: SearchBy.propertyType,
     };
     //console.log('param', searchParam);
     this.setState({ spinner: true, resultData: [] });
@@ -152,6 +152,13 @@ export default class ResultListScreen extends Component {
         this.setState({ spinner: false });
       })
   }  
+
+  getPropertyTypeFromId = (categoryId) => {
+    var propertyType = PropertyTypeData.filter((each)=>each.properties_category_id == categoryId);
+    var retValue = propertyType[0];
+    retValue.properties_category_short_desc = retValue.properties_category_short_desc ? retValue.properties_category_short_desc : 'No title';
+    return retValue;
+  }
 
   onPropertyPress = (propertyRecordNo) => {
     RouteParam.propertyRecordNo = propertyRecordNo;
@@ -194,7 +201,7 @@ export default class ResultListScreen extends Component {
                       <Text style={{ fontFamily: 'SFProText-Regular', fontSize: RFPercentage(1.8), color: Colors.passiveTxtColor }}>PROPERTY TYPE</Text>
                     </View>
                     <View style={{ width: '100%', height: '50%', justifyContent: 'center' }}>
-                      <Text style={{ fontFamily: 'SFProText-Regular', fontSize: RFPercentage(2.2), color: Colors.blackColor }}>{PropertyTypeData[SearchBy.propertyTypeIndex].properties_category_short_desc}</Text>
+                      <Text style={{ fontFamily: 'SFProText-Regular', fontSize: RFPercentage(2.2), color: Colors.blackColor }}>{this.getPropertyTypeFromId(SearchBy.propertyType).properties_category_short_desc}</Text>
                     </View>
                   </TouchableOpacity>
 
@@ -236,7 +243,7 @@ export default class ResultListScreen extends Component {
                 <FlatList
                   showsVerticalScrollIndicator={false}
                   data={this.state.resultData}
-                  renderItem={({ item }) => <PropertyCard cardStyle={{ width: width * 0.95, height: normalize(245, 'height'), marginBottom: normalize(10, 'height'), marginRight: 0 }} cardTheme={PropertyCardTheme[1]} item={item} onPress={() => this.onPropertyPress(item.property_recordno)} />}
+                  renderItem={({ item }) => <PropertyCard cardStyle={{ width: width * 0.95, height: normalize(245, 'height'), marginBottom: normalize(10, 'height'), marginRight: 0 }} item={item} onPress={() => this.onPropertyPress(item.property_recordno)} />}
                   keyExtractor={item => item.property_recordno}
                 />
             }
@@ -284,7 +291,7 @@ export default class ResultListScreen extends Component {
                         <View style={{ width: '20%', height: '100%', justifyContent: 'center', alignItems: 'center' }}>
                           <TouchableOpacity style={{ width: '70%', height: '50%' }} onPress={() => {
                             let numberOfRooms = this.state.numberOfRooms;
-                            numberOfRooms[index].count = each.count > 0 ? each.count - 1 : 0;
+                            numberOfRooms[index].count = each.count > 1 ? each.count - 1 : 1;
                             this.setState({ numberOfRooms: numberOfRooms });
 
                             if (index == 0) SearchBy.bedrooms = numberOfRooms[index].count;
