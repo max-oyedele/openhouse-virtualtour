@@ -217,6 +217,11 @@ export default class DashboardScreen extends Component {
       })
   }
 
+  onCategoryPress = (categoryIndex) => {
+    SearchBy.propertyTypeIndex = categoryIndex;
+    this.props.navigation.navigate('SearchStack');
+  }
+
   onPropertyPress = (propertyRecordNo) => {
     RouteParam.propertyRecordNo = propertyRecordNo;
     this.props.navigation.navigate('PropertyStack');
@@ -236,8 +241,8 @@ export default class DashboardScreen extends Component {
   onSearch = (query) => {
     SearchBy.query = query;
     console.log(SearchBy.query);
-    if (query == null) this.props.navigation.navigate('SearchStack', { screen: 'SearchBy' });
-    else this.props.navigation.navigate('SearchStack');
+
+    if (query)this.props.navigation.navigate('SearchStack');
   }
 
   render() {
@@ -293,7 +298,7 @@ export default class DashboardScreen extends Component {
                   horizontal={true}
                   showsHorizontalScrollIndicator={false}
                   data={this.state.categoryData}
-                  renderItem={({ item }) => <BrowseCard item={item} />}
+                  renderItem={({ item }) => <BrowseCard item={item} onPress={() => this.onCategoryPress(item.properties_category_id)}/>}
                   keyExtractor={item => item.properties_category_id}
                 />
               </View>

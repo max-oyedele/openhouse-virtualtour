@@ -25,7 +25,7 @@ export const LoginInfo = {
 
 export const RouteParam = {
   loginEssentialInfo: {},
-  confirmResult: {},
+  confirmResult: {},  
   propertyRecordNo: '',  
 }
 
