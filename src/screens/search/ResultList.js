@@ -65,6 +65,9 @@ export default class ResultListScreen extends Component {
   }
 
   componentDidFocus() {
+    if(!RouteParam.isChanged) return;
+    RouteParam.isChanged = false;
+
     let numberOfRooms = this.state.numberOfRooms;
     numberOfRooms[0].count = SearchBy.bedrooms;
     numberOfRooms[1].count = SearchBy.bathrooms;
@@ -75,10 +78,15 @@ export default class ResultListScreen extends Component {
 
     if (RouteParam.searchKind === 'searchByQuery') {
       this.setState({ headerTitle: SearchBy.query})
-      this.getSearchByQuery();
+      this.getSearchByQuery();      
     }
     else if (RouteParam.searchKind === 'searchByCategory'){
-      this.setState({ headerTitle: this.getPropertyTypeFromId(SearchBy.propertyType).properties_category_short_desc});
+      if(SearchBy.categoryForHeader){
+        this.setState({ headerTitle: SearchBy.categoryForHeader })
+      }
+      else {
+        this.setState({ headerTitle: this.getPropertyTypeFromId(SearchBy.propertyType).properties_category_short_desc});
+      }
       this.getSearchByCategory();
     } 
   }
@@ -109,15 +117,15 @@ export default class ResultListScreen extends Component {
 
     getContentByAction(searchParam)
       .then((res) => {
-        if (res[0].error) {
-          this.setState({ spinner: false });
+        //console.log('searchData', res);             
+        if (res.length == 0 || typeof res[0].error === 'defined') {
+          this.setState({ spinner: false });          
           return;
         }
 
         var sortedRes = res.sort((a, b) => { return a.properties_displayorder - b.properties_displayorder })
         this.setState({ resultData: sortedRes, spinner: false });
-
-        //console.log('searchData', res);        
+        RouteParam.mapResultData = sortedRes;
       })
       .catch((err) => {
         console.log('get search data error', err);
@@ -139,13 +147,14 @@ export default class ResultListScreen extends Component {
     getContentByAction(searchParam)
       .then((res) => {
         //console.log('searchData', res);        
-        if (res[0].error) {
-          this.setState({ spinner: false });
+        if (res.length == 0 || typeof res[0].error === 'defined') {
+          this.setState({ spinner: false });          
           return;
         }
 
         var sortedRes = res.sort((a, b) => { return a.properties_displayorder - b.properties_displayorder })
-        this.setState({ resultData: sortedRes, spinner: false });        
+        this.setState({ resultData: sortedRes, spinner: false });
+        RouteParam.mapResultData = sortedRes;        
       })
       .catch((err) => {
         console.log('get search data error', err);
@@ -193,6 +202,7 @@ export default class ResultListScreen extends Component {
                   <Image style={{ width: '100%', height: '100%' }} source={Images.iconFilter} resizeMode='contain' />
                 </TouchableOpacity>
               </View>
+
               <View style={styles.searchBoxContainer}>
                 <SearchBox boxStyle={{ width: width * 0.9, height: normalize(35, 'height'), backgroundColor: Colors.searchBackColor, borderColor: Colors.searchBackColor, btnColor: Colors.weakBlackColor }} onSearch={this.onSearch} />
               </View>

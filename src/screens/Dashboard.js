@@ -192,8 +192,7 @@ export default class DashboardScreen extends Component {
       user_id: LoginInfo.uniqueid,
       listingtype: SearchBy.listingType
     };
-
-    console.log('feature-listingType', SearchBy.listingType);
+    
     this.setState({ spinner: true });
 
     getContentByAction(featurePrpertyParam)
@@ -230,6 +229,7 @@ export default class DashboardScreen extends Component {
 
   onCategoryPress = (categoryId) => {
     SearchBy.propertyType = categoryId;
+    SearchBy.categoryForHeader = '';
     RouteParam.searchKind = 'searchByCategory';
     this.props.navigation.navigate('SearchStack');
   }
@@ -251,10 +251,12 @@ export default class DashboardScreen extends Component {
   }
 
   onSearch = (query) => {
-    //console.log(SearchBy.query);
     SearchBy.query = query;
     RouteParam.searchKind = 'searchByQuery';
-    if (query) this.props.navigation.navigate('SearchStack');
+    if (query){
+      RouteParam.isChanged = true;
+      this.props.navigation.navigate('SearchStack');
+    } 
   }
 
   render() {
@@ -280,7 +282,7 @@ export default class DashboardScreen extends Component {
               </TouchableOpacity>
             </View>
             <View style={styles.searchBoxContainer}>
-              <SearchBox boxStyle={{ width: width * 0.9, height: normalize(40, 'height'), backgroundColor: Colors.whiteColor, borderColor: Colors.blueColor, btnColor: Colors.blueColor }} onSearch={this.onSearch} />
+              <SearchBox boxStyle={{ width: width * 0.9, height: normalize(40, 'height'), backgroundColor: Colors.whiteColor, borderColor: Colors.blueColor, btnColor: Colors.blueColor }} onSearch={(query) => this.onSearch(query)} />
             </View>
           </ImageBackground>
 

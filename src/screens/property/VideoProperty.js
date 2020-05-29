@@ -99,7 +99,7 @@ export default class VideoPropertyScreen extends Component {
           name: 'Anthony Robinson Duran',
           role: 'Licensed Real State Salesperson',
           act: 'Brought By',
-          img: require('../../assets/images/profileImg.png')
+          //img: require('../../assets/images/profileImg.png')
         }
       }
     }

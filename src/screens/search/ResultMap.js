@@ -37,14 +37,12 @@ import {
   SignModal,
 } from '@components';
 import { Colors, Images, LoginInfo, RouteParam, SearchBy, SearchWordData, PropertyTypeData } from '@constants';
-import { getContentByAction } from '../../api/rest';
 
 export default class ResultMapScreen extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      refresh: false,
-      spinner: false,
+      refresh: false,      
       visibleModal: false,
       resultData: [],
       markerData: [],
@@ -86,95 +84,29 @@ export default class ResultMapScreen extends Component {
   }
 
   componentDidMount() {
+    RouteParam.isChanged = false;
     
+    this.setState({resultData: RouteParam.mapResultData});
+    this.getMarkerData(RouteParam.mapResultData);
   }
 
   componentDidFocus(){
     if (RouteParam.searchKind === 'searchByQuery') {
-      this.setState({ headerTitle: SearchBy.query})
-      this.getSearchByQuery();
+      this.setState({ headerTitle: SearchBy.query})      
     }
     else if (RouteParam.searchKind === 'searchByCategory'){
-      this.setState({ headerTitle: this.getPropertyTypeFromId(SearchBy.propertyType).properties_category_short_desc});
-      this.getSearchByCategory();
+      if(SearchBy.categoryForHeader){
+        this.setState({ headerTitle: SearchBy.categoryForHeader })
+      }
+      else {
+        this.setState({ headerTitle: this.getPropertyTypeFromId(SearchBy.propertyType).properties_category_short_desc});
+      }      
     } 
   }
 
   componentWillUnmount() {
     //if (this.listener) this.listener.remove();
-  }
-
-  getSearchByQuery = () => {
-    var searchParam = {
-      action: 'property_search',
-      user_latitude: LoginInfo.latitude,
-      user_longitude: LoginInfo.longitude,
-      user_id: LoginInfo.uniqueid,
-      search_city: SearchBy.query,
-      listingtype: SearchBy.listingType,
-      propertytype: SearchBy.propertyType,
-      pricefrom: SearchBy.priceFrom,
-      priceto: SearchBy.priceTo,
-      bedrooms: SearchBy.bedrooms,
-      bathrooms: SearchBy.bathrooms,
-      distance: SearchBy.distance,
-      sortby: SearchBy.sortBy,
-      ascdesc: SearchBy.sortOrder
-    };
-    //console.log('param', searchParam);
-    this.setState({ spinner: true, resultData: [] });
-
-    getContentByAction(searchParam)
-      .then((res) => {
-        if (res[0].error) {
-          this.setState({ spinner: false });
-          return;
-        }
-
-        //console.log('searchData', res);
-        var sortedRes = res.sort((a, b) => { return a.properties_displayorder - b.properties_displayorder })
-        this.setState({
-          resultData: sortedRes,
-          spinner: false
-        })
-
-        this.getMarkerData(sortedRes);
-      })
-      .catch((err) => {
-        console.log('get search data error', err);
-        this.setState({ spinner: false });
-      })
-  }
-
-  getSearchByCategory = () => {
-    var searchParam = {
-      action: 'property_search_by_category',
-      user_latitude: LoginInfo.latitude,
-      user_longitude: LoginInfo.longitude,
-      user_id: LoginInfo.uniqueid,
-      propertytype: SearchBy.propertyType,
-    };
-    //console.log('param', searchParam);
-    this.setState({ spinner: true, resultData: [] });
-
-    getContentByAction(searchParam)
-      .then((res) => {
-        //console.log('searchData', res);        
-        if (res[0].error) {
-          this.setState({ spinner: false });
-          return;
-        }
-
-        var sortedRes = res.sort((a, b) => { return a.properties_displayorder - b.properties_displayorder })
-        this.setState({ resultData: sortedRes, spinner: false });
-
-        this.getMarkerData(sortedRes);
-      })
-      .catch((err) => {
-        console.log('get search data error', err);
-        this.setState({ spinner: false });
-      })
-  }
+  }  
 
   getMarkerData = (res) => {
     var markerData = [];
@@ -210,10 +142,18 @@ export default class ResultMapScreen extends Component {
     SearchBy.sortBy = this.state.sortBy;
     SearchBy.sortOrder = this.state.sortOrder;
 
-    this.setState({ visibleModal: false })
-    this.getSearchByQuery();
-    //console.log('searchBy', SearchBy);
-  }
+    if (
+      this.state.oldSortBy == SearchBy.sortBy &&
+      this.state.oldSortOrder == SearchBy.sortOrder      
+    ) {      
+      RouteParam.isChanged = false;
+    }
+    else{      
+      RouteParam.isChanged = true;
+    } 
+    
+    this.setState({ visibleModal: false })    
+  } 
 
   render() {
     return (
@@ -328,7 +268,7 @@ export default class ResultMapScreen extends Component {
             </View>
 
             <View style={styles.modalBtnContainer}>
-              <Button btnTxt='Apply' btnStyle={{ width: '100%', height: normalize(50, 'height'), color: 'blue' }} onPress={this.onApply} />
+              <Button btnTxt='Apply' btnStyle={{ width: '100%', height: normalize(50, 'height'), color: 'blue' }} onPress={()=>this.onApply()} />
             </View>
           </View>
 

@@ -66,15 +66,7 @@ export default class SearchBox extends Component {
               value={query}
               placeholder='Search'
               placeholderTextColor={Colors.weakBlackColor}
-              onChangeText={(text) => this.setState({ query: text, isPicked: false })}
-              onKeyPress={(e) => {
-                console.log(e.nativeEvent.key);
-                if (e.nativeEvent.key == "done") {
-                  console.warn('enter');
-                  SearchBy.query = this.state.query;
-                  this.props.onSearch(this.state.query);
-                }
-              }}
+              onChangeText={(text) => this.setState({ query: text, isPicked: false })}              
             />
           </View>
           <View style={styles.btnContainer}>
@@ -92,16 +84,16 @@ export default class SearchBox extends Component {
           <View
             style={[
               styles.autoCompleteContainer,
-              { height: data.length * 15 > 150 ? normalize(150, 'height') : normalize((data.length+1) * 15, 'height') }
+              { height: data.length * 15 > 150 ? normalize(150, 'height') : normalize((data.length+1) * 22, 'height') }
             ]}
           >
-            <ScrollView style={{backgroundColor: '#ffffff', zIndex: 2}}>
+            <ScrollView>
               {
                 data.map((each, index) => {
                   return (
-                    <View key={index} style={{backgroundColor: '#ffffff', zIndex: 2}}>
+                    <View key={index}>
                       <TouchableOpacity onPress={() => this.setState({ query: each, isPicked: true })}>
-                        <Text style={{ fontFamily: 'SFProText-Regular', fontSize: RFPercentage(1.8), color: Colors.blackColor }}>{each}</Text>
+                        <Text style={{ fontFamily: 'SFProText-Regular', fontSize: RFPercentage(2.8), color: Colors.blackColor, marginTop: normalize(5, 'height') }}>{each}</Text>
                       </TouchableOpacity>
                     </View>
                   )
@@ -140,8 +132,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#ffffff',
     width: '95%',
     alignSelf: 'center',
-    padding: normalize(7),        
-    zIndex: 1,
+    padding: normalize(7),            
     // borderColor: '#ff0000',
     // borderWidth: 1
   }

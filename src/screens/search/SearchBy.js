@@ -31,6 +31,7 @@ import {
   SignModal
 } from '@components';
 import { Colors, Images, SearchBy } from '@constants';
+import { RouteParam } from "../../constants";
 
 export default class SearchByScreen extends Component {
   constructor(props) {
@@ -50,34 +51,90 @@ export default class SearchByScreen extends Component {
       distance: SearchBy.distance,
       priceFrom: SearchBy.priceFrom.toString(),
       priceTo: SearchBy.priceTo.toString(),
+      oldSearchBy: {}
     }
   }
 
   componentDidMount() {
-
+    var oldSearchBy = {
+      distance: SearchBy.distance,
+      priceFrom: SearchBy.priceFrom,
+      priceTo: SearchBy.priceTo,
+      propertyType: SearchBy.propertyType,
+      bedrooms: SearchBy.bedrooms,
+      bathrooms: SearchBy.bathrooms
+    }    
+    this.setState({oldSearchBy: oldSearchBy});
   }
 
   onSearch = () => {
     //this.props.navigation.navigate('Location');
   }
 
-  onUpdate = () => {
-    if(this.state.priceFrom == '' || this.state.priceTo == ''){
+  onApply = () => {
+    if (this.state.priceFrom == '' || this.state.priceTo == '') {
       Alert.alert('Please enter the price');
       return;
     }
 
-    //SearchBy.query = this.state.query;
-    SearchBy.priceFrom = this.state.priceFrom;
-    SearchBy.priceTo = this.state.priceTo;
+    SearchBy.distance = this.state.distance;
+    SearchBy.priceFrom = parseInt(this.getRealValue(this.state.priceFrom));
+    SearchBy.priceTo = parseInt(this.getRealValue(this.state.priceTo));
     SearchBy.bedrooms = this.state.numberOfRooms[0].count;
     SearchBy.bathrooms = this.state.numberOfRooms[1].count;
-    SearchBy.distance = this.state.distance;   
-    
+
+    var compareSearchBy = this.state.oldSearchBy;
+    if (
+      compareSearchBy.distance == SearchBy.distance &&
+      compareSearchBy.priceFrom == SearchBy.priceFrom &&
+      compareSearchBy.priceTo == SearchBy.priceTo &&
+      compareSearchBy.bedrooms == SearchBy.bedrooms &&
+      compareSearchBy.bathrooms == SearchBy.bathrooms &&
+      compareSearchBy.propertyType == SearchBy.propertyType
+    ) {      
+      RouteParam.isChanged = false;
+    }
+    else{      
+      RouteParam.isChanged = true;
+    } 
+
     this.props.navigation.goBack(null);
   }
 
-  render() {    
+  format2Number(num) {
+    return num.toString().replace(/(\d)(?=(\d{2})+(?!\d))/g, '$1,')
+  }
+
+  formatter = new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: 'USD',
+  });
+
+  getFormatValue = (value) => {
+    value = value.replace(".", "");
+    var partArr = value.split(",");
+    var valueNoComma = '';
+    partArr.forEach(each => {
+      valueNoComma += each;
+    })
+
+    var realValue = valueNoComma.replace("$", "");
+    if (realValue == '') return realValue;
+    else return this.formatter.format(realValue).split(".")[0];
+  }
+
+  getRealValue = (value) => {
+    var partArr = value.split(",");
+    var valueNoComma = '';
+    partArr.forEach(each => {
+      valueNoComma += each;
+    })
+
+    var realValue = valueNoComma.replace("$", "");
+    return realValue;
+  }
+
+  render() {
     return (
       <View style={styles.container}>
         <View style={{ width: '100%' }}>
@@ -92,13 +149,13 @@ export default class SearchByScreen extends Component {
           <View style={[styles.eachBigLineContainer, { flexDirection: 'column' }]}>
             <View style={{ width: '100%', height: '40%', flexDirection: 'row', paddingTop: normalize(10, 'height') }}>
               <Text style={{ fontFamily: 'SFProText-Semibold', fontSize: RFPercentage(2), color: Colors.blackColor }}>SEARCH WITHIN</Text>
-              <Text style={{ fontFamily: 'SFProText-Semibold', fontSize: RFPercentage(2), color: Colors.blueColor }}> {this.state.distance} MILES</Text>
+              <Text style={{ fontFamily: 'SFProText-Semibold', fontSize: RFPercentage(2), color: Colors.blueColor }}> {this.format2Number(this.state.distance)} MILES</Text>
             </View>
             <Slider
               // style={{width: '80%', height: '30%'}}
-              minimumValue={1}
-              maximumValue={10000000}
-              step={1}
+              minimumValue={0}
+              maximumValue={100}
+              step={10}
               minimumTrackTintColor='#2A5FA4'
               maximumTrackTintColor='#11DBB3'
               thumbTintColor={Colors.blueColor}
@@ -118,8 +175,8 @@ export default class SearchByScreen extends Component {
                   placeholder='From'
                   placeholderTextColor={Colors.passiveTxtColor}
                   keyboardType='numeric'
-                  value={this.state.priceFrom}
-                  onChangeText={(text)=>this.setState({ priceFrom: text })}
+                  value={this.getFormatValue(this.state.priceFrom)}
+                  onChangeText={(text) => this.setState({ priceFrom: text })}
                 />
               </View>
               <View style={{ width: '10%', height: '80%', justifyContent: 'center', alignItems: 'center' }}><Text>-</Text></View>
@@ -129,8 +186,8 @@ export default class SearchByScreen extends Component {
                   placeholder='To'
                   placeholderTextColor={Colors.passiveTxtColor}
                   keyboardType='numeric'
-                  value={this.state.priceTo}
-                  onChangeText={(text)=>this.setState({ priceTo: text })}
+                  value={this.getFormatValue(this.state.priceTo)}
+                  onChangeText={(text) => this.setState({ priceTo: text })}
                 />
               </View>
             </View>
@@ -181,7 +238,7 @@ export default class SearchByScreen extends Component {
           }
 
           <View style={styles.btnContainer}>
-            <Button btnTxt='Update' btnStyle={{ width: '100%', height: normalize(50, 'height'), color: 'blue' }} onPress={this.onUpdate} />
+            <Button btnTxt='Apply' btnStyle={{ width: '100%', height: normalize(50, 'height'), color: 'blue' }} onPress={()=>this.onApply()} />
           </View>
         </View>
       </View>

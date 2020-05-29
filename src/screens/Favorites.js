@@ -37,7 +37,7 @@ export default class FavoritesScreen extends Component {
     super(props);
     this.state = {
       spinner: false,
-      tab: 'favorites',
+      tab: 'viewed',
       favoritesData: [],
       viewedData: [],
     }
@@ -93,8 +93,8 @@ export default class FavoritesScreen extends Component {
         </View>
         <View style={styles.body}>
           <View style={styles.btnContainer}>
-            <Button btnTxt='FAVORITES' btnStyle={this.state.tab === 'favorites' ? btnBlueStyle : btnWhiteStyle} onPress={() => { this.setState({ tab: 'favorites' }, this.getData) }} />
             <Button btnTxt='LAST VIEWED' btnStyle={this.state.tab === 'viewed' ? btnBlueStyle : btnWhiteStyle} onPress={() => { this.setState({ tab: 'viewed' }, this.getData) }} />
+            <Button btnTxt='FAVORITES' btnStyle={this.state.tab === 'favorites' ? btnBlueStyle : btnWhiteStyle} onPress={() => { this.setState({ tab: 'favorites' }, this.getData) }} />
           </View>
           <View style={styles.listContainer}>
             <ActivityIndicator style={{ position: 'absolute' }} animating={this.state.spinner} />
@@ -110,7 +110,7 @@ export default class FavoritesScreen extends Component {
                 showsVerticalScrollIndicator={false}
                 data={this.state.tab === 'favorites' ? this.state.favoritesData : this.state.viewedData}
                 renderItem={({ item }) => <PropertyCard cardStyle={{ width: width * 0.95, height: normalize(245, 'height'), marginBottom: normalize(10, 'height'), marginRight: 0 }} item={item} onPress={() => this.onPropertyPress(item.property_recordno)} />}
-                keyExtractor={item => item.id}
+                keyExtractor={item => item.property_recordno}
               />
             }
           </View>

@@ -23,19 +23,22 @@ export const RouteParam = {
   searchKind: '',  
   propertyRecordNo: '',
   agent: {},
+  isChanged: false,
+  mapResultData: []
 }
 
 export const SearchWordData = [];
 
 export const SearchBy = {
   query: '',
+  categoryForHeader: '', //not used really for search
   listingType: 'S',
   propertyType: 1,
   priceFrom: 1,
   priceTo: 10000000,
   bedrooms: 1,
   bathrooms: 1,
-  distance: 1000000,
+  distance: 10,
   sortBy: 'property_price',
   sortOrder: 'asc'
 }

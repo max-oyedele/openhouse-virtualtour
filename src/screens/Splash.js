@@ -19,6 +19,7 @@ import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-nat
 import { RFPercentage, RFValue } from "react-native-responsive-fontsize";
 import GetLocation from 'react-native-get-location';
 import AsyncStorage from '@react-native-community/async-storage';
+import KeyboardManager from 'react-native-keyboard-manager';
 
 import {
   BrowseCard,
@@ -41,18 +42,42 @@ export default class SplashScreen extends Component {
     this.state = {
       logoTxt: 'In-Person & Virtual \n Digital Sign-in Platform'
     }
+    
+    this.keyboardManager();
   }
 
   componentDidMount() {
     //this.getLocation();
 
-
+    //temp for skip
     this.submit();
     setTimeout(() => { this.props.navigation.navigate('Main') }, 1000);
   }
 
   componentWillUnmount() {
     //if(this.listener) this.listener.remove();
+  }
+
+  keyboardManager = () => {
+    if (Platform.OS === 'ios') {
+      KeyboardManager.setEnable(true);
+      KeyboardManager.setEnableDebugging(false);
+      KeyboardManager.setKeyboardDistanceFromTextField(10);
+      KeyboardManager.setPreventShowingBottomBlankSpace(true);
+      KeyboardManager.setEnableAutoToolbar(true);
+      KeyboardManager.setToolbarDoneBarButtonItemText("Done");
+      KeyboardManager.setToolbarManageBehaviour(0);
+      KeyboardManager.setToolbarPreviousNextButtonEnable(false);
+      KeyboardManager.setShouldToolbarUsesTextFieldTintColor(false);
+      KeyboardManager.setShouldShowTextFieldPlaceholder(true); // deprecated, use setShouldShowToolbarPlaceholder
+      KeyboardManager.setShouldShowToolbarPlaceholder(true);
+      KeyboardManager.setOverrideKeyboardAppearance(false);
+      KeyboardManager.setShouldResignOnTouchOutside(true);
+      KeyboardManager.resignFirstResponder();
+      KeyboardManager.isKeyboardShowing()
+        .then((isShowing) => {
+        });
+    }
   }
 
   getLocation = () => {
@@ -76,7 +101,7 @@ export default class SplashScreen extends Component {
         //     return Linking.openURL('app-settings:');
         //   }
         // }).catch(err => console.error('An error occurred', err));        
-        this.isLoggedInProc();
+        this.isLoggedInProc();//temp for skip
       })
   }
 
@@ -110,15 +135,17 @@ export default class SplashScreen extends Component {
   }
 
   submit = async () => {
+    //temp for skip
     LoginInfo.uniqueid = '123';
-    LoginInfo.fullname = 'anthony robinson';
+    LoginInfo.fullname = 'Anthony Robinson';
     LoginInfo.email = 'opendemo@icloud.com';
     LoginInfo.telephone = '+13059007270';
-    LoginInfo.photourl = '';
+    LoginInfo.photourl = 'http://photos.v3.mlsstratus.com/Live/Photos/agents/7000.jpg';
     LoginInfo.providerid = 'apple';
     LoginInfo.email_verified = true;
     LoginInfo.latitude = 40.776611;
     LoginInfo.longitude = -73.345718;
+    ///////////////
 
     let bodyFormData = new FormData();
     bodyFormData.append('action', 'newaccount');

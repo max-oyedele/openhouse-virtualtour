@@ -22,30 +22,59 @@ import PropTypes from 'prop-types';
 import Icon from 'react-native-vector-icons/FontAwesome';
 Platform.OS === 'ios' ? Icon.loadFont() : '';
 
-import { Colors, Images } from '@constants';
+import { Colors, Images, LoginInfo, RouteParam, SearchBy } from '@constants';
 import { Button } from '@components';
 
 export default class SideMenu extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      user: {
-        name: 'Jonathan Smith',
-        img: require('../assets/images/profileImg.png')
-      }
+
     }
   }
   componentDidMount = () => {
-        
+
+  }
+
+  onForRent = () => {    
+    SearchBy.categoryForHeader = 'Rental Properties';
+    SearchBy.propetyType = 6;
+    RouteParam.searchKind = 'searchByCategory';
+    this.props.navigation.navigate('SearchStack');
+    this.props.onToggleMenu();    
+  }
+
+  onForSale = () => {
+    SearchBy.categoryForHeader = 'Properties For Sale';
+    SearchBy.propetyType = 1;
+    RouteParam.searchKind = 'searchByCategory';
+    this.props.navigation.navigate('SearchStack');
+    this.props.onToggleMenu();    
+  }
+
+  onSearch = () => {
+    SearchBy.categoryForHeader = 'Properties For Sale';
+    SearchBy.propetyType = 1;
+    RouteParam.searchKind = 'searchByCategory';
+    this.props.navigation.navigate('SearchStack');
+    this.props.onToggleMenu();    
+  }
+
+  onFavorites = () => {
+    this.props.navigation.navigate('Favorites');
+    this.props.onToggleMenu();    
+  }
+
+  onMyPreference = () => {
+    this.props.navigation.navigate('Setting', { screen: 'Preference' });
+    this.props.onToggleMenu();    
   }
 
   render() {
-    let { navigation, onToggleMenu, onLogout } = this.props;
-
     return (
       <ImageBackground style={styles.container} source={Images.sideBlurBack}>
         <View style={styles.sideMenuIcon}>
-          <TouchableOpacity onPress={() => onToggleMenu()}>
+          <TouchableOpacity onPress={() => this.props.onToggleMenu()}>
             <Icon
               name='bars'
               size={30}
@@ -55,29 +84,29 @@ export default class SideMenu extends Component {
         </View>
         <View style={styles.profileImgNameContainer}>
           <View style={styles.profileImgContainer}>
-            <Image style={{ width: '100%', height: '100%' }} source={this.state.user.img} resizeMode='contain' />
+            <Image style={{ width: '100%', height: '100%', borderRadius: normalize(50) }} source={{ uri: LoginInfo.photourl }} resizeMode='stretch' />
           </View>
-          <Text style={[styles.menuItemTxt, { marginTop: normalize(10, 'height') }]}>{this.state.user.name}</Text>
+          <Text style={[styles.menuItemTxt, { marginTop: normalize(10, 'height') }]}>{LoginInfo.fullname}</Text>
         </View>
         <View style={styles.bodyContainer}>
-          <TouchableOpacity style={[styles.menuItemContainer, { marginTop: normalize(10, 'height') }]}>
-            <Text style={styles.menuItemTxt}>FOR RENT</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.menuItemContainer}>
+          <TouchableOpacity style={[styles.menuItemContainer, { marginTop: normalize(10, 'height') }]} onPress={() => this.onForSale()}>
             <Text style={styles.menuItemTxt}>FOR SALE</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.menuItemContainer} onPress={() => navigation.navigate('SearchStack')}>
+          <TouchableOpacity style={styles.menuItemContainer} onPress={() => this.onForRent()}>
+            <Text style={styles.menuItemTxt}>FOR RENT</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.menuItemContainer} onPress={() => this.onSearch()}>
             <Text style={styles.menuItemTxt}>SEARCH</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.menuItemContainer} onPress={() => navigation.navigate('Favorites')}>
+          <TouchableOpacity style={styles.menuItemContainer} onPress={() => this.onFavorites()}>
             <Text style={styles.menuItemTxt}>FAVORITES</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.menuItemContainer} onPress={() => navigation.navigate('Setting', { screen: 'Preference' })}>
+          <TouchableOpacity style={styles.menuItemContainer} onPress={() => this.onMyPreference()}>
             <Text style={styles.menuItemTxt}>MY PREFERENCE</Text>
           </TouchableOpacity>
 
-          <View style={[styles.menuItemContainer, {marginTop: normalize(40, 'height')}]}>
-            <Button btnTxt='Log out' btnStyle={{ width: width * 0.45, height: normalize(50, 'height'), color: 'blue' }} onPress={() => onLogout()} />
+          <View style={[styles.menuItemContainer, { marginTop: normalize(40, 'height') }]}>
+            <Button btnTxt='Log out' btnStyle={{ width: width * 0.45, height: normalize(50, 'height'), color: 'blue' }} onPress={() => this.props.onLogout()} />
           </View>
         </View>
       </ImageBackground>
@@ -129,7 +158,7 @@ const styles = StyleSheet.create({
     height: normalize(100),
     borderRadius: normalize(50),
     borderColor: Colors.borderColor,
-    borderWidth: normalize(1)
+    borderWidth: normalize(3)
   },
   bodyContainer: {
     width: '100%',

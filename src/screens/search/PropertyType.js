@@ -93,7 +93,7 @@ export default class PropertyTypeScreen extends Component {
               return (
                 <View key={index} style={styles.eachLineContainer}>
                   <View style={styles.nameContainer}>
-                    <Text style={{ fontFamily: 'SFProText-Regular', fontSize: RFPercentage(2.2), color: Colors.blackColor }}>{PropertyTypeData[index].properties_category_long_desc}</Text>
+                    <Text style={{ fontFamily: 'SFProText-Regular', fontSize: RFPercentage(2.2), color: Colors.blackColor }}>{PropertyTypeData[index].properties_category_short_desc}</Text>
                   </View>
                   <View style={styles.switchContainer}>
                     <SwitchSelector
