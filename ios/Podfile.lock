@@ -608,6 +608,8 @@ PODS:
     - React
   - react-native-safe-area-context (0.7.3):
     - React
+  - react-native-signature-capture (0.4.10):
+    - React
   - react-native-twitter-signin (1.1.1):
     - React
     - TwitterKit (~> 3.3)
@@ -683,6 +685,8 @@ PODS:
     - IQKeyboardManager (= 4.0.13)
     - React
     - React-RCTText
+  - rn-fetch-blob (0.12.0):
+    - React-Core
   - RNAppleAuthentication (1.0.0):
     - React
   - RNCAsyncStorage (1.11.0):
@@ -766,6 +770,7 @@ DEPENDENCIES:
   - react-native-fbsdk (from `../node_modules/react-native-fbsdk`)
   - react-native-maps (from `../node_modules/react-native-maps`)
   - react-native-safe-area-context (from `../node_modules/react-native-safe-area-context`)
+  - react-native-signature-capture (from `../node_modules/react-native-signature-capture`)
   - react-native-twitter-signin (from `../node_modules/react-native-twitter-signin`)
   - react-native-video (from `../node_modules/react-native-video`)
   - react-native-webview (from `../node_modules/react-native-webview`)
@@ -782,6 +787,7 @@ DEPENDENCIES:
   - ReactCommon/turbomodule/core (from `../node_modules/react-native/ReactCommon`)
   - ReactNativeGetLocation (from `../node_modules/react-native-get-location`)
   - ReactNativeKeyboardManager (from `../node_modules/react-native-keyboard-manager`)
+  - rn-fetch-blob (from `../node_modules/rn-fetch-blob`)
   - "RNAppleAuthentication (from `../node_modules/@invertase/react-native-apple-authentication`)"
   - "RNCAsyncStorage (from `../node_modules/@react-native-community/async-storage`)"
   - "RNCMaskedView (from `../node_modules/@react-native-community/masked-view`)"
@@ -878,6 +884,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-maps"
   react-native-safe-area-context:
     :path: "../node_modules/react-native-safe-area-context"
+  react-native-signature-capture:
+    :path: "../node_modules/react-native-signature-capture"
   react-native-twitter-signin:
     :path: "../node_modules/react-native-twitter-signin"
   react-native-video:
@@ -908,6 +916,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-get-location"
   ReactNativeKeyboardManager:
     :path: "../node_modules/react-native-keyboard-manager"
+  rn-fetch-blob:
+    :path: "../node_modules/rn-fetch-blob"
   RNAppleAuthentication:
     :path: "../node_modules/@invertase/react-native-apple-authentication"
   RNCAsyncStorage:
@@ -994,6 +1004,7 @@ SPEC CHECKSUMS:
   react-native-fbsdk: c35d42169e64aaf66f01713c1e18d0674f7f6519
   react-native-maps: f4b89da81626ad7f151a8bfcb79733295d31ce5c
   react-native-safe-area-context: 8260e5157617df4b72865f44006797f895b2ada7
+  react-native-signature-capture: 6dae6c8c9f085536d4ba305e15c01f0a3a49373e
   react-native-twitter-signin: 5b737eab225a0059e6f8fe93c893c864d020b8b9
   react-native-video: aa527b0acb37f94c4491e70df0274cb26979405d
   react-native-webview: 0e2881d2e3e72ad52a82445c1a116c43205fd471
@@ -1009,6 +1020,7 @@ SPEC CHECKSUMS:
   ReactCommon: ed4e11d27609d571e7eee8b65548efc191116eb3
   ReactNativeGetLocation: 9114734cbe43209e1e86ec8d1d3974ad0c364db3
   ReactNativeKeyboardManager: b657632ca39d78a409949835d92fc3bed537c826
+  rn-fetch-blob: f065bb7ab7fb48dd002629f8bdcb0336602d3cba
   RNAppleAuthentication: 954b347c26ffb638265c828a5003ce1fa6971120
   RNCAsyncStorage: db711e29e5e0500d9bd21aa0c2e397efa45302b1
   RNCMaskedView: f5c7d14d6847b7b44853f7acb6284c1da30a3459
@@ -1027,6 +1039,6 @@ SPEC CHECKSUMS:
   Yoga: 3ebccbdd559724312790e7742142d062476b698e
   YogaKit: f782866e155069a2cca2517aafea43200b01fd5a
 
-PODFILE CHECKSUM: 856742197973b43e209bad1dbcedd60679952993
+PODFILE CHECKSUM: ff354fe77a4767e86839d4f8c9b39626dcecbb70
 
 COCOAPODS: 1.9.2

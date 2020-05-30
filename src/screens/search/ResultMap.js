@@ -42,10 +42,11 @@ export default class ResultMapScreen extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      refresh: false,      
+      refresh: false,
       visibleModal: false,
       resultData: [],
       markerData: [],
+      markerIdentifierData: [],
       sortByListData: [
         {
           sortBy: 'property_price',
@@ -85,50 +86,57 @@ export default class ResultMapScreen extends Component {
 
   componentDidMount() {
     RouteParam.isChanged = false;
-    
-    this.setState({resultData: RouteParam.mapResultData});
+
+    this.setState({ resultData: RouteParam.mapResultData });
     this.getMarkerData(RouteParam.mapResultData);
   }
 
-  componentDidFocus(){
+  componentDidFocus() {
     if (RouteParam.searchKind === 'searchByQuery') {
-      this.setState({ headerTitle: SearchBy.query})      
+      this.setState({ headerTitle: SearchBy.query })
     }
-    else if (RouteParam.searchKind === 'searchByCategory'){
-      if(SearchBy.categoryForHeader){
+    else if (RouteParam.searchKind === 'searchByCategory') {
+      if (SearchBy.categoryForHeader) {
         this.setState({ headerTitle: SearchBy.categoryForHeader })
       }
       else {
-        this.setState({ headerTitle: this.getPropertyTypeFromId(SearchBy.propertyType).properties_category_short_desc});
-      }      
-    } 
+        this.setState({ headerTitle: this.getPropertyTypeFromId(SearchBy.propertyType).properties_category_short_desc });
+      }
+    }
   }
 
   componentWillUnmount() {
     //if (this.listener) this.listener.remove();
-  }  
+  }
 
   getMarkerData = (res) => {
     var markerData = [];
+    var markerIdentifierData = [];
     res.forEach((each) => {
+      var title = each.property_address1 + ', ' + each.property_city;
       markerData.push({
+        propertyRecordNo: each.property_recordno,
         coordinate: {
           latitude: each.property_latitude,
           longitude: each.property_longitude
         },
-        title: each.property_address1
-      })
+        title: title
+      });
+      markerIdentifierData.push(title);
     });
-    this.setState({ markerData: markerData });
+    this.setState({
+      markerData: markerData,
+      markerIdentifierData: markerIdentifierData
+    });
   }
 
   getPropertyTypeFromId = (categoryId) => {
-    var propertyType = PropertyTypeData.filter((each)=>each.properties_category_id == categoryId);
+    var propertyType = PropertyTypeData.filter((each) => each.properties_category_id == categoryId);
     var retValue = propertyType[0];
     retValue.properties_category_short_desc = retValue.properties_category_short_desc ? retValue.properties_category_short_desc : 'No title';
     return retValue;
   }
-  
+
   onPropertyPress = (propertyRecordNo) => {
     RouteParam.propertyRecordNo = propertyRecordNo;
     this.props.navigation.navigate('PropertyStack');
@@ -144,16 +152,28 @@ export default class ResultMapScreen extends Component {
 
     if (
       this.state.oldSortBy == SearchBy.sortBy &&
-      this.state.oldSortOrder == SearchBy.sortOrder      
-    ) {      
+      this.state.oldSortOrder == SearchBy.sortOrder
+    ) {
       RouteParam.isChanged = false;
     }
-    else{      
+    else {
       RouteParam.isChanged = true;
-    } 
+    }
+
+    this.setState({ visibleModal: false })
+  }
+
+  onPressMarker = (propertyRecordNo) => {
+    var index = this.state.resultData.findIndex((each) => each.property_recordno == propertyRecordNo);
     
-    this.setState({ visibleModal: false })    
-  } 
+    var param = {
+      animated: true,
+      index: index,
+      viewOffset: 50,
+      viewPosition: 0.5
+    }
+    this.flatListRef.scrollToIndex(param);
+  }
 
   render() {
     return (
@@ -171,12 +191,7 @@ export default class ResultMapScreen extends Component {
 
           <View style={styles.mapContainer}>
             <MapView
-              initialRegion={{
-                latitude: this.state.resultData.length > 0 ? this.state.resultData[0].property_latitude : LoginInfo.latitude,
-                longitude: this.state.resultData.length > 0 ? this.state.resultData[0].property_longitude : LoginInfo.longitude,
-                latitudeDelta: 0.0922 / 5,
-                longitudeDelta: 0.0421 / 5,
-              }}
+              ref={map => { this.map = map }}
               region={{
                 latitude: this.state.resultData.length > 0 ? this.state.resultData[0].property_latitude : LoginInfo.latitude,
                 longitude: this.state.resultData.length > 0 ? this.state.resultData[0].property_longitude : LoginInfo.longitude,
@@ -187,7 +202,18 @@ export default class ResultMapScreen extends Component {
               showsUserLocation={true}
               showsCompass={true}
               showsPointsOfInterest={false}
-              zoomControlEnabled={true}
+              zoomControlEnabled={true}              
+              onMapReady={() => {
+                this.map.fitToSuppliedMarkers(this.state.markerIdentifierData, {
+                  edgePadding:
+                  {
+                    top: 50,
+                    right: 50,
+                    bottom: 50,
+                    left: 50
+                  }
+                })
+              }}
             >
               {
                 this.state.markerData.map((each) => (
@@ -195,9 +221,11 @@ export default class ResultMapScreen extends Component {
                     key={each.property_recordno}
                     coordinate={each.coordinate}
                     title={each.title}
+                    identifier={each.title}
+                    onPress={() => this.onPressMarker(each.propertyRecordNo)}
                   >
-                    <View style={{ width: normalize(20), height: normalize(30, 'height') }}>
-                      <Image style={{ width: '100%', height: '100%' }} source={Images.marker} />
+                    <View style={{ width: normalize(15), height: normalize(25, 'height') }}>
+                      <Image style={{ width: '100%', height: '100%' }} source={Images.marker} resizeMode='stretch' />
                     </View>
                   </Marker>
                 ))
@@ -215,11 +243,15 @@ export default class ResultMapScreen extends Component {
               </View>
               :
               <FlatList
+                ref={(ref) => { this.flatListRef = ref; }}
+                keyExtractor={item => item.property_recordno}
                 horizontal={true}
                 showsHorizontalScrollIndicator={false}
                 data={this.state.resultData}
+                getItemLayout={(data, index) => (
+                  { length: normalize(335), offset: normalize(338) * index, index }
+                )}
                 renderItem={({ item }) => <PropertyCard cardStyle={{ width: normalize(325), height: normalize(245, 'height'), marginTop: normalize(10, 'height'), marginRight: normalize(10) }} item={item} onPress={() => this.onPropertyPress(item.property_recordno)} />}
-                keyExtractor={item => item.property_recordno}
               />
           }
         </View>
@@ -268,7 +300,7 @@ export default class ResultMapScreen extends Component {
             </View>
 
             <View style={styles.modalBtnContainer}>
-              <Button btnTxt='Apply' btnStyle={{ width: '100%', height: normalize(50, 'height'), color: 'blue' }} onPress={()=>this.onApply()} />
+              <Button btnTxt='Apply' btnStyle={{ width: '100%', height: normalize(50, 'height'), color: 'blue' }} onPress={() => this.onApply()} />
             </View>
           </View>
 

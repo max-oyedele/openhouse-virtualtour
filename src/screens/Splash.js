@@ -21,6 +21,7 @@ import GetLocation from 'react-native-get-location';
 import AsyncStorage from '@react-native-community/async-storage';
 import KeyboardManager from 'react-native-keyboard-manager';
 
+
 import {
   BrowseCard,
   Button,
@@ -44,6 +45,7 @@ export default class SplashScreen extends Component {
     }
     
     this.keyboardManager();
+    
   }
 
   componentDidMount() {
@@ -140,7 +142,7 @@ export default class SplashScreen extends Component {
     LoginInfo.fullname = 'Anthony Robinson';
     LoginInfo.email = 'opendemo@icloud.com';
     LoginInfo.telephone = '+13059007270';
-    LoginInfo.photourl = 'http://photos.v3.mlsstratus.com/Live/Photos/agents/7000.jpg';
+    LoginInfo.photourl = '';
     LoginInfo.providerid = 'apple';
     LoginInfo.email_verified = true;
     LoginInfo.latitude = 40.776611;
@@ -156,14 +158,19 @@ export default class SplashScreen extends Component {
     bodyFormData.append('photourl', LoginInfo.photourl);
     bodyFormData.append('providerid', LoginInfo.providerid);
     bodyFormData.append('email_verified', LoginInfo.email_verified);
-    bodyFormData.append('latitude', LoginInfo.latitude);
-    bodyFormData.append('longitude', LoginInfo.longitude);
+    bodyFormData.append('user_latitude', LoginInfo.latitude);
+    bodyFormData.append('user_longitude', LoginInfo.longitude);
     bodyFormData.append('appid', 'com.openhousemarketingsystem.open');
     bodyFormData.append('referredby', 0);
 
     await postLoginInfo(bodyFormData)
-      .then((res) => console.log('post login info success', res))
-      .catch((err) => console.log('post login info error', err))
+      .then((res) => {
+        console.log('post login info success', res);
+        LoginInfo.photourl = res[0].user_photourl;
+      })      
+      .catch((err) => {
+        console.log('post login info error', err)
+      })      
   }
 
   render() {

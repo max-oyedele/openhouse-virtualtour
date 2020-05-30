@@ -65,7 +65,7 @@ export default class ResultListScreen extends Component {
   }
 
   componentDidFocus() {
-    if(!RouteParam.isChanged) return;
+    if (!RouteParam.isChanged) return;
     RouteParam.isChanged = false;
 
     let numberOfRooms = this.state.numberOfRooms;
@@ -77,18 +77,22 @@ export default class ResultListScreen extends Component {
     });
 
     if (RouteParam.searchKind === 'searchByQuery') {
-      this.setState({ headerTitle: SearchBy.query})
-      this.getSearchByQuery();      
+      if (SearchBy.propertyType == 6) {
+        SearchBy.listingType = 'R';
+      }
+      this.setState({ headerTitle: SearchBy.query })
+      this.getSearchByQuery();
     }
-    else if (RouteParam.searchKind === 'searchByCategory'){
-      if(SearchBy.categoryForHeader){
+    else if (RouteParam.searchKind === 'searchByCategory') {
+      //console.log(SearchBy.categoryForHeader);
+      if (SearchBy.categoryForHeader != '') {
         this.setState({ headerTitle: SearchBy.categoryForHeader })
       }
       else {
-        this.setState({ headerTitle: this.getPropertyTypeFromId(SearchBy.propertyType).properties_category_short_desc});
+        this.setState({ headerTitle: this.getPropertyTypeFromId(SearchBy.propertyType).properties_category_short_desc });
       }
       this.getSearchByCategory();
-    } 
+    }
   }
 
   componentWillUnmount() {
@@ -119,12 +123,14 @@ export default class ResultListScreen extends Component {
       .then((res) => {
         //console.log('searchData', res);             
         if (res.length == 0 || typeof res[0].error === 'defined') {
-          this.setState({ spinner: false });          
+          this.setState({ spinner: false });
           return;
         }
 
         var sortedRes = res.sort((a, b) => { return a.properties_displayorder - b.properties_displayorder })
-        this.setState({ resultData: sortedRes, spinner: false });
+        var filterByListingRes = sortedRes.filter((each) => each.property_listing_type == SearchBy.listingType);
+        this.setState({ resultData: filterByListingRes, spinner: false });
+
         RouteParam.mapResultData = sortedRes;
       })
       .catch((err) => {
@@ -148,22 +154,22 @@ export default class ResultListScreen extends Component {
       .then((res) => {
         //console.log('searchData', res);        
         if (res.length == 0 || typeof res[0].error === 'defined') {
-          this.setState({ spinner: false });          
+          this.setState({ spinner: false });
           return;
         }
 
-        var sortedRes = res.sort((a, b) => { return a.properties_displayorder - b.properties_displayorder })
+        var sortedRes = res.sort((a, b) => { return a.properties_displayorder - b.properties_displayorder });
         this.setState({ resultData: sortedRes, spinner: false });
-        RouteParam.mapResultData = sortedRes;        
+        RouteParam.mapResultData = sortedRes;
       })
       .catch((err) => {
         console.log('get search data error', err);
         this.setState({ spinner: false });
       })
-  }  
+  }
 
   getPropertyTypeFromId = (categoryId) => {
-    var propertyType = PropertyTypeData.filter((each)=>each.properties_category_id == categoryId);
+    var propertyType = PropertyTypeData.filter((each) => each.properties_category_id == categoryId);
     var retValue = propertyType[0];
     retValue.properties_category_short_desc = retValue.properties_category_short_desc ? retValue.properties_category_short_desc : 'No title';
     return retValue;
@@ -195,18 +201,13 @@ export default class ResultListScreen extends Component {
         <View style={styles.body}>
           <View style={styles.searchShadowContainer}>
             <View style={styles.searchInnerContainer}>
-
               <View style={styles.locationLabelAndFilter}>
                 <Text style={{ fontFamily: 'SFProText-Semibold', fontSize: RFPercentage(2), color: Colors.passiveTxtColor }}>LOCATION</Text>
                 <TouchableOpacity style={{ width: '6%', height: '90%', marginRight: normalize(10) }} onPress={() => this.props.navigation.navigate('SearchBy')}>
                   <Image style={{ width: '100%', height: '100%' }} source={Images.iconFilter} resizeMode='contain' />
                 </TouchableOpacity>
               </View>
-
-              <View style={styles.searchBoxContainer}>
-                <SearchBox boxStyle={{ width: width * 0.9, height: normalize(35, 'height'), backgroundColor: Colors.searchBackColor, borderColor: Colors.searchBackColor, btnColor: Colors.weakBlackColor }} onSearch={this.onSearch} />
-              </View>
-
+              
               <View style={styles.conditionContainer}>
                 <View style={styles.conditionInnerContainer}>
                   <TouchableOpacity style={{ width: '50%', height: '100%' }} onPress={() => this.props.navigation.navigate('PropertyType')}>
@@ -241,8 +242,11 @@ export default class ResultListScreen extends Component {
                   })}
                 </View>
               </View>
-
             </View>
+          </View>
+
+          <View style={styles.searchBoxContainer}>
+            <SearchBox boxStyle={{ width: width * 0.9, height: normalize(40, 'height'), backgroundColor: Colors.searchBackColor, borderColor: Colors.searchBackColor, btnColor: Colors.weakBlackColor }} onSearch={this.onSearch} />
           </View>
 
           <View style={styles.listContainer}>
@@ -404,8 +408,11 @@ const styles = StyleSheet.create({
     //borderWidth: 1
   },
   searchBoxContainer: {
-    width: '95%',    
-    height: '22%',   
+    width: '95%',
+    // height: '22%',
+    marginTop: normalize(-100, 'height'),
+    alignSelf: 'center',
+    zIndex: 1,
     //borderWidth: 1    
   },
   conditionContainer: {
@@ -413,7 +420,7 @@ const styles = StyleSheet.create({
     height: '40%',
     justifyContent: 'center',
     alignItems: 'center',
-    marginTop: normalize(10, 'height'),
+    marginTop: normalize(45, 'height'),
     borderColor: Colors.borderColor,
     borderTopWidth: normalize(0.5),
     //borderWidth: 1
@@ -425,13 +432,16 @@ const styles = StyleSheet.create({
     //borderWidth: 1
   },
   listContainer: {
+    position: 'absolute',
+    top: normalize(135, 'height'),
+    left: '2.5%',
     width: '95%',
     height: '70%',
     justifyContent: 'center',
     alignItems: 'center',
-    alignSelf: 'center',
-    marginTop: normalize(10, 'height'),
-    //borderWidth: 1
+    // alignSelf: 'center',
+    // marginTop: normalize(70, 'height'),
+    // borderWidth: 1
   },
   emptyContainer: {
     width: '60%',

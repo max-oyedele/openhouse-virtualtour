@@ -63,6 +63,37 @@ export default class PreferenceScreen extends Component {
     });
   }
 
+  //////////////////////// format //////////////
+  formatter = new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: 'USD',
+  });
+
+  getFormatValue = (value) => {
+    value = value.replace(".", "");
+    var partArr = value.split(",");
+    var valueNoComma = '';
+    partArr.forEach(each => {
+      valueNoComma += each;
+    })
+
+    var realValue = valueNoComma.replace("$", "");
+    if (realValue == '') return realValue;
+    else return this.formatter.format(realValue).split(".")[0];
+  }
+
+  getRealValue = (value) => {
+    var partArr = value.split(",");
+    var valueNoComma = '';
+    partArr.forEach(each => {
+      valueNoComma += each;
+    })
+
+    var realValue = valueNoComma.replace("$", "");
+    return realValue;
+  }
+  ///////////////////////////////////////////////
+
   render() {
     const isOptionOverFlow = PreferencesData[this.state.selectedPreferenceIndex].options.length > 8 ? true : false;
     return (
@@ -165,8 +196,8 @@ export default class PreferenceScreen extends Component {
                   <View style={[styles.eachLine, { borderBottomWidth: 0 }]}>
                     <TextInput
                       style={{ width: '100%', height: '100%', paddingLeft: normalize(10), color: Colors.blackColor }}
-                      placeholder={PreferencesData[this.state.selectedPreferenceIndex].options[PreferencesData[this.state.selectedPreferenceIndex].answerIndex]}
-                      value={this.state.inputValue}
+                      //placeholder={PreferencesData[this.state.selectedPreferenceIndex].options[PreferencesData[this.state.selectedPreferenceIndex].answerIndex]}
+                      value={PreferencesData[this.state.selectedPreferenceIndex].id == 9 ? this.getFormatValue(this.state.inputValue) : this.state.inputValue}
                       keyboardType={PreferencesData[this.state.selectedPreferenceIndex].id == 9 ? 'numeric' : 'default'}
                       onChangeText={(text) => this.setState({ inputValue: text })}
                     />
@@ -218,7 +249,6 @@ export default class PreferenceScreen extends Component {
     );
   }
 
-
 }
 
 const width = Dimensions.get('window').width;
@@ -261,6 +291,7 @@ const styles = StyleSheet.create({
   subqueryContainer: {
     width: '90%',
     height: '27%',
+    flex: 0.8,
     justifyContent: 'center',
     alignSelf: 'center',
     //borderWidth: 1

@@ -20,6 +20,7 @@ import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-nat
 import { RFPercentage, RFValue } from "react-native-responsive-fontsize";
 
 import SwitchSelector from "react-native-switch-selector";
+
 import AsyncStorage from '@react-native-community/async-storage';
 
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -143,7 +144,9 @@ export default class DashboardScreen extends Component {
       ]
     }
 
+    this.scrollRef = null;
     this.listener = this.props.navigation.addListener('focus', this.componentDidFocus.bind(this));
+    
   }
 
   componentDidMount() {
@@ -154,7 +157,8 @@ export default class DashboardScreen extends Component {
 
   componentDidFocus() {
     SearchBy.query = '';
-    this.scrollRef.scrollTo({y:0, animated: true});
+    SearchBy.priceTo = 100000000;
+    if(this.scrollRef != null) this.scrollRef.scrollTo({y:0, animated: true});
     this.setState({ refresh: !this.state.refresh });
   }
 
@@ -227,10 +231,13 @@ export default class DashboardScreen extends Component {
       })
   }
 
-  onCategoryPress = (categoryId) => {
+  onCategoryPress = (categoryId) => {    
+    RouteParam.isChanged = true;
+    RouteParam.searchKind = 'searchByCategory';    
     SearchBy.propertyType = categoryId;
     SearchBy.categoryForHeader = '';
-    RouteParam.searchKind = 'searchByCategory';
+    SearchBy.listingType = this.state.listingType;
+
     this.props.navigation.navigate('SearchStack');
   }
 
@@ -251,17 +258,26 @@ export default class DashboardScreen extends Component {
   }
 
   onSearch = (query) => {
-    SearchBy.query = query;
     RouteParam.searchKind = 'searchByQuery';
+    SearchBy.query = query;
+    SearchBy.listingType = this.state.listingType;
+    if(SearchBy.propertyType == 6) SearchBy.propertyType = 1;    
     if (query){
       RouteParam.isChanged = true;
       this.props.navigation.navigate('SearchStack');
     } 
   }
 
+  onTouchEvent = (e) => {
+    var locationX = e.nativeEvent.locationX;
+    if(this.state.toggleMenuVisible && locationX > width * 0.8){
+      this.setState({toggleMenuVisible: false});
+    }
+  }
+
   render() {
     return (
-      <View style={styles.container}>
+      <View style={styles.container} onTouchStart={(e) => this.onTouchEvent(e)}>
         {this.state.toggleMenuVisible ?
           <SideMenu navigation={this.props.navigation} onToggleMenu={this.onToggleMenu} onLogout={this.onLogout} />
           : null
@@ -289,7 +305,7 @@ export default class DashboardScreen extends Component {
           <View style={styles.contentContainer}>
             <View style={styles.switchBoxContainer}>
               <SwitchSelector
-                initial={0}
+                initial={SearchBy.listingType == 'S' ? 0 : 1}
                 onPress={value => {
                   this.setState({ listingType: value, featurePropertyData: [] });
                   SearchBy.listingType = value;
@@ -332,7 +348,7 @@ export default class DashboardScreen extends Component {
                   horizontal={true}
                   showsHorizontalScrollIndicator={false}
                   data={this.state.featurePropertyData}
-                  renderItem={({ item }) => <PropertyCard cardStyle={{ width: normalize(325), height: normalize(245, 'height'), marginTop: 0, marginRight: normalize(10) }} item={item} listingType={SearchBy.listingType} onPress={() => this.onPropertyPress(item.property_recordno)} />}
+                  renderItem={({ item }) => <PropertyCard cardStyle={{ width: normalize(325), height: normalize(245, 'height'), marginTop: 0, marginRight: normalize(10) }} item={item} onPress={() => this.onPropertyPress(item.property_recordno)} />}
                   keyExtractor={item => item.property_recordno}
                 />
               </View>

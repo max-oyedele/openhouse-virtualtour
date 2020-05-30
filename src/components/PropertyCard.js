@@ -94,7 +94,7 @@ export default class PropertyCard extends Component {
                   paddingLeft: normalize(13),
                   //borderWidth: 2
                 }}>
-                  <View style={{ flex: 0.8, flexDirection: 'row' }}>
+                  <View style={{ flex: 0.6, flexDirection: 'row' }}>
                     <Text style={{ fontFamily: 'SFProText-Regular', fontSize: RFPercentage(2), color: Colors.blackColor }}>{this.props.item.property_address1}</Text>
                     <Text style={{ fontFamily: 'SFProText-Regular', fontSize: RFPercentage(2), color: Colors.blackColor }}>, {this.props.item.property_city}</Text>
                   </View>

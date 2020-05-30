@@ -55,7 +55,7 @@ export default class SearchByScreen extends Component {
     }
   }
 
-  componentDidMount() {
+  componentDidMount() {    
     var oldSearchBy = {
       distance: SearchBy.distance,
       priceFrom: SearchBy.priceFrom,
@@ -101,6 +101,7 @@ export default class SearchByScreen extends Component {
     this.props.navigation.goBack(null);
   }
 
+  //////////////////////// format //////////////
   format2Number(num) {
     return num.toString().replace(/(\d)(?=(\d{2})+(?!\d))/g, '$1,')
   }
@@ -133,6 +134,7 @@ export default class SearchByScreen extends Component {
     var realValue = valueNoComma.replace("$", "");
     return realValue;
   }
+  ///////////////////////////////////////////////
 
   render() {
     return (

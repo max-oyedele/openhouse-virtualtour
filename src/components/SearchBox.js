@@ -36,8 +36,9 @@ export default class SearchBox extends Component {
 
   filterData = (query) => {
     var filtered = SearchWordData.filter(each => {
-      var eachStr = each;
-      return eachStr.includes(query);
+      var eachStr = each.toLowerCase();
+      var lowerQuery = query.toLowerCase();
+      return eachStr.includes(lowerQuery);
     });
     return filtered;
   }
@@ -87,6 +88,7 @@ export default class SearchBox extends Component {
               { height: data.length * 15 > 150 ? normalize(150, 'height') : normalize((data.length+1) * 22, 'height') }
             ]}
           >
+            <View style={{width: '100%', height: '100%', backgroundColor: '#ffffff'}}>
             <ScrollView>
               {
                 data.map((each, index) => {
@@ -100,6 +102,7 @@ export default class SearchBox extends Component {
                 })
               }
             </ScrollView>
+            </View>
           </View>
         }
       </View>
@@ -128,7 +131,7 @@ const styles = StyleSheet.create({
     width: '20%',
     justifyContent: 'center',
   },
-  autoCompleteContainer: {
+  autoCompleteContainer: {    
     backgroundColor: '#ffffff',
     width: '95%',
     alignSelf: 'center',

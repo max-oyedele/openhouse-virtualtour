@@ -21,7 +21,8 @@ import { RFPercentage, RFValue } from "react-native-responsive-fontsize";
 import { BlurView } from "@react-native-community/blur";
 import ViewMoreText from 'react-native-view-more-text';
 
-import Icon from 'react-native-vector-icons/FontAwesome';
+import ImageView from 'react-native-image-view';
+
 import MapView, { Marker } from 'react-native-maps';
 
 import {
@@ -46,13 +47,23 @@ export default class PropertyScreen extends Component {
       isFavorite: false,
       property: {},
       propertyPhotoData: [],
+      propertyPhotoDetailData: [],
       agentCard: '',
       sticky: false,
-      spinner: false
+      spinner: false,
+      isImageViewVisible: false,
+      imageIndex: 0
     }
   }
 
   componentDidMount() {
+    var animatedValue = new Animated.Value(0);
+    Animated.timing(animatedValue, {
+      toValue: 1,
+      duration: 500,
+      useNativeDriver: true,
+    }).start();
+
     this.getProperty();
     this.getPropertyPhoto();
     this.getAgentCard();
@@ -89,13 +100,24 @@ export default class PropertyScreen extends Component {
       user_latitude: LoginInfo.latitude,
       user_longitude: LoginInfo.longitude,
       user_id: LoginInfo.uniqueid,
-      property_recordno: RouteParam.propertyRecordNo,//this.props.route.params.propertyRecordNo
+      property_recordno: RouteParam.propertyRecordNo,
     };
 
     getContentByAction(photoParam)
       .then((res) => {
-        //console.log('property', res)      
+        //console.log('property photo', res)      
         this.setState({ propertyPhotoData: res });
+
+        var propertyPhotoDetailData = [];
+        res.forEach((each) => {
+          var photo = {
+            source: { uri: each.property_photourl },
+            width: width,
+            height: width
+          };
+          propertyPhotoDetailData.push(photo);
+        })
+        this.setState({ propertyPhotoDetailData: propertyPhotoDetailData });
       })
       .catch((err) => {
         console.log('get property photo error', err)
@@ -109,7 +131,7 @@ export default class PropertyScreen extends Component {
       user_longitude: LoginInfo.longitude,
       user_id: LoginInfo.uniqueid,
       user_assigned_agent: 0, //hard code
-      property_recordno: RouteParam.propertyRecordNo,//this.props.route.params.propertyRecordNo
+      property_recordno: RouteParam.propertyRecordNo,
     };
 
     getContentByAction(cardParam)
@@ -165,11 +187,13 @@ export default class PropertyScreen extends Component {
   }
 
   renderViewMore(onPress) {
+    console.log('more');
     return (
       <Text style={{ fontSize: RFPercentage(1.7), color: Colors.blueColor, alignSelf: 'flex-end', marginTop: normalize(5, 'height') }} onPress={onPress}>View more</Text>
     )
   }
   renderViewLess(onPress) {
+    console.log('less');
     return (
       <Text style={{ fontSize: RFPercentage(1.7), color: Colors.blueColor, alignSelf: 'flex-end', marginTop: normalize(5, 'height') }} onPress={onPress}>View less</Text>
     )
@@ -205,7 +229,7 @@ export default class PropertyScreen extends Component {
         {
           this.state.sticky ? (
             <View style={{ width: '100%' }}>
-              <Header title={this.state.property.property_recordno} titleColor={Colors.blackColor} isSticky={true} onPressBack={() => this.props.navigation.goBack(null)} />
+              <Header title={this.state.property.property_mlsnumber} titleColor={Colors.blackColor} isSticky={true} onPressBack={() => this.props.navigation.goBack(null)} />
             </View>
           )
             : <View></View>
@@ -215,9 +239,8 @@ export default class PropertyScreen extends Component {
             this.state.sticky ? <View></View> :
               (
                 <View style={{ width: '100%' }}>
-                  <Header title={this.state.property.property_recordno} titleColor={Colors.whiteColor} onPressBack={() => this.props.navigation.goBack(null)} />
+                  <Header title={this.state.property.property_mlsnumber} titleColor={Colors.whiteColor} onPressBack={() => this.props.navigation.goBack(null)} />
                 </View>
-
               )
           }
 
@@ -244,10 +267,14 @@ export default class PropertyScreen extends Component {
             <View style={styles.topPart}>
               <View style={styles.leftPart}>
                 <View style={styles.leftNameLine}>
-                  <Text style={{ fontFamily: 'SFProText-Bold', fontSize: RFPercentage(5), color: 'white' }}>{this.state.property.property_address1}</Text>
+                  <Text style={{ fontFamily: 'SFProText-Bold', fontSize: RFPercentage(4), color: 'white' }}>{this.state.property.property_address1}</Text>
+                  <View style={styles.leftCityStateLine}>
+                    <Text style={{ fontFamily: 'SFProText-Bold', fontSize: RFPercentage(3.5), color: 'white' }}>{this.state.property.property_city}</Text>
+                    <Text style={{ fontFamily: 'SFProText-Bold', fontSize: RFPercentage(3.5), color: 'white' }}>, {this.state.property.property_state}</Text>
+                  </View>
                 </View>
                 <View style={styles.leftPriceLine}>
-                  <Text style={{ fontFamily: 'SFProText-Regular', fontSize: RFPercentage(3.8), color: 'white' }}>{this.formatter.format(this.state.property.property_amount).split(".")[0]}</Text>
+                  <Text style={{ fontFamily: 'SFProText-Regular', fontSize: RFPercentage(3.5), color: 'white' }}>{this.formatter.format(this.state.property.property_amount).split(".")[0]}</Text>
                 </View>
                 <View style={styles.leftTagLine}>
                   <View style={styles.eachTagContainer}>
@@ -276,7 +303,6 @@ export default class PropertyScreen extends Component {
               </TouchableOpacity>
             </View>
           </View>
-
         </ImageBackground>
 
         <View style={styles.enterBtnContainer}>
@@ -286,6 +312,7 @@ export default class PropertyScreen extends Component {
         <View style={styles.descContainer}>
           <Text style={{ fontFamily: 'SFProText-Semibold', fontSize: RFPercentage(2), color: Colors.blackColor, marginTop: normalize(7, 'height'), marginBottom: normalize(7, 'height') }}>DESCRIPTION</Text>
           <ViewMoreText
+            key={this.state.property.property_long_description}
             style={{ marginTop: normalize(7, 'height') }}
             numberOfLines={3}
             renderViewMore={this.renderViewMore}
@@ -322,21 +349,32 @@ export default class PropertyScreen extends Component {
             showsHorizontalScrollIndicator={false}
             renderItem={({ item }) => {
               return (
-                <View key={item.img} style={{ width: width * 0.3, height: 100, marginTop: normalize(7, 'height'), marginRight: normalize(7), borderRadius: normalize(8), /*borderWidth: 1*/ }}>
-                  <Image style={{ width: '100%', height: '100%', borderRadius: normalize(8) }} resizeMode='stretch' source={{ uri: item.property_photourl }} />
-                </View>
+                <TouchableOpacity
+                  style={{ width: width * 0.3, height: 100, marginTop: normalize(7, 'height'), marginRight: normalize(7), borderRadius: normalize(8) }}
+                  onPress={() => this.setState({
+                    isImageViewVisible: true,
+                    imageIndex: this.state.propertyPhotoData.indexOf(item)
+                  })}
+                >
+                  <Image style={{ width: width * 0.3, height: 100, borderRadius: normalize(8) }} source={{ uri: item.property_photourl }} resizeMode='stretch' />
+                </TouchableOpacity>
               )
             }}
           />
         </View>
+
+        {
+          this.state.isImageViewVisible &&
+          <ImageView
+            images={this.state.propertyPhotoDetailData}
+            imageIndex={this.state.imageIndex}
+            isVisible={this.state.isImageViewVisible}
+            onClose={() => this.setState({ isImageViewVisible: false })}
+          />
+        }
+
         <View style={styles.mapContainer}>
           <MapView
-            initialRegion={{
-              latitude: this.state.property.property_latitude,
-              longitude: this.state.property.property_longitude,
-              latitudeDelta: 0.0922 / 5,
-              longitudeDelta: 0.0421 / 5,
-            }}
             region={{
               latitude: this.state.property.property_latitude,
               longitude: this.state.property.property_longitude,
@@ -354,7 +392,7 @@ export default class PropertyScreen extends Component {
                 latitude: this.state.property.property_latitude,
                 longitude: this.state.property.property_longitude
               }}
-              title={this.state.property.property_city}
+              title={this.state.property.property_address1}
             >
               <View style={{ width: normalize(20), height: normalize(30, 'height') }}>
                 <Image style={{ width: '100%', height: '100%' }} source={Images.marker} />
@@ -389,9 +427,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     //borderWidth: 1
   },
-
-
-
   labelTagLine: {
     width: '85%',
     height: normalize(30, 'height'),
@@ -417,7 +452,7 @@ const styles = StyleSheet.create({
   },
   topPart: {
     width: '100%',
-    height: '83%',
+    height: '85%',
     flexDirection: 'row',
     paddingLeft: normalize(15),
     //borderWidth: 1,    
@@ -437,7 +472,7 @@ const styles = StyleSheet.create({
   },
   bottomPart: {
     width: '100%',
-    height: '17%',
+    height: '15%',
     justifyContent: 'center',
     alignItems: 'center',
     //borderWidth: 1
@@ -446,18 +481,27 @@ const styles = StyleSheet.create({
     width: '100%',
     height: '60%',
     justifyContent: 'center',
+    marginTop: normalize(15, 'height'),
+    //borderWidth: 1
+  },
+  leftCityStateLine: {
+    width: '100%',
+    height: '30%',
+    flexDirection: 'row',
+    alignItems: 'center',
     //borderWidth: 1
   },
   leftPriceLine: {
     width: '100%',
-    height: '25%',
+    height: '20%',
+    justifyContent: 'center',
     //borderWidth: 1
   },
   leftTagLine: {
     width: '100%',
-    height: '15%',
+    height: '20%',
     flexDirection: 'row',
-    alignItems: 'center',
+    //alignItems: 'center',
     //borderWidth: 1
   },
   eachTagContainer: {
@@ -466,9 +510,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
   },
-
-
-
   enterBtnContainer: {
     width: '90%',
     height: '5%',
@@ -480,7 +521,7 @@ const styles = StyleSheet.create({
   },
   descContainer: {
     width: '90%',
-    // height: '10%',
+    //height: '10%',
     alignSelf: 'center',
     //borderWidth: 1
   },

@@ -20,6 +20,8 @@ import { RFPercentage, RFValue } from "react-native-responsive-fontsize";
 
 import PropTypes from 'prop-types';
 import Overlay from 'react-native-modal-overlay';
+import SignatureCapture from 'react-native-signature-capture';
+import RNFetchBlob from 'rn-fetch-blob'
 
 import { Colors, Images } from '@constants';
 
@@ -31,7 +33,28 @@ export default class SignModal extends Component {
     }
   }
 
-  onRefresh = ()=> {}
+  saveSign() {
+    this.refs["sign"].saveImage();
+    this.props.onClose();
+  }
+
+  resetSign() {
+    this.refs["sign"].resetImage();
+  }
+
+  _onDragEvent() {        
+    //console.warn('drag');
+  }
+
+  _onSaveEvent(result) {
+    const signPath = `${RNFetchBlob.fs.dirs.DocumentDir}/signature.png`;
+    RNFetchBlob.fs
+      .writeFile(signPath, result.encoded, 'base64')
+      .then((res) => {        
+        //console.warn('signature', res)
+      })
+      .catch(err => console.log('signature error', err));
+  }
 
   render() {
     return (
@@ -45,7 +68,7 @@ export default class SignModal extends Component {
         <View style={styles.signModalHeader}>
           <View style={{ width: '15%', height: '100%', justifyContent: 'center', alignItems: 'center' }}></View>
           <View style={{ width: '70%', height: '100%', justifyContent: 'center', alignItems: 'center' }}>
-            <Text style={{fontFamily: 'SFProText-Semibold', fontSize: RFPercentage(2), color: Colors.blackColor}}>Your Signature</Text>
+            <Text style={{ fontFamily: 'SFProText-Semibold', fontSize: RFPercentage(2), color: Colors.blackColor }}>Your Signature</Text>
           </View>
           <TouchableOpacity
             style={{ width: '15%', height: '100%', marginTop: normalize(3, 'height'), alignItems: 'flex-end' }}
@@ -55,18 +78,26 @@ export default class SignModal extends Component {
           </TouchableOpacity>
         </View>
         <View style={styles.signModalBody}>
-
+          <SignatureCapture
+            style={{ flex: 1 }}
+            ref="sign"
+            onSaveEvent={this._onSaveEvent}
+            onDragEvent={this._onDragEvent}
+            saveImageFileInExtStorage={false}
+            showNativeButtons={false}
+            showTitleLabel={false}
+            viewMode={"portrait"} />
         </View>
         <View style={styles.signModalFooter}>
           <TouchableOpacity
             style={{ width: '15%', height: '100%', justifyContent: 'center', alignItems: 'center' }}
-            onPress={() => this.onRefresh()}
+            onPress={() => this.resetSign()}
           >
             <Image style={{ width: '60%', height: '60%' }} source={Images.iconRefresh} resizeMode='contain' />
           </TouchableOpacity>
           <TouchableOpacity
             style={{ width: '15%', height: '100%', justifyContent: 'center', alignItems: 'center' }}
-            onPress={() => this.props.onSignOK()}
+            onPress={() => this.saveSign()}
           >
             <Image style={{ width: '60%', height: '60%' }} source={Images.iconOK} resizeMode='contain' />
           </TouchableOpacity>

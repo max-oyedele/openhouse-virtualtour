@@ -29,6 +29,7 @@ import {
   SignModal,
 } from '@components';
 import { Colors, Images, LoginInfo, SearchBy, PropertyTypeData } from '@constants';
+import { RouteParam } from "../../constants";
 
 export default class PropertyTypeScreen extends Component {
   constructor(props) {
@@ -36,6 +37,7 @@ export default class PropertyTypeScreen extends Component {
     this.state = {
       refresh: false,
       propertyTypeCheckedList: [],
+      oldCheckedList: []
     }    
   }
 
@@ -48,12 +50,20 @@ export default class PropertyTypeScreen extends Component {
     PropertyTypeData.forEach((each, index) => {
       if(each.properties_category_id == SearchBy.propertyType) propertyTypeCheckedList[index] = 1;
       else propertyTypeCheckedList[index] = 0;
-    });  
-    this.setState({propertyTypeCheckedList: propertyTypeCheckedList});
+    });      
+
+    var oldCheckedList = [];
+    propertyTypeCheckedList.forEach(each=>oldCheckedList.push(each));
+
+    this.setState({ 
+      propertyTypeCheckedList: propertyTypeCheckedList,
+      oldCheckedList: oldCheckedList
+    });     
   }  
 
   controlSwitch = (selectedIndex, selectedValue) => {
-    let { propertyTypeCheckedList } = this.state;
+    let { propertyTypeCheckedList } = this.state;    
+
     propertyTypeCheckedList[selectedIndex] = selectedValue;
 
     if (selectedValue) {
@@ -72,12 +82,18 @@ export default class PropertyTypeScreen extends Component {
         propertyTypeCheckedList[0] = 1;
         SearchBy.propertyType = PropertyTypeData[0].properties_category_id;
       }
-    }
+    }    
 
     this.setState({
       propertyTypeCheckedList: propertyTypeCheckedList,
       refresh: !this.state.refresh
     });
+
+    var isChanged = false;        
+    propertyTypeCheckedList.forEach((each, index)=>{      
+      if(each != this.state.oldCheckedList[index]) isChanged = true;              
+    });    
+    RouteParam.isChanged = isChanged;
   }
 
   render() {
@@ -102,7 +118,7 @@ export default class PropertyTypeScreen extends Component {
                       backgroundColor={eachChecked ? Colors.blueColor : Colors.borderColor}
                       selectedColor='#00f'
                       buttonColor={Colors.whiteColor}
-                      initial={index == 0 ? 1 : 0}
+                      initial={this.state.propertyTypeCheckedList[index]}
                       value={eachChecked}
                       onPress={value => {
                         this.controlSwitch(index, value);

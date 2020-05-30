@@ -37,25 +37,28 @@ export default class SideMenu extends Component {
   }
 
   onForRent = () => {    
-    SearchBy.categoryForHeader = 'Rental Properties';
-    SearchBy.propetyType = 6;
+    RouteParam.isChanged = true;
     RouteParam.searchKind = 'searchByCategory';
+    SearchBy.categoryForHeader = 'Rental Properties';
+    SearchBy.propertyType = 6;     
     this.props.navigation.navigate('SearchStack');
     this.props.onToggleMenu();    
   }
 
   onForSale = () => {
-    SearchBy.categoryForHeader = 'Properties For Sale';
-    SearchBy.propetyType = 1;
+    RouteParam.isChanged = true;
     RouteParam.searchKind = 'searchByCategory';
+    SearchBy.categoryForHeader = 'Properties For Sale';
+    SearchBy.propertyType = 1;    
     this.props.navigation.navigate('SearchStack');
     this.props.onToggleMenu();    
   }
 
   onSearch = () => {
-    SearchBy.categoryForHeader = 'Properties For Sale';
-    SearchBy.propetyType = 1;
+    RouteParam.isChanged = true;
     RouteParam.searchKind = 'searchByCategory';
+    SearchBy.categoryForHeader = 'Properties For Sale';
+    SearchBy.propertyType = 1;    
     this.props.navigation.navigate('SearchStack');
     this.props.onToggleMenu();    
   }
