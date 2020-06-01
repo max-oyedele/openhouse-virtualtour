@@ -53,11 +53,11 @@ export default class SplashScreen extends Component {
   }
   
   componentDidFocus(){    
-    //this.getLocation();
+    this.getLocation();
   
     //temp for skip
-    this.submit();
-    setTimeout(() => { this.props.navigation.navigate('Main') }, 1000);    
+    // this.submit();
+    // setTimeout(() => { this.props.navigation.navigate('Main') }, 1000);    
   }
 
   componentWillUnmount() {
