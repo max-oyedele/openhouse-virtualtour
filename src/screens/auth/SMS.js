@@ -23,7 +23,7 @@ import {
   Header,
 } from '@components';
 import { Colors, Images, LoginInfo, RouteParam } from '@constants';
-import { postLoginInfo } from '../../api/rest';
+import { postData } from '../../api/rest';
 
 export default class SMSScreen extends Component {
   constructor(props) {
@@ -88,11 +88,13 @@ export default class SMSScreen extends Component {
     bodyFormData.append('appid', 'com.openhousemarketingsystem.open');
     bodyFormData.append('referredby', 0);
 
-    await postLoginInfo(bodyFormData)
+    await postData(bodyFormData)
       .then((res) => {
         console.log('post login info success', res);
 
         LoginInfo.photourl = res[0].user_photourl;
+        LoginInfo.user_account = res[0].user_account;
+        LoginInfo.user_assigned_agent = res[0].user_assigned_agent;
 
         AsyncStorage.setItem('LoginInfo', JSON.stringify(LoginInfo));
         this.props.navigation.navigate('Welcome');

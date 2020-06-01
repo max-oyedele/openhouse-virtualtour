@@ -44,8 +44,7 @@ const Images = {
 
   btnFBLogin: require('../assets/images/fbLogin.png'),
   btnGoogleLogin: require('../assets/images/googleLogin.png'),
-  btnTwitterLogin: require('../assets/images/twitterLogin.png'),
-
+  
   btnBookmark: require('../assets/images/btnBookmark.png'),
   btnMsg: require('../assets/images/btnMsg.png'), 
   btnVideoPlay: require('../assets/images/btnVideoPlay.png'), 

@@ -35,12 +35,15 @@ export default class SearchBox extends Component {
   }
 
   filterData = (query) => {
-    var filtered = SearchWordData.filter(each => {
-      var eachStr = each.toLowerCase();
-      var lowerQuery = query.toLowerCase();
-      return eachStr.includes(lowerQuery);
-    });
-    return filtered;
+    if(SearchWordData.length > 0){
+      var filtered = SearchWordData.filter(each => {
+        var eachStr = each.toLowerCase();
+        var lowerQuery = query.toLowerCase();
+        return eachStr.includes(lowerQuery);
+      });
+      return filtered;
+    }
+    else return []
   }
 
   render() {

@@ -9,6 +9,7 @@ import {
   ImageBackground,
   TextInput,
   Alert,
+  Linking,
   TouchableOpacity,
   Dimensions,
   Platform
@@ -19,8 +20,8 @@ import { RFPercentage, RFValue } from "react-native-responsive-fontsize";
 
 import { WebView } from 'react-native-webview';//ios
 import PDFView from 'react-native-view-pdf';//android
+import RNFetchBlob from 'rn-fetch-blob';
 
-import { Colors, Images } from '@constants';
 import {
   BrowseCard,
   Button,
@@ -32,19 +33,80 @@ import {
   SideMenu,
   SignModal,
 } from '@components';
+import { Colors, Images, LoginInfo, RouteParam } from '@constants';
+import { getContentByAction, postData } from '../../api/rest';
 
 export default class SignatureScreen extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      // propertyPdf: require('../../assets/property.pdf'),
-      propertyPdfUrl: 'https://www.dos.ny.gov/forms/licensing/1736-a.pdf',
       visibleSignForm: false
     }
   }
 
   componentDidMount() {
+    
+  }
 
+  onSignOK = () => {
+    Linking.canOpenURL(RouteParam.browseUrl).then(supported => {
+      if (supported) {
+        Linking.openURL(RouteParam.browseUrl)
+          .then(() => { })
+          .catch((err) => console.log('open browse url error'))
+      } else {
+        console.log('open browser error');
+      }
+    });
+
+    this.postAttendee();
+  }
+  
+  postAttendee = async () => {    
+    let signaturePath = `${RNFetchBlob.fs.dirs.DocumentDir}/signature.png`;    
+    let uri = Platform.OS === 'ios' ? signaturePath : 'file://' + signaturePath;
+
+    let filetoupload = LoginInfo.user_account + '.png';  
+    let photo_id = LoginInfo.user_account + '-' + RouteParam.propertyRecordNo;
+    
+    let data = new FormData();
+    data.append('photo_id', photo_id);
+    data.append('photo_type', 's');    
+    data.append('filetoupload', {
+      uri: uri,
+      name: filetoupload,
+      type: 'image/png',
+    });      
+
+    fetch("http://www.openhousemarketingsystem.com/application/virtualplus/v1/uploadimage.php", {
+      method: 'POST',
+      headers: { 'Content-Type': 'multipart/form-data' },
+      body: data,
+    })
+      .then(res => res.json())      
+      .then(res => {        
+        console.log('post sign success', res)
+      })
+      .catch((err)=>{
+        console.log('post sign error',err);
+      })
+      .done();
+
+
+    let bodyFormData = new FormData();
+    bodyFormData.append('action', 'post_oh_attendee');
+    bodyFormData.append('user_account', LoginInfo.user_account);
+    bodyFormData.append('property_recordno', RouteParam.propertyRecordNo);
+    bodyFormData.append('user_latitude', LoginInfo.latitude);
+    bodyFormData.append('user_longitude', LoginInfo.longitude);
+
+    await postData(bodyFormData)
+      .then((res) => {
+        //console.log('post attendee success', res);
+      })
+      .catch((err) => {
+        console.log('post attendee error', err)
+      })
   }
 
   render() {
@@ -53,25 +115,14 @@ export default class SignatureScreen extends Component {
         <SignModal
           visible={this.state.visibleSignForm}
           onClose={() => this.setState({ visibleSignForm: false })}
-          onSignOK={() => console.warn('where to go')}
+          onSignOK={() => this.onSignOK()}
         />
         <View style={{ width: '100%' }}>
           <Header title='AGENCY DISCLOSURE FORM' titleColor={Colors.blackColor} onPressBack={() => this.props.navigation.goBack(null)} />
         </View>
         <View style={styles.body}>
           <View style={styles.pdfContainer}>
-            {Platform.OS === 'ios' ?
-              <WebView source={{uri:this.state.propertyPdfUrl}} />
-              :
-              <PDFView
-                fadeInDuration={250.0}
-                style={{ flex: 1 }}
-                // resource={this.state.propertyPdf}
-                resourceType='file'
-                onLoad={() => console.log(`PDF rendered`)}
-                onError={(err) => console.log('Cannot render PDF', err)}
-              />
-            }
+            <WebView source={{ uri: RouteParam.pdfUrl }} />
           </View>
           <View style={styles.btnContainer}>
             <Button btnTxt='AGREE AND SIGN' btnStyle={{ width: '100%', height: normalize(50, 'height'), color: 'blue' }} onPress={() => this.setState({ visibleSignForm: true })} />
@@ -100,13 +151,22 @@ const styles = StyleSheet.create({
   body: {
     width: '100%',
     height: height,
-    marginTop: normalize(20, 'height'),    
+    marginTop: normalize(20, 'height'),
     alignItems: 'center'
     //borderWidth: 2
   },
   pdfContainer: {
     width: '95%',
     height: '70%',
+    justifyContent: 'center',
+    alignSelf: 'center',
+    //borderWidth: 1
+  },
+  emptyContainer: {
+    width: '60%',
+    height: '30%',
+    justifyContent: 'center',
+    alignItems: 'center',
     alignSelf: 'center',
     //borderWidth: 1
   },

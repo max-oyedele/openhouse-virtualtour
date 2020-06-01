@@ -182,7 +182,8 @@ export default class ResultListScreen extends Component {
 
   onSearch = (query) => {
     //console.log(SearchBy.query);
-    SearchBy.query = query;
+    RouteParam.searchKind = 'searchByQuery';
+    SearchBy.query = query;    
     this.getSearchByQuery();
   }
 

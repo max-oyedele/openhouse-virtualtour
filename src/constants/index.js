@@ -22,7 +22,9 @@ export const RouteParam = {
   confirmResult: {},
   searchKind: '',  
   propertyRecordNo: '',
-  agent: {},
+  agent: {},  
+  pdfUrl: '',
+  browseUrl: '',  
   isChanged: false,
   mapResultData: []
 }

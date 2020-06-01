@@ -38,7 +38,7 @@ import {
 } from '@components';
 
 import { Colors, Images, RouteParam, LoginInfo } from '@constants';
-import { getContentByAction, postSaveOrRemoveProperty } from '../../api/rest';
+import { getContentByAction, postData } from '../../api/rest';
 
 export default class PropertyScreen extends Component {
   constructor(props) {
@@ -86,7 +86,7 @@ export default class PropertyScreen extends Component {
           property: res[0],
           isFavorite: res[0].property_isFavorite,
           spinner: false
-        });
+        });        
       })
       .catch((err) => {
         console.log('get feature property error', err);
@@ -168,7 +168,7 @@ export default class PropertyScreen extends Component {
     bodyFormData.append('user_action', favoriteParam.user_action);
     bodyFormData.append('property_recordno', favoriteParam.property_recordno);
 
-    await postSaveOrRemoveProperty(bodyFormData)
+    await postData(bodyFormData)
       .then((res) => console.log('post save or remove favorite success', res))
       .catch((err) => console.log('post save or remove favorite error', err))
 
@@ -186,14 +186,12 @@ export default class PropertyScreen extends Component {
     this.props.navigation.navigate('OpenVirtual')
   }
 
-  renderViewMore(onPress) {
-    console.log('more');
+  renderViewMore(onPress) {    
     return (
       <Text style={{ fontSize: RFPercentage(1.7), color: Colors.blueColor, alignSelf: 'flex-end', marginTop: normalize(5, 'height') }} onPress={onPress}>View more</Text>
     )
   }
-  renderViewLess(onPress) {
-    console.log('less');
+  renderViewLess(onPress) {    
     return (
       <Text style={{ fontSize: RFPercentage(1.7), color: Colors.blueColor, alignSelf: 'flex-end', marginTop: normalize(5, 'height') }} onPress={onPress}>View less</Text>
     )
@@ -305,9 +303,12 @@ export default class PropertyScreen extends Component {
           </View>
         </ImageBackground>
 
-        <View style={styles.enterBtnContainer}>
-          <Button btnTxt='Walk Around! Enter Virtual Open House' btnStyle={{ width: '100%', height: normalize(50, 'height'), color: 'blue' }} onPress={() => this.onOpenVirtual()} />
-        </View>
+        {
+          this.state.property.property_openhouse &&
+          <View style={styles.enterBtnContainer}>
+            <Button btnTxt='Walk Around! Enter Virtual Open House' btnStyle={{ width: '100%', height: normalize(50, 'height'), color: 'blue' }} onPress={() => this.onOpenVirtual()} />
+          </View>
+        }
 
         <View style={styles.descContainer}>
           <Text style={{ fontFamily: 'SFProText-Semibold', fontSize: RFPercentage(2), color: Colors.blackColor, marginTop: normalize(7, 'height'), marginBottom: normalize(7, 'height') }}>DESCRIPTION</Text>

@@ -610,9 +610,6 @@ PODS:
     - React
   - react-native-signature-capture (0.4.10):
     - React
-  - react-native-twitter-signin (1.1.1):
-    - React
-    - TwitterKit (~> 3.3)
   - react-native-video (4.4.5):
     - React
     - react-native-video/Video (= 4.4.5)
@@ -723,9 +720,6 @@ PODS:
     - React
   - RNVectorIcons (6.6.0):
     - React
-  - TwitterCore (3.2.0)
-  - TwitterKit (3.4.2):
-    - TwitterCore (>= 3.2.0)
   - Yoga (1.14.0)
   - YogaKit (1.18.1):
     - Yoga (~> 1.14)
@@ -771,7 +765,6 @@ DEPENDENCIES:
   - react-native-maps (from `../node_modules/react-native-maps`)
   - react-native-safe-area-context (from `../node_modules/react-native-safe-area-context`)
   - react-native-signature-capture (from `../node_modules/react-native-signature-capture`)
-  - react-native-twitter-signin (from `../node_modules/react-native-twitter-signin`)
   - react-native-video (from `../node_modules/react-native-video`)
   - react-native-webview (from `../node_modules/react-native-webview`)
   - React-RCTActionSheet (from `../node_modules/react-native/Libraries/ActionSheetIOS`)
@@ -843,8 +836,6 @@ SPEC REPOS:
     - nanopb
     - OpenSSL-Universal
     - PromisesObjC
-    - TwitterCore
-    - TwitterKit
     - YogaKit
 
 EXTERNAL SOURCES:
@@ -886,8 +877,6 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-safe-area-context"
   react-native-signature-capture:
     :path: "../node_modules/react-native-signature-capture"
-  react-native-twitter-signin:
-    :path: "../node_modules/react-native-twitter-signin"
   react-native-video:
     :path: "../node_modules/react-native-video"
   react-native-webview:
@@ -1005,7 +994,6 @@ SPEC CHECKSUMS:
   react-native-maps: f4b89da81626ad7f151a8bfcb79733295d31ce5c
   react-native-safe-area-context: 8260e5157617df4b72865f44006797f895b2ada7
   react-native-signature-capture: 6dae6c8c9f085536d4ba305e15c01f0a3a49373e
-  react-native-twitter-signin: 5b737eab225a0059e6f8fe93c893c864d020b8b9
   react-native-video: aa527b0acb37f94c4491e70df0274cb26979405d
   react-native-webview: 0e2881d2e3e72ad52a82445c1a116c43205fd471
   React-RCTActionSheet: f41ea8a811aac770e0cc6e0ad6b270c644ea8b7c
@@ -1034,11 +1022,9 @@ SPEC CHECKSUMS:
   RNPDF: f6adfcb6299b2ad7f7d14600c578764ab472ff54
   RNScreens: 62211832af51e0aebcf6e8c36bcf7dd65592f244
   RNVectorIcons: 0bb4def82230be1333ddaeee9fcba45f0b288ed4
-  TwitterCore: 8cbc9ad34d91c63a0035ea05bfbfc0d7ca72a28c
-  TwitterKit: 5e4f41d70b9abdb41df5467f52d7aa2c0fd26ebb
   Yoga: 3ebccbdd559724312790e7742142d062476b698e
   YogaKit: f782866e155069a2cca2517aafea43200b01fd5a
 
-PODFILE CHECKSUM: ff354fe77a4767e86839d4f8c9b39626dcecbb70
+PODFILE CHECKSUM: 856742197973b43e209bad1dbcedd60679952993
 
 COCOAPODS: 1.9.2

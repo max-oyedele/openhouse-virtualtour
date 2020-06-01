@@ -12,7 +12,7 @@ import {
   Dimensions,
   Platform,
   ImageBackground,
-  Linking
+  Linking  
 } from "react-native";
 import normalize from "react-native-normalize";
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
@@ -35,7 +35,7 @@ import {
 } from '@components';
 import { Colors, Images, LoginInfo } from '@constants';
 
-import { postLoginInfo } from '../api/rest';
+import { postData } from '../api/rest';
 
 export default class SplashScreen extends Component {
   constructor(props) {
@@ -45,15 +45,23 @@ export default class SplashScreen extends Component {
     }
     
     this.keyboardManager();
-    
+    this.listener = this.props.navigation.addListener('focus', this.componentDidFocus.bind(this));
   }
 
   componentDidMount() {
-    //this.getLocation();
-
+    
+  }
+  
+  componentDidFocus(){
+    // console.warn('here');
+    this.getLocation();
+  
     //temp for skip
-    this.submit();
-    setTimeout(() => { this.props.navigation.navigate('Main') }, 1000);
+    // this.submit();
+    // setTimeout(() => { this.props.navigation.navigate('Main') }, 1000);
+
+    // setTimeout(() => { this.props.navigation.navigate('Auth', {screen: 'Form'}) }, 1000);
+    // setTimeout(() => { this.props.navigation.navigate('Auth') }, 1000);    
   }
 
   componentWillUnmount() {
@@ -91,20 +99,24 @@ export default class SplashScreen extends Component {
         //console.log(location);
         LoginInfo.latitude = location.latitude;
         LoginInfo.longitude = location.longitude;
-
+        
         this.isLoggedInProc();
       })
       .catch(error => {
-        console.log('get location error', error);
-        // Linking.canOpenURL('app-settings:').then(supported => {
-        //   if (!supported) {
-        //     console.log('Can\'t handle settings url');
-        //   } else {
-        //     return Linking.openURL('app-settings:');
-        //   }
-        // }).catch(err => console.error('An error occurred', err));        
-        this.isLoggedInProc();//temp for skip
+        //console.log('get location error', error);        
+        Linking.canOpenURL('app-settings:').then(supported => {
+          if (!supported) {
+            console.log('Can\'t handle settings url');
+          } else {
+            return Linking.openURL('app-settings:');                        
+          }
+        }).catch(err => console.error('An error occurred', err));                
+        this.props.navigation.navigate('Auth');
       })
+  }
+
+  _handleOpenURL = () => {
+    console.warn('handleopenurl');
   }
 
   isLoggedInProc = () => {
@@ -120,6 +132,8 @@ export default class SplashScreen extends Component {
           LoginInfo.photourl = info.photourl;
           LoginInfo.providerid = info.providerid;
           LoginInfo.email_verified = info.email_verified;
+          LoginInfo.user_account = info.user_account;
+          LoginInfo.user_assigned_agent = info.user_assigned_agent,
           // LoginInfo.latitude = info.latitude;
           // LoginInfo.longitude = info.longitude;
 
@@ -139,6 +153,7 @@ export default class SplashScreen extends Component {
   submit = async () => {
     //temp for skip
     LoginInfo.uniqueid = '123';
+    LoginInfo.user_account = '10';
     LoginInfo.fullname = 'Anthony Robinson';
     LoginInfo.email = 'opendemo@icloud.com';
     LoginInfo.telephone = '+13059007270';
@@ -163,10 +178,12 @@ export default class SplashScreen extends Component {
     bodyFormData.append('appid', 'com.openhousemarketingsystem.open');
     bodyFormData.append('referredby', 0);
 
-    await postLoginInfo(bodyFormData)
+    await postData(bodyFormData)
       .then((res) => {
-        console.log('post login info success', res);
+        //console.log('post login info success', res);
         LoginInfo.photourl = res[0].user_photourl;
+        LoginInfo.user_account = res[0].user_account;
+        LoginInfo.user_assigned_agent = res[0].user_assigned_agent;
       })      
       .catch((err) => {
         console.log('post login info error', err)

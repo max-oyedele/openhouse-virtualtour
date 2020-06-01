@@ -21,7 +21,7 @@ import { RFPercentage, RFValue } from "react-native-responsive-fontsize";
 import PropTypes from 'prop-types';
 import Overlay from 'react-native-modal-overlay';
 import SignatureCapture from 'react-native-signature-capture';
-import RNFetchBlob from 'rn-fetch-blob'
+import RNFetchBlob from 'rn-fetch-blob';
 
 import { Colors, Images } from '@constants';
 
@@ -30,11 +30,12 @@ export default class SignModal extends Component {
     super(props);
     this.state = {
 
-    }
+    }    
   }
 
   saveSign() {
     this.refs["sign"].saveImage();
+    this.props.onSignOK();
     this.props.onClose();
   }
 
@@ -42,18 +43,18 @@ export default class SignModal extends Component {
     this.refs["sign"].resetImage();
   }
 
-  _onDragEvent() {        
+  _onDragEvent() {
     //console.warn('drag');
   }
 
-  _onSaveEvent(result) {
+  _onSaveEvent(result) {    
     const signPath = `${RNFetchBlob.fs.dirs.DocumentDir}/signature.png`;
     RNFetchBlob.fs
-      .writeFile(signPath, result.encoded, 'base64')
+      .writeFile(signPath, sign.encoded, 'base64')
       .then((res) => {        
-        //console.warn('signature', res)
+        console.log('signature saved', res)
       })
-      .catch(err => console.log('signature error', err));
+      .catch(err => console.log('signature error', err));  
   }
 
   render() {

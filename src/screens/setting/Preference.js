@@ -61,6 +61,13 @@ export default class PreferenceScreen extends Component {
       refresh: !this.state.refresh,
       visibleModal: false
     });
+
+    let postData = {
+      question: PreferencesData[this.state.selectedPreferenceIndex].question,
+      answer: PreferencesData[this.state.selectedPreferenceIndex].options[index]
+    }
+
+    console.log(postData);
   }
 
   //////////////////////// format //////////////
@@ -229,8 +236,8 @@ export default class PreferenceScreen extends Component {
                   <Button btnTxt='OK' btnStyle={{ width: width * 0.42, height: normalize(50, 'height'), color: 'blue' }}
                     onPress={() => {
                       if (this.state.inputValue != '') {
-                        PreferencesData[this.state.selectedPreferenceIndex].options[1] = this.state.inputValue;
-                        PreferencesData[this.state.selectedPreferenceIndex].answerIndex = 1;
+                        PreferencesData[this.state.selectedPreferenceIndex].options[1] = this.state.inputValue;                        
+                        this.updatePreference(1);
                       }
                       this.setState({
                         inputValue: '',

@@ -17,7 +17,7 @@ import {
 import normalize from "react-native-normalize";
 
 import auth from '@react-native-firebase/auth'
-import { postLoginInfo } from '../../api/rest';
+import { postData } from '../../api/rest';
 
 import { Colors, Images, LoginInfo } from '@constants';
 import {
@@ -99,7 +99,7 @@ export default class FormScreen extends Component {
             <View style={styles.inputBoxContainer}>
               <TextInput
                 style={styles.txtInput}
-                autoFocus={true}
+                autoFocus={this.state.fullname ? false : true }
                 value={this.state.fullname}
                 placeholder='Full name'
                 placeholderTextColor={Colors.weakBlackColor}
@@ -109,8 +109,8 @@ export default class FormScreen extends Component {
             </View>
             <View style={styles.inputBoxContainer}>
               <TextInput
-                style={styles.txtInput}
-                autoFocus={true}
+                style={styles.txtInput}                
+                autoFocus={this.state.fullname ? true : false}
                 value={this.state.email}
                 placeholder='E-mail'
                 placeholderTextColor={Colors.weakBlackColor}
@@ -120,8 +120,7 @@ export default class FormScreen extends Component {
             </View>
             <View style={styles.inputBoxContainer}>
               <TextInput
-                style={styles.txtInput}
-                autoFocus={true}
+                style={styles.txtInput}                
                 keyboardType={'numeric'}
                 value={this.state.telephone}
                 placeholder='Cell Phone Number'

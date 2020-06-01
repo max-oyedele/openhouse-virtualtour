@@ -260,8 +260,8 @@ export default class DashboardScreen extends Component {
   onSearch = (query) => {
     RouteParam.searchKind = 'searchByQuery';
     SearchBy.query = query;
+    SearchBy.propertyType = 1;    
     SearchBy.listingType = this.state.listingType;
-    if(SearchBy.propertyType == 6) SearchBy.propertyType = 1;    
     if (query){
       RouteParam.isChanged = true;
       this.props.navigation.navigate('SearchStack');

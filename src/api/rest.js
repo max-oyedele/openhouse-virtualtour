@@ -11,7 +11,7 @@ const axios_post_instance = axios.create({
   withCredentials: false,
 });
 
-export const postLoginInfo = (loginInfo) => {
+export const postData = (loginInfo) => {
   return new Promise((resolve, reject) => {
     axios_post_instance
       .post(API_V1_POST_URL, loginInfo)
@@ -36,18 +36,5 @@ export const getContentByAction = (param) => {
     .catch((err) => {
       reject(err)
     });
-  })
-}
-
-export const postSaveOrRemoveProperty = (param) => {
-  return new Promise((resolve, reject) => {
-    axios_post_instance
-      .post(API_V1_POST_URL, param)
-      .then((res) => {        
-        resolve(res.data)
-      })
-      .catch((err) => {
-        reject(err);
-      })
   })
 }

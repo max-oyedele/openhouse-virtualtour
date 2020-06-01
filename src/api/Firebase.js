@@ -5,8 +5,7 @@ import storage from '@react-native-firebase/storage';
 import database from '@react-native-firebase/database';
 
 import { LoginManager, AccessToken } from 'react-native-fbsdk';
-import { NativeModules } from 'react-native';
-const { RNTwitterSignIn } = NativeModules;
+
 import { GoogleSignin } from '@react-native-community/google-signin';
 import appleAuth, {
   AppleAuthRequestScope,
@@ -53,6 +52,29 @@ export const appleSignin = () => {
   })
 }
 
+export const googleSignin = () => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      GoogleSignin.configure({
+        webClientId: '1006237194994-6l0vqo9al9d1jhjbonh6hsgbsnv0f9pn.apps.googleusercontent.com',
+        offlineAccess: false
+      })
+
+      // Get the users ID token
+      const { idToken } = await GoogleSignin.signIn();
+
+      // // Create a Google credential with the token
+      const googleCredential = auth.GoogleAuthProvider.credential(idToken);
+
+      // // Sign-in the user with the credential
+      resolve(auth().signInWithCredential(googleCredential));
+    }
+    catch (err) {
+      reject(err);
+    }
+  })
+}
+
 export const fbSignin = () => {
   return new Promise(async (resolve, reject) => {
     try {
@@ -80,55 +102,6 @@ export const fbSignin = () => {
       reject(err);
     }
   })
-}
-
-
-
-export const googleSignin = () => {
-  return new Promise(async (resolve, reject) => {
-    try {
-      GoogleSignin.configure({
-        webClientId: '1006237194994-6l0vqo9al9d1jhjbonh6hsgbsnv0f9pn.apps.googleusercontent.com',
-        offlineAccess: false
-      })
-
-      // Get the users ID token
-      const { idToken } = await GoogleSignin.signIn();
-
-      // // Create a Google credential with the token
-      const googleCredential = auth.GoogleAuthProvider.credential(idToken);
-
-      // // Sign-in the user with the credential
-      resolve(auth().signInWithCredential(googleCredential));
-    }
-    catch (err) {
-      reject(err);
-    }
-  })
-}
-
-const Constants = {
-  TWITTER_CONSUMER_KEY: 'ZcFxAmxQ6iEwQ2oLDyTu4It9X',
-  TWITTER_CONSUMER_SECRET: '8NU3xjFexNrahOwP4kqXXvLu63DxoIdxqQOFydjOXW5MSGQ2XT',
-};
-RNTwitterSignIn.init(Constants.TWITTER_CONSUMER_KEY, Constants.TWITTER_CONSUMER_SECRET);
-export const twitterSignin = () => {
-  return new Promise(async (resolve, reject) => {
-    try {
-      // Perform the login request
-      const { authToken, authTokenSecret } = await RNTwitterSignIn.logIn();
-
-      // Create a Twitter credential with the tokens
-      const twitterCredential = auth.TwitterAuthProvider.credential(authToken, authTokenSecret);
-
-      // Sign-in the user with the credential
-      resolve(auth().signInWithCredential(twitterCredential));
-    }
-    catch (err) {
-      reject(err);
-    }
-  })
-
 }
 
 export const signInWithPhoneNumber = (phoneNumber) => {
