@@ -52,10 +52,8 @@ export default class SMSScreen extends Component {
     if (verificationCode.length == 6) {
       RouteParam.confirmResult
         .confirm(verificationCode)
-        .then(user => {
-          // this.setState({ userId: user.uid });
-          // Alert.alert(`Verified! ${user.uid}`);
-          Alert.alert('Verified');
+        .then(user => {          
+          //Alert.alert('Verified');
 
           LoginInfo.fullname = RouteParam.loginEssentialInfo.fullname;
           LoginInfo.email = RouteParam.loginEssentialInfo.email;
@@ -65,7 +63,7 @@ export default class SMSScreen extends Component {
           this.submit();
         })
         .catch(error => {
-          console.log('verification error', error);
+          //console.log('verification error', error);
           Alert.alert('Invalid Activation Code. \n You\'ve entered an invalid activation code. \n Please try again');
         })
     } else {
@@ -90,7 +88,7 @@ export default class SMSScreen extends Component {
 
     await postData(bodyFormData)
       .then((res) => {
-        console.log('post login info success', res);
+        //console.log('post login info success', res);
 
         LoginInfo.photourl = res[0].user_photourl;
         LoginInfo.user_account = res[0].user_account;

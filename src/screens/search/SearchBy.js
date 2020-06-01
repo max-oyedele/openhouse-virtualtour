@@ -66,11 +66,7 @@ export default class SearchByScreen extends Component {
     }    
     this.setState({oldSearchBy: oldSearchBy});
   }
-
-  onSearch = () => {
-    //this.props.navigation.navigate('Location');
-  }
-
+  
   onApply = () => {
     if (this.state.priceFrom == '' || this.state.priceTo == '') {
       Alert.alert('Please enter the price');
@@ -144,10 +140,6 @@ export default class SearchByScreen extends Component {
         </View>
 
         <View style={styles.body}>
-          {/* <View style={styles.eachBigLineContainer}>
-            <SearchBox boxStyle={{ width: width * 0.9, height: normalize(40, 'height'), backgroundColor: Colors.searchBackColor, borderColor: Colors.blueColor, btnColor: Colors.blueColor }} onSearch={this.onSearch} />
-          </View> */}
-
           <View style={[styles.eachBigLineContainer, { flexDirection: 'column' }]}>
             <View style={{ width: '100%', height: '40%', flexDirection: 'row', paddingTop: normalize(10, 'height') }}>
               <Text style={{ fontFamily: 'SFProText-Semibold', fontSize: RFPercentage(2), color: Colors.blackColor }}>SEARCH WITHIN</Text>

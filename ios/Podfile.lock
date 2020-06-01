@@ -610,6 +610,9 @@ PODS:
     - React
   - react-native-signature-capture (0.4.10):
     - React
+  - react-native-text-input-mask (2.0.0):
+    - React
+    - RNInputMask
   - react-native-video (4.4.5):
     - React
     - react-native-video/Video (= 4.4.5)
@@ -714,6 +717,7 @@ PODS:
   - RNGoogleSignin (4.0.3):
     - GoogleSignIn (~> 5.0.0)
     - React
+  - RNInputMask (4.1.0)
   - RNPDF (0.10.2):
     - React
   - RNScreens (2.8.0):
@@ -765,6 +769,7 @@ DEPENDENCIES:
   - react-native-maps (from `../node_modules/react-native-maps`)
   - react-native-safe-area-context (from `../node_modules/react-native-safe-area-context`)
   - react-native-signature-capture (from `../node_modules/react-native-signature-capture`)
+  - react-native-text-input-mask (from `../node_modules/react-native-text-input-mask`)
   - react-native-video (from `../node_modules/react-native-video`)
   - react-native-webview (from `../node_modules/react-native-webview`)
   - React-RCTActionSheet (from `../node_modules/react-native/Libraries/ActionSheetIOS`)
@@ -791,6 +796,7 @@ DEPENDENCIES:
   - "RNFBStorage (from `../node_modules/@react-native-firebase/storage`)"
   - RNGestureHandler (from `../node_modules/react-native-gesture-handler`)
   - "RNGoogleSignin (from `../node_modules/@react-native-community/google-signin`)"
+  - RNInputMask (from `../node_modules/react-native-text-input-mask/ios/InputMask`)
   - RNPDF (from `../node_modules/react-native-view-pdf`)
   - RNScreens (from `../node_modules/react-native-screens`)
   - RNVectorIcons (from `../node_modules/react-native-vector-icons`)
@@ -877,6 +883,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-safe-area-context"
   react-native-signature-capture:
     :path: "../node_modules/react-native-signature-capture"
+  react-native-text-input-mask:
+    :path: "../node_modules/react-native-text-input-mask"
   react-native-video:
     :path: "../node_modules/react-native-video"
   react-native-webview:
@@ -927,6 +935,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-gesture-handler"
   RNGoogleSignin:
     :path: "../node_modules/@react-native-community/google-signin"
+  RNInputMask:
+    :path: "../node_modules/react-native-text-input-mask/ios/InputMask"
   RNPDF:
     :path: "../node_modules/react-native-view-pdf"
   RNScreens:
@@ -994,6 +1004,7 @@ SPEC CHECKSUMS:
   react-native-maps: f4b89da81626ad7f151a8bfcb79733295d31ce5c
   react-native-safe-area-context: 8260e5157617df4b72865f44006797f895b2ada7
   react-native-signature-capture: 6dae6c8c9f085536d4ba305e15c01f0a3a49373e
+  react-native-text-input-mask: b3cb63f0cd73b4b3ea76dd0c614bb7d79e934e39
   react-native-video: aa527b0acb37f94c4491e70df0274cb26979405d
   react-native-webview: 0e2881d2e3e72ad52a82445c1a116c43205fd471
   React-RCTActionSheet: f41ea8a811aac770e0cc6e0ad6b270c644ea8b7c
@@ -1019,12 +1030,13 @@ SPEC CHECKSUMS:
   RNFBStorage: 2e4e895f3f3147955fc3abe8c653483b739973cc
   RNGestureHandler: 8f09cd560f8d533eb36da5a6c5a843af9f056b38
   RNGoogleSignin: ccf71ee4b6cfd324fd788a41e457e2043838c0d9
+  RNInputMask: 815461ebdf396beb62cf58916c35cf6930adb991
   RNPDF: f6adfcb6299b2ad7f7d14600c578764ab472ff54
   RNScreens: 62211832af51e0aebcf6e8c36bcf7dd65592f244
   RNVectorIcons: 0bb4def82230be1333ddaeee9fcba45f0b288ed4
   Yoga: 3ebccbdd559724312790e7742142d062476b698e
   YogaKit: f782866e155069a2cca2517aafea43200b01fd5a
 
-PODFILE CHECKSUM: 856742197973b43e209bad1dbcedd60679952993
+PODFILE CHECKSUM: 1d1a32779401f932651c840d05ba63ff42eb8ac1
 
 COCOAPODS: 1.9.2

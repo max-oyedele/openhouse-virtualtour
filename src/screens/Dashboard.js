@@ -49,104 +49,13 @@ export default class DashboardScreen extends Component {
       refresh: false,
       spinner: false,
       toggleMenuVisible: false,
-      categoryData: [
-        // {
-        //   id: '0',
-        //   name: 'Homes',
-        //   img: require('../assets/images/browseImg1.png')
-        // },
-        // {
-        //   id: '1',
-        //   name: 'Apartments',
-        //   img: require('../assets/images/browseImg2.png')
-        // },
-        // {
-        //   id: '2',
-        //   name: 'Condos',
-        //   img: require('../assets/images/browseImg3.png')
-        // },
-      ],
-      featurePropertyData: [
-        // {
-        //   id: '0',
-        //   name: 'Dix Hills',
-        //   img: require('../assets/images/favoriteImg1.png'),
-        //   state: 'NY',
-        //   price: 420,
-        //   period: 'Monthly',
-        //   subTxt: 'w/Pool',
-        //   address: '123 Main Street - First Floor',
-        //   number: 11746,
-        //   location: 'Toronto',
-        //   region: {
-        //     latitude: 37.78825,
-        //     longitude: -122.4324,
-        //     latitudeDelta: 0.0922,
-        //     longitudeDelta: 0.0421,
-        //   },
-        //   sqm: 230,
-        //   desc: 'This Stately Brick Colonial Was Completely Renovated In 2001, Boasting 5 Beds/5.5 Baths, 2 Story Grand Entry Foyer, Huge Granite Eat-In Kitchen W/ Center Island W/ Wine Fridge, Stainless Designer Appliances W/ Gas Cooking, Radiant Heated Floor & Double Wall Ovens. Office, Fam Room W/ Wood Burning/Gas Fplc & 4K Projector Theater System, Lr W/ Gas Flpc, FDR W/ Coffered Ceiling, Master Suite W/ Sitting Room & Marble Bathroom W/ Radiant Heated Floors. Gated 1 Acre Property W/ IG Pool/Cabana.',
-        //   tags: [
-        //     {
-        //       label: 'Beds',
-        //       value: 3,
-        //       iconImg: Images.iconBlackBed
-        //     },
-        //     {
-        //       label: 'Baths',
-        //       value: 2,
-        //       iconImg: Images.iconBlackBath
-        //     },
-        //   ],
-        //   owner: {
-        //     name: 'Anthony Robinson Duran',
-        //     role: 'Licensed Real State Salesperson',
-        //     act: 'Brought By',
-        //     img: require('../assets/images/profileImg.png')
-        //   }
-        // },
-        // {
-        //   id: '1',
-        //   name: '3 Bedroom Modern',
-        //   img: require('../assets/images/featureImg2.png'),
-        //   state: 'NY',
-        //   price: 389.102,
-        //   period: 'Monthly',
-        //   subTxt: 'w/Pool',
-        //   address: '123 Main Street - First Floor',
-        //   number: 11746,
-        //   location: 'NewYork',
-        //   region: {
-        //     latitude: 37.78825,
-        //     longitude: -122.4324,
-        //     latitudeDelta: 0.0922,
-        //     longitudeDelta: 0.0421,
-        //   },
-        //   sqm: 120,
-        //   desc: 'This Stately Brick Colonial Was Completely Renovated In 2001, Boasting 5 Beds/5.5 Baths, 2 Story Grand Entry Foyer, Huge Granite Eat-In Kitchen W/ Center Island W/ Wine Fridge, Stainless Designer Appliances W/ Gas Cooking, Radiant Heated Floor & Double Wall Ovens. Office, Fam Room W/ Wood Burning/Gas Fplc & 4K Projector Theater System, Lr W/ Gas Flpc, FDR W/ Coffered Ceiling, Master Suite W/ Sitting Room & Marble Bathroom W/ Radiant Heated Floors. Gated 1 Acre Property W/ IG Pool/Cabana.',
-        //   tags: [
-        //     {
-        //       label: 'Beds',
-        //       value: 3,
-        //     },
-        //     {
-        //       label: 'Baths',
-        //       value: 2,
-        //     },
-        //   ],
-        //   owner: {
-        //     name: 'Anthony Robinson Duran',
-        //     role: 'Licensed Real State Salesperson',
-        //     act: 'Brought By',
-        //     img: require('../assets/images/profileImg.png')
-        //   }
-        // },
-      ]
+      categoryData: [],
+      featurePropertyData: []
     }
 
     this.scrollRef = null;
     this.listener = this.props.navigation.addListener('focus', this.componentDidFocus.bind(this));
-    
+
   }
 
   componentDidMount() {
@@ -158,7 +67,7 @@ export default class DashboardScreen extends Component {
   componentDidFocus() {
     SearchBy.query = '';
     SearchBy.priceTo = 100000000;
-    if(this.scrollRef != null) this.scrollRef.scrollTo({y:0, animated: true});
+    if (this.scrollRef != null) this.scrollRef.scrollTo({ y: 0, animated: true });
     this.setState({ refresh: !this.state.refresh });
   }
 
@@ -176,7 +85,6 @@ export default class DashboardScreen extends Component {
 
     getContentByAction(categoryParam)
       .then((res) => {
-        //console.log('category', res)
         var sortedRes = res.sort((a, b) => { return a.properties_category_displayorder - b.properties_category_displayorder })
         sortedRes.forEach((each, index) => {
           PropertyTypeData[index] = each;
@@ -196,7 +104,7 @@ export default class DashboardScreen extends Component {
       user_id: LoginInfo.uniqueid,
       listingtype: SearchBy.listingType
     };
-    
+
     this.setState({ spinner: true });
 
     getContentByAction(featurePrpertyParam)
@@ -223,17 +131,18 @@ export default class DashboardScreen extends Component {
     getContentByAction(searchWordParam)
       .then((res) => {
         res.forEach(each => {
-          if(SearchWordData.indexOf(each.search_city) == -1) SearchWordData.push(each.search_city);
-        })        
+          if (SearchWordData.indexOf(each.search_city) == -1) SearchWordData.push(each.search_city);
+        })
+        this.setState({ refresh: !this.state.refresh });
       })
       .catch((err) => {
         console.log('get searchword error', err)
       })
   }
 
-  onCategoryPress = (categoryId) => {    
+  onCategoryPress = (categoryId) => {
     RouteParam.isChanged = true;
-    RouteParam.searchKind = 'searchByCategory';    
+    RouteParam.searchKind = 'searchByCategory';
     SearchBy.propertyType = categoryId;
     SearchBy.categoryForHeader = '';
     SearchBy.listingType = this.state.listingType;
@@ -260,18 +169,18 @@ export default class DashboardScreen extends Component {
   onSearch = (query) => {
     RouteParam.searchKind = 'searchByQuery';
     SearchBy.query = query;
-    SearchBy.propertyType = 1;    
+    SearchBy.propertyType = 1;
     SearchBy.listingType = this.state.listingType;
-    if (query){
+    if (query) {
       RouteParam.isChanged = true;
       this.props.navigation.navigate('SearchStack');
-    } 
+    }
   }
 
   onTouchEvent = (e) => {
     var locationX = e.nativeEvent.locationX;
-    if(this.state.toggleMenuVisible && locationX > width * 0.8){
-      this.setState({toggleMenuVisible: false});
+    if (this.state.toggleMenuVisible && locationX > width * 0.8) {
+      this.setState({ toggleMenuVisible: false });
     }
   }
 

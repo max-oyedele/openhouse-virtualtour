@@ -84,7 +84,6 @@ export default class ResultListScreen extends Component {
       this.getSearchByQuery();
     }
     else if (RouteParam.searchKind === 'searchByCategory') {
-      //console.log(SearchBy.categoryForHeader);
       if (SearchBy.categoryForHeader != '') {
         this.setState({ headerTitle: SearchBy.categoryForHeader })
       }
@@ -116,12 +115,10 @@ export default class ResultListScreen extends Component {
       sortby: SearchBy.sortBy,
       ascdesc: SearchBy.sortOrder
     };
-    //console.log('param', searchParam);
     this.setState({ spinner: true, resultData: [] });
 
     getContentByAction(searchParam)
       .then((res) => {
-        //console.log('searchData', res);             
         if (res.length == 0 || typeof res[0].error === 'defined') {
           this.setState({ spinner: false });
           return;
@@ -147,12 +144,10 @@ export default class ResultListScreen extends Component {
       user_id: LoginInfo.uniqueid,
       propertytype: SearchBy.propertyType,
     };
-    //console.log('param', searchParam);
     this.setState({ spinner: true, resultData: [] });
 
     getContentByAction(searchParam)
       .then((res) => {
-        //console.log('searchData', res);        
         if (res.length == 0 || typeof res[0].error === 'defined') {
           this.setState({ spinner: false });
           return;
@@ -181,7 +176,6 @@ export default class ResultListScreen extends Component {
   }
 
   onSearch = (query) => {
-    //console.log(SearchBy.query);
     RouteParam.searchKind = 'searchByQuery';
     SearchBy.query = query;    
     this.getSearchByQuery();

@@ -15,16 +15,16 @@ import {
   Platform,
 } from "react-native";
 import normalize from "react-native-normalize";
+import auth from '@react-native-firebase/auth';
+import TextInputMask from 'react-native-text-input-mask';
 
-import auth from '@react-native-firebase/auth'
-import { postData } from '../../api/rest';
-
-import { Colors, Images, LoginInfo } from '@constants';
 import {
   Button,
   Header,
 } from '@components';
-import { RouteParam } from "../../constants";
+
+import { Colors, Images, LoginInfo, RouteParam } from '@constants';
+import { postData } from '../../api/rest';
 
 export default class FormScreen extends Component {
   constructor(props) {
@@ -32,7 +32,7 @@ export default class FormScreen extends Component {
     this.state = {
       fullname: LoginInfo.fullname,
       email: LoginInfo.email,
-      telephone: LoginInfo.telephone,            
+      telephone: LoginInfo.telephone,
     }
   }
 
@@ -61,7 +61,7 @@ export default class FormScreen extends Component {
 
     if (this.validatePhoneNumber()) {
       auth()
-        .signInWithPhoneNumber('+' + this.state.telephone)
+        .signInWithPhoneNumber('+1' + this.state.telephone)
         .then(confirmResult => {
           RouteParam.confirmResult = confirmResult;
           RouteParam.loginEssentialInfo = {
@@ -71,7 +71,7 @@ export default class FormScreen extends Component {
           };
           this.props.navigation.navigate('SMS');
         })
-        .catch(error => {     
+        .catch(error => {
           Alert.alert('Signin with your phone is failed');
           console.log('signInWithPhoneNumber', error);
         })
@@ -99,7 +99,7 @@ export default class FormScreen extends Component {
             <View style={styles.inputBoxContainer}>
               <TextInput
                 style={styles.txtInput}
-                autoFocus={this.state.fullname ? false : true }
+                autoFocus={this.state.fullname ? false : true}
                 value={this.state.fullname}
                 placeholder='Full name'
                 placeholderTextColor={Colors.weakBlackColor}
@@ -109,8 +109,8 @@ export default class FormScreen extends Component {
             </View>
             <View style={styles.inputBoxContainer}>
               <TextInput
-                style={styles.txtInput}                
-                autoFocus={this.state.fullname ? true : false}
+                style={styles.txtInput}
+                autoFocus={this.state.email ? true : false}
                 value={this.state.email}
                 placeholder='E-mail'
                 placeholderTextColor={Colors.weakBlackColor}
@@ -119,7 +119,7 @@ export default class FormScreen extends Component {
               />
             </View>
             <View style={styles.inputBoxContainer}>
-              <TextInput
+              {/* <TextInput
                 style={styles.txtInput}                
                 keyboardType={'numeric'}
                 value={this.state.telephone}
@@ -127,13 +127,25 @@ export default class FormScreen extends Component {
                 placeholderTextColor={Colors.weakBlackColor}
                 editable={LoginInfo.telephone ? false : true}
                 onChangeText={(telephone) => this.setState({ telephone })}
+              /> */}
+              <TextInputMask
+                refInput={ref => { this.input = ref }}
+                style={styles.txtInput}
+                placeholder='Cell Phone Number'
+                placeholderTextColor={Colors.weakBlackColor}
+                keyboardType={'numeric'}
+                editable={LoginInfo.telephone ? false : true}
+                onChangeText={(formatted, extracted) => {
+                  this.setState({telephone: extracted});
+                }}
+                mask={"+1 ([000]) [000] - [0000]"}                
               />
             </View>
             <View style={styles.nextContainer}>
               <Button btnTxt='Next'
                 btnStyle={{ width: '100%', height: normalize(50, 'height'), color: 'blue' }}
                 onPress={() => this.onNext()} />
-            </View>            
+            </View>
           </View>
         </ImageBackground>
       </KeyboardAvoidingView>

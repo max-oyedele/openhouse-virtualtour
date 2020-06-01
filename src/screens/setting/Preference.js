@@ -138,7 +138,6 @@ export default class PreferenceScreen extends Component {
           }
         </ScrollView>
 
-
         <Overlay
           visible={this.state.visibleModal}
           // onClose={this.onClose}
@@ -203,6 +202,7 @@ export default class PreferenceScreen extends Component {
                   <View style={[styles.eachLine, { borderBottomWidth: 0 }]}>
                     <TextInput
                       style={{ width: '100%', height: '100%', paddingLeft: normalize(10), color: Colors.blackColor }}
+                      autoFocus={true}
                       //placeholder={PreferencesData[this.state.selectedPreferenceIndex].options[PreferencesData[this.state.selectedPreferenceIndex].answerIndex]}
                       value={PreferencesData[this.state.selectedPreferenceIndex].id == 9 ? this.getFormatValue(this.state.inputValue) : this.state.inputValue}
                       keyboardType={PreferencesData[this.state.selectedPreferenceIndex].id == 9 ? 'numeric' : 'default'}

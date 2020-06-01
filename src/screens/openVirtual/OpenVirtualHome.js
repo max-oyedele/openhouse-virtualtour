@@ -62,8 +62,7 @@ export default class OpenVirtualHomeScreen extends Component {
     
     getContentByAction(dataParam)
       .then((res) => {
-        if (res) {
-          //console.log('res', res);
+        if (res) {          
           this.setState({
             property_mlsnumber: res[0].property_mlsnumber,
             page_background_photo: res[0].page_background_photo,
@@ -133,7 +132,7 @@ export default class OpenVirtualHomeScreen extends Component {
             </View>
           }
           {
-            this.state.display_virtual_tour_button &&
+            this.state.display_virtual_tour_button && 
             <View style={styles.btnContainer}>
               <Button btnTxt='VIEW VIRTUAL TOUR' btnStyle={{ width: '100%', height: normalize(50, 'height'), color: 'blue' }} onPress={() => this.onVirtualTour()} />
             </View>

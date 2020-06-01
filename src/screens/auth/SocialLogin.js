@@ -117,10 +117,9 @@ export default class SocialLoginScreen extends Component {
       timeout: 15000,
     })
       .then(location => {
-        //console.log(location);
         LoginInfo.latitude = location.latitude;
         LoginInfo.longitude = location.longitude;
-        console.log('myloc', location);
+        
         this.signin();
       })
       .catch(error => {

@@ -67,7 +67,6 @@ export default class FavoritesScreen extends Component {
     this.setState({ spinner: true });
     getContentByAction(dataParam)
       .then((res) => {
-        //console.log('data', res)     
         var sortedRes = res.sort((a, b) => { return a.properties_displayorder - b.properties_displayorder })
         if (this.state.tab == 'favorites') this.setState({ favoritesData: sortedRes, spinner: false });
         else if (this.state.tab == 'viewed') this.setState({ viewedData: sortedRes, spinner: false });

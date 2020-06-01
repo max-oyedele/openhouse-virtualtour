@@ -2,16 +2,7 @@ const Images = {
   
   logo: require('../assets/images/logo.png'), 
   splashBackground: require('../assets/images/splashBackground.png'), 
-
-  iconSearch: require('../assets/images/iconSearch.png'), 
-  iconSearchTint: require('../assets/images/iconSearchTint.png'), 
-  iconBookmark: require('../assets/images/iconBookmark.png'), 
-  iconBookmarkTint: require('../assets/images/iconBookmarkTint.png'), 
-  iconProfile: require('../assets/images/iconProfile.png'), 
-  iconProfileTint: require('../assets/images/iconProfileTint.png'), 
-  iconSetting: require('../assets/images/iconSetting.png'), 
-  iconSettingTint: require('../assets/images/iconSettingTint.png'), 
-  
+   
   iconFavorite: require('../assets/images/iconFavorite.png'),
   iconFilter: require('../assets/images/iconFilter.png'), 
   iconSort: require('../assets/images/iconSort.png'), 
@@ -28,26 +19,18 @@ const Images = {
   iconBlackBed: require('../assets/images/iconBlackBed.png'), 
   iconWhiteBath: require('../assets/images/iconWhiteBath.png'), 
   iconWhiteBed: require('../assets/images/iconWhiteBed.png'), 
-  iconWhiteClose: require('../assets/images/iconWhiteClose.png'),  
-  iconProfilePlus: require('../assets/images/iconProfilePlus.png'),
-  iconNearest: require('../assets/images/iconNearest.png'),
-  iconBack: require('../assets/images/iconBack.png'),
-  iconStar: require('../assets/images/iconStar.png'),
+  iconWhiteClose: require('../assets/images/iconWhiteClose.png'),    
   iconWhiteBookmark: require('../assets/images/iconWhiteBookmark.png'),
   iconRedBookmark: require('../assets/images/iconRedBookmark.png'),
 
   marker: require('../assets/images/marker.png'),
-
   markDot: require('../assets/images/markDot.png'),
-  
-  orLine: require('../assets/images/orLine.png'), 
-
+    
   btnFBLogin: require('../assets/images/fbLogin.png'),
   btnGoogleLogin: require('../assets/images/googleLogin.png'),
   
   btnBookmark: require('../assets/images/btnBookmark.png'),
-  btnMsg: require('../assets/images/btnMsg.png'), 
-  btnVideoPlay: require('../assets/images/btnVideoPlay.png'), 
+  btnMsg: require('../assets/images/btnMsg.png'),   
   
   sideBlurBack: require('../assets/images/sideBlurBack.png')
 }

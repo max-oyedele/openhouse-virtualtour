@@ -30,7 +30,6 @@ export const getContentByAction = (param) => {
       params: param
     })
     .then((res) => {
-      //console.log(res);
       resolve(res.data);
     })
     .catch((err) => {

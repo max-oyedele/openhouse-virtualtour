@@ -140,11 +140,7 @@ export default class ResultMapScreen extends Component {
   onPropertyPress = (propertyRecordNo) => {
     RouteParam.propertyRecordNo = propertyRecordNo;
     this.props.navigation.navigate('PropertyStack');
-  }
-
-  onSearch = () => {
-    //this.props.navigation.navigate('Location');
-  }
+  } 
 
   onApply = () => {
     SearchBy.sortBy = this.state.sortBy;
@@ -182,12 +178,7 @@ export default class ResultMapScreen extends Component {
         <View style={styles.body}>
           <View style={{ width: '100%', zIndex: 1 }}>
             <Header title={this.state.headerTitle.toUpperCase()} titleColor={Colors.blackColor} rightIcon={Images.iconSort} onPressBack={() => this.props.navigation.goBack(null)} onPressRightIcon={() => this.setState({ visibleModal: true, oldSortBy: this.state.sortBy, oldSortOrder: this.state.sortOrder })} />
-          </View>
-          {/* <View style={styles.searchShadowContainer}>
-            <View style={styles.searchInnerContainer}>
-              <SearchBox boxStyle={{ width: width * 0.9, height: normalize(35, 'height'), backgroundColor: Colors.searchBackColor, borderColor: Colors.searchBackColor, btnColor: Colors.weakBlackColor }} onSearch={this.onSearch} />
-            </View>
-          </View> */}
+          </View>          
 
           <View style={styles.mapContainer}>
             <MapView

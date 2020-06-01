@@ -52,16 +52,12 @@ export default class SplashScreen extends Component {
     
   }
   
-  componentDidFocus(){
-    // console.warn('here');
-    this.getLocation();
+  componentDidFocus(){    
+    //this.getLocation();
   
     //temp for skip
-    // this.submit();
-    // setTimeout(() => { this.props.navigation.navigate('Main') }, 1000);
-
-    // setTimeout(() => { this.props.navigation.navigate('Auth', {screen: 'Form'}) }, 1000);
-    // setTimeout(() => { this.props.navigation.navigate('Auth') }, 1000);    
+    this.submit();
+    setTimeout(() => { this.props.navigation.navigate('Main') }, 1000);    
   }
 
   componentWillUnmount() {
@@ -96,14 +92,12 @@ export default class SplashScreen extends Component {
       timeout: 15000,
     })
       .then(location => {
-        //console.log(location);
         LoginInfo.latitude = location.latitude;
         LoginInfo.longitude = location.longitude;
         
         this.isLoggedInProc();
       })
       .catch(error => {
-        //console.log('get location error', error);        
         Linking.canOpenURL('app-settings:').then(supported => {
           if (!supported) {
             console.log('Can\'t handle settings url');
@@ -113,10 +107,6 @@ export default class SplashScreen extends Component {
         }).catch(err => console.error('An error occurred', err));                
         this.props.navigation.navigate('Auth');
       })
-  }
-
-  _handleOpenURL = () => {
-    console.warn('handleopenurl');
   }
 
   isLoggedInProc = () => {
@@ -134,9 +124,7 @@ export default class SplashScreen extends Component {
           LoginInfo.email_verified = info.email_verified;
           LoginInfo.user_account = info.user_account;
           LoginInfo.user_assigned_agent = info.user_assigned_agent,
-          // LoginInfo.latitude = info.latitude;
-          // LoginInfo.longitude = info.longitude;
-
+          
           this.submit();
           setTimeout(() => { this.props.navigation.navigate('Main') }, 1000);
         }
@@ -152,16 +140,16 @@ export default class SplashScreen extends Component {
 
   submit = async () => {
     //temp for skip
-    LoginInfo.uniqueid = '123';
-    LoginInfo.user_account = '10';
-    LoginInfo.fullname = 'Anthony Robinson';
-    LoginInfo.email = 'opendemo@icloud.com';
-    LoginInfo.telephone = '+13059007270';
-    LoginInfo.photourl = '';
-    LoginInfo.providerid = 'apple';
-    LoginInfo.email_verified = true;
-    LoginInfo.latitude = 40.776611;
-    LoginInfo.longitude = -73.345718;
+    // LoginInfo.uniqueid = '123';
+    // LoginInfo.user_account = '10';
+    // LoginInfo.fullname = 'Anthony Robinson';
+    // LoginInfo.email = 'opendemo@icloud.com';
+    // LoginInfo.telephone = '+13059007270';
+    // LoginInfo.photourl = '';
+    // LoginInfo.providerid = 'apple';
+    // LoginInfo.email_verified = true;
+    // LoginInfo.latitude = 40.776611;
+    // LoginInfo.longitude = -73.345718;
     ///////////////
 
     let bodyFormData = new FormData();

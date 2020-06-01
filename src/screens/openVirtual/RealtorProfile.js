@@ -33,144 +33,8 @@ import { Colors, Images, RouteParam } from '@constants';
 export default class RealtorProfileScreen extends Component {
   constructor(props) {
     super(props);
-    this.state = {      
-      propertiesByMeData: [
-        {
-          id: 'MLS.123456',
-          name: 'Dix Hills',
-          img: require('../../assets/images/favoriteImg1.png'),
-          state: 'NY',
-          price: 420,
-          period: 'Monthly',
-          subTxt: 'Dix Hills',
-          address: '123 Main Street - First Floor',
-          number: 11746,
-          type: 'rent',
-          location: 'Toronto',
-          region: {
-            latitude: 37.78825,
-            longitude: -122.4324,
-            latitudeDelta: 0.0922,
-            longitudeDelta: 0.0421,
-          },
-          sqm: 230,
-          desc: 'This Stately Brick Colonial Was Completely Renovated In 2001, Boasting 5 Beds/5.5 Baths, 2 Story Grand Entry Foyer, Huge Granite Eat-In Kitchen W/ Center Island W/ Wine Fridge, Stainless Designer Appliances W/ Gas Cooking, Radiant Heated Floor & Double Wall Ovens. Office, Fam Room W/ Wood Burning/Gas Fplc & 4K Projector Theater System, Lr W/ Gas Flpc, FDR W/ Coffered Ceiling, Master Suite W/ Sitting Room & Marble Bathroom W/ Radiant Heated Floors. Gated 1 Acre Property W/ IG Pool/Cabana.',
-          detailImgs: [
-            { img: require('../../assets/images/favoriteImg1.png') },
-            { img: require('../../assets/images/favoriteImg2.png') },
-            { img: require('../../assets/images/favoriteImg1.png') },
-            { img: require('../../assets/images/favoriteImg2.png') },
-          ],
-          tags: [
-            {
-              label: 'Beds',
-              value: 3,
-              iconImg: Images.iconBlackBed
-            },
-            {
-              label: 'Baths',
-              value: 1,
-              iconImg: Images.iconBlackBath
-            },
-          ],
-          owner: {
-            name: 'Anthony Robinson Duran',
-            role: 'Licensed Real State Salesperson',
-            act: 'Brought By',
-            //img: require('../../assets/images/profileImg.png')
-          }
-        },
-        {
-          id: 'MLS.123457',
-          name: 'Historical Lake House',
-          img: require('../../assets/images/favoriteImg2.png'),
-          state: 'NY',
-          price: 23,
-          period: 'Monthly',
-          subTxt: 'Dix Hills',
-          address: '123 Main Street - First Floor',
-          number: 11746,
-          type: 'rent',
-          location: 'Toronto',
-          region: {
-            latitude: 37.78825,
-            longitude: -122.4324,
-            latitudeDelta: 0.0922,
-            longitudeDelta: 0.0421,
-          },
-          sqm: 230,
-          desc: 'This Stately Brick Colonial Was Completely Renovated In 2001, Boasting 5 Beds/5.5 Baths, 2 Story Grand Entry Foyer, Huge Granite Eat-In Kitchen W/ Center Island W/ Wine Fridge, Stainless Designer Appliances W/ Gas Cooking, Radiant Heated Floor & Double Wall Ovens. Office, Fam Room W/ Wood Burning/Gas Fplc & 4K Projector Theater System, Lr W/ Gas Flpc, FDR W/ Coffered Ceiling, Master Suite W/ Sitting Room & Marble Bathroom W/ Radiant Heated Floors. Gated 1 Acre Property W/ IG Pool/Cabana.',
-          detailImgs: [
-            { img: require('../../assets/images/favoriteImg1.png') },
-            { img: require('../../assets/images/favoriteImg2.png') },
-            { img: require('../../assets/images/favoriteImg1.png') },
-            { img: require('../../assets/images/favoriteImg2.png') },
-          ],
-          tags: [
-            {
-              label: 'Beds',
-              value: 3,
-              iconImg: Images.iconBlackBed
-            },
-            {
-              label: 'Baths',
-              value: 2,
-              iconImg: Images.iconBlackBath
-            },
-          ],
-          owner: {
-            name: 'Anthony Robinson Duran',
-            role: 'Licensed Real State Salesperson',
-            act: 'Brought By',
-            //img: require('../../assets/images/profileImg.png')
-          }
-        },
-        {
-          id: 'MLS.123458',
-          name: '3 Bedroom Modern House',
-          img: require('../../assets/images/favoriteImg1.png'),
-          state: 'NY',
-          price: 2.3,
-          period: 'Monthly',
-          subTxt: 'Dix Hills',
-          address: '123 Main Street - First Floor',
-          number: 11746,
-          type: 'rent',
-          location: 'Toronto',
-          region: {
-            latitude: 37.78825,
-            longitude: -122.4324,
-            latitudeDelta: 0.0922,
-            longitudeDelta: 0.0421,
-          },
-          sqm: 230,
-          desc: 'This Stately Brick Colonial Was Completely Renovated In 2001, Boasting 5 Beds/5.5 Baths, 2 Story Grand Entry Foyer, Huge Granite Eat-In Kitchen W/ Center Island W/ Wine Fridge, Stainless Designer Appliances W/ Gas Cooking, Radiant Heated Floor & Double Wall Ovens. Office, Fam Room W/ Wood Burning/Gas Fplc & 4K Projector Theater System, Lr W/ Gas Flpc, FDR W/ Coffered Ceiling, Master Suite W/ Sitting Room & Marble Bathroom W/ Radiant Heated Floors. Gated 1 Acre Property W/ IG Pool/Cabana.',
-          detailImgs: [
-            { img: require('../../assets/images/favoriteImg1.png') },
-            { img: require('../../assets/images/favoriteImg2.png') },
-            { img: require('../../assets/images/favoriteImg1.png') },
-            { img: require('../../assets/images/favoriteImg2.png') },
-          ],
-          tags: [
-            {
-              label: 'Beds',
-              value: 3,
-              iconImg: Images.iconBlackBed
-            },
-            {
-              label: 'Baths',
-              value: 2,
-              iconImg: Images.iconBlackBath
-            },
-          ],
-          owner: {
-            name: 'Anthony Robinson Duran',
-            role: 'Licensed Real State Salesperson',
-            act: 'Brought By',
-            //img: require('../../assets/images/profileImg.png')
-          }
-        }
-      ],
+    this.state = {
+      propertiesByMeData: [],
     }
   }
 
@@ -191,12 +55,11 @@ export default class RealtorProfileScreen extends Component {
         <View style={styles.body}>
           <View style={styles.imgAndNameContainer}>
             <View style={styles.imgContainer}>
-              <Image style={{ width: '100%', height: '100%', borderRadius: 10 }} source={{uri: RouteParam.agent.img}} resizeMode='stretch' />
+              <Image style={{ width: '100%', height: '100%', borderRadius: 10 }} source={{ uri: RouteParam.agent.img }} resizeMode='stretch' />
             </View>
             <View style={styles.nameContainer}>
               <View style={{ width: '100%', height: '20%', justifyContent: 'center' }}><Text style={{ fontFamily: 'SFProText-Bold', fontSize: RFPercentage(2.2), color: Colors.blackColor }}>{RouteParam.agent.fullname}</Text></View>
-              <View style={{ width: '100%', height: '20%', justifyContent: 'center' }}><Text style={{ fontFamily: 'SFProText-Regular', fontSize: RFPercentage(1.8), color: Colors.passiveTxtColor }}>{RouteParam.agent.title}</Text></View>
-              <View style={{ width: '100%', height: '20%', justifyContent: 'center' }}><Text style={{ fontFamily: 'SFProText-Regular', fontSize: RFPercentage(1.8), color: Colors.passiveTxtColor }}>{RouteParam.agent.company}</Text></View>
+              <View style={{ width: '100%', height: '20%', justifyContent: 'center' }}><Text style={{ fontFamily: 'SFProText-Regular', fontSize: RFPercentage(1.8), color: Colors.passiveTxtColor }}>{RouteParam.agent.title}</Text></View>              
             </View>
           </View>
 
@@ -212,22 +75,26 @@ export default class RealtorProfileScreen extends Component {
           </View>
 
           <View style={styles.listingContainer}>
-            <TouchableOpacity style={styles.activeContainer} onPress={() => this.props.navigation.navigate('MyListing', { tab: 'active' })}>
+            {/* <TouchableOpacity style={styles.activeContainer} onPress={() => this.props.navigation.navigate('MyListing', { tab: 'active' })}> */}
+            <View style={styles.activeContainer}>
               <View style={{ width: '90%', height: '30%', justifyContent: 'center', alignItems: 'center' }}>
                 <Text style={{ fontFamily: 'SFProText-Semibold', fontSize: RFPercentage(2.2), color: Colors.blackColor }}>ACTIVE LISTINGS</Text>
               </View>
               <View style={{ width: '90%', height: '30%', justifyContent: 'center', alignItems: 'center' }}>
                 <Text style={{ fontFamily: 'SFProText-Regular', fontSize: RFPercentage(3.2), color: Colors.blackColor }}>{RouteParam.agent.activeListing}</Text>
               </View>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.soldContainer} onPress={() => this.props.navigation.navigate('MyListing', { tab: 'sold-rented' })}>
+            </View>
+            {/* </TouchableOpacity> */}
+            {/* <TouchableOpacity style={styles.soldContainer} onPress={() => this.props.navigation.navigate('MyListing', { tab: 'sold-rented' })}> */}
+            <View style={styles.soldContainer}>
               <View style={{ width: '90%', height: '30%', justifyContent: 'center', alignItems: 'center' }}>
                 <Text style={{ fontFamily: 'SFProText-Semibold', fontSize: RFPercentage(2.2), color: Colors.blackColor }}>SOLD</Text>
               </View>
               <View style={{ width: '90%', height: '30%', justifyContent: 'center', alignItems: 'center' }}>
                 <Text style={{ fontFamily: 'SFProText-Regular', fontSize: RFPercentage(3.2), color: Colors.blackColor }}>{RouteParam.agent.sold}</Text>
               </View>
-            </TouchableOpacity>
+            </View>
+            {/* </TouchableOpacity> */}
           </View>
 
           <View style={styles.listTitleContainer}>
@@ -262,7 +129,7 @@ const styles = StyleSheet.create({
     backgroundColor: "rgba(255,255,255,1)",
     flex: 1,
     width: width,
-    height: height,    
+    height: height,
   },
   body: {
     width: wp(100),

@@ -81,7 +81,6 @@ export default class PropertyScreen extends Component {
     this.setState({ spinner: true });
     getContentByAction(propertyParam)
       .then((res) => {
-        //console.log('property', res)
         this.setState({
           property: res[0],
           isFavorite: res[0].property_isFavorite,
@@ -105,7 +104,6 @@ export default class PropertyScreen extends Component {
 
     getContentByAction(photoParam)
       .then((res) => {
-        //console.log('property photo', res)      
         this.setState({ propertyPhotoData: res });
 
         var propertyPhotoDetailData = [];
@@ -130,13 +128,12 @@ export default class PropertyScreen extends Component {
       user_latitude: LoginInfo.latitude,
       user_longitude: LoginInfo.longitude,
       user_id: LoginInfo.uniqueid,
-      user_assigned_agent: 0, //hard code
+      user_assigned_agent: LoginInfo.user_assigned_agent,
       property_recordno: RouteParam.propertyRecordNo,
     };
 
     getContentByAction(cardParam)
       .then((res) => {
-        //console.log('card', res)      
         this.setState({ agentCard: res[0] });
       })
       .catch((err) => {
@@ -157,7 +154,7 @@ export default class PropertyScreen extends Component {
       user_longitude: LoginInfo.longitude,
       user_id: LoginInfo.uniqueid,
       user_action: addRemoveFlag,
-      property_recordno: RouteParam.propertyRecordNo,//this.props.route.params.propertyRecordNo
+      property_recordno: RouteParam.propertyRecordNo,
     };
 
     let bodyFormData = new FormData();
@@ -177,13 +174,12 @@ export default class PropertyScreen extends Component {
 
   onOpenVirtual = () => {
     RouteParam.agent.fullname = this.state.agentCard.agent_fullname;
-    RouteParam.agent.title = this.state.agentCard.agent_title;
-    RouteParam.agent.company = 'Real Estate Company'; //this.state.agentCard.agent_company;
+    RouteParam.agent.title = this.state.agentCard.agent_title;    
     RouteParam.agent.img = this.state.agentCard.agent_photourl;
-    RouteParam.agent.activeListing = 16; //this.state.agentCard.activeListing;
-    RouteParam.agent.sold = 64; //this.state.agentCard.sold;
+    // RouteParam.agent.activeListing = this.state.agentCard.activeListing;
+    // RouteParam.agent.sold = this.state.agentCard.sold;
 
-    this.props.navigation.navigate('OpenVirtual')
+    this.props.navigation.navigate('OpenVirtual');
   }
 
   renderViewMore(onPress) {    
@@ -198,7 +194,6 @@ export default class PropertyScreen extends Component {
   }
 
   handleScroll = (event) => {
-    //console.log(event.nativeEvent.contentOffset.y)
     let y = event.nativeEvent.contentOffset.y;
 
     if (!this.state.sticky && y > 60) {
