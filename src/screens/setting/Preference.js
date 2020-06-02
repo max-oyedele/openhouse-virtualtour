@@ -20,7 +20,6 @@ import { RFPercentage, RFValue } from "react-native-responsive-fontsize";
 
 import Overlay from 'react-native-modal-overlay';
 
-import { Colors, Images, PreferencesData } from '@constants';
 import {
   BrowseCard,
   Button,
@@ -32,6 +31,8 @@ import {
   SideMenu,
   SignModal
 } from '@components';
+import { Colors, Images, LoginInfo, PreferencesData } from '@constants';
+import { getContentByAction, postData } from '../../api/rest';
 
 export default class PreferenceScreen extends Component {
   constructor(props) {
@@ -55,19 +56,31 @@ export default class PreferenceScreen extends Component {
     })
   }
 
-  updatePreference = (index) => {
+  updatePreference = async (index) => {
     PreferencesData[this.state.selectedPreferenceIndex].answerIndex = index;
     this.setState({
       refresh: !this.state.refresh,
       visibleModal: false
     });
 
-    let postData = {
+    let postParam = {
       question: PreferencesData[this.state.selectedPreferenceIndex].question,
       answer: PreferencesData[this.state.selectedPreferenceIndex].options[index]
     }
 
-    console.log(postData);
+    console.log(postParam);
+
+    let bodyFormData = new FormData();
+    bodyFormData.append('action', 'update_preferrences');
+    bodyFormData.append('user_latitude', LoginInfo.latitude);
+    bodyFormData.append('user_longitude', LoginInfo.longitude);    
+    bodyFormData.append('user_account', LoginInfo.user_account);
+    bodyFormData.append('user_question', postParam.question);
+    bodyFormData.append('user_answer', postParam.answer);
+    
+    await postData(bodyFormData)
+      .then((res) => console.log('post save or remove favorite success', res))
+      .catch((err) => console.log('post save or remove favorite error', err))
   }
 
   //////////////////////// format //////////////

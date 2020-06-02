@@ -12,7 +12,7 @@ import {
   Dimensions,
   Platform,
   ImageBackground,
-  Linking  
+  Linking
 } from "react-native";
 import normalize from "react-native-normalize";
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
@@ -20,7 +20,6 @@ import { RFPercentage, RFValue } from "react-native-responsive-fontsize";
 import GetLocation from 'react-native-get-location';
 import AsyncStorage from '@react-native-community/async-storage';
 import KeyboardManager from 'react-native-keyboard-manager';
-
 
 import {
   BrowseCard,
@@ -43,25 +42,22 @@ export default class SplashScreen extends Component {
     this.state = {
       logoTxt: 'In-Person & Virtual \n Digital Sign-in Platform'
     }
-    
-    this.keyboardManager();
-    this.listener = this.props.navigation.addListener('focus', this.componentDidFocus.bind(this));
+
+    this.keyboardManager();    
+    this.timer = setInterval(this.watchGeoTimer, 1000);    
+    this.isSettingResult = false;
   }
 
   componentDidMount() {
-    
-  }
+    //this.getLocation();
   
-  componentDidFocus(){    
-    this.getLocation();
-  
-    //temp for skip
-    // this.submit();
-    // setTimeout(() => { this.props.navigation.navigate('Main') }, 1000);    
+    // uncomment for skip
+    this.submit();
+    setTimeout(() => { this.props.navigation.navigate('Main') }, 1000);        
   }
 
-  componentWillUnmount() {
-    //if(this.listener) this.listener.remove();
+  componentWillUnmount() {    
+    clearInterval(this.timer);
   }
 
   keyboardManager = () => {
@@ -86,6 +82,13 @@ export default class SplashScreen extends Component {
     }
   }
 
+  watchGeoTimer = () => {
+    if (this.isSettingResult) {
+      this.isSettingResult = false;
+      this.getLocation();      
+    }
+  }
+
   getLocation = () => {
     GetLocation.getCurrentPosition({
       enableHighAccuracy: true,
@@ -94,18 +97,24 @@ export default class SplashScreen extends Component {
       .then(location => {
         LoginInfo.latitude = location.latitude;
         LoginInfo.longitude = location.longitude;
-        
+
         this.isLoggedInProc();
       })
-      .catch(error => {
+      .catch(error => {        
+        this.isSettingResult = true;
         Linking.canOpenURL('app-settings:').then(supported => {
           if (!supported) {
             console.log('Can\'t handle settings url');
           } else {
-            return Linking.openURL('app-settings:');                        
+            Linking.openURL('app-settings:')
+              .then(res => {
+                console.log('open settings resp', res);
+              })
+              .catch(err => {
+                console.log('open settings error', err);
+              })
           }
-        }).catch(err => console.error('An error occurred', err));                
-        this.props.navigation.navigate('Auth');
+        }).catch(err => console.error('An error occurred', err));        
       })
   }
 
@@ -124,8 +133,8 @@ export default class SplashScreen extends Component {
           LoginInfo.email_verified = info.email_verified;
           LoginInfo.user_account = info.user_account;
           LoginInfo.user_assigned_agent = info.user_assigned_agent,
-          
-          this.submit();
+
+            this.submit();
           setTimeout(() => { this.props.navigation.navigate('Main') }, 1000);
         }
         else {
@@ -139,17 +148,18 @@ export default class SplashScreen extends Component {
   }
 
   submit = async () => {
-    //temp for skip
-    // LoginInfo.uniqueid = '123';
-    // LoginInfo.user_account = '10';
-    // LoginInfo.fullname = 'Anthony Robinson';
-    // LoginInfo.email = 'opendemo@icloud.com';
-    // LoginInfo.telephone = '+13059007270';
-    // LoginInfo.photourl = '';
-    // LoginInfo.providerid = 'apple';
-    // LoginInfo.email_verified = true;
-    // LoginInfo.latitude = 40.776611;
-    // LoginInfo.longitude = -73.345718;
+    // uncomment for skip
+    LoginInfo.uniqueid = '123';
+    LoginInfo.user_account = '10';
+    LoginInfo.fullname = 'Anthony Robinson';
+    LoginInfo.email = 'opendemo@icloud.com';
+    LoginInfo.telephone = '+13059007270';
+    LoginInfo.photourl = '';
+    LoginInfo.providerid = 'apple';
+    LoginInfo.email_verified = true;
+    LoginInfo.latitude = 40.776611;
+    LoginInfo.longitude = -73.345718;
+    LoginInfo.user_assigned_agent = 0;
     ///////////////
 
     let bodyFormData = new FormData();
@@ -168,14 +178,14 @@ export default class SplashScreen extends Component {
 
     await postData(bodyFormData)
       .then((res) => {
-        //console.log('post login info success', res);
+        console.log('post login info success', res);
         LoginInfo.photourl = res[0].user_photourl;
         LoginInfo.user_account = res[0].user_account;
         LoginInfo.user_assigned_agent = res[0].user_assigned_agent;
-      })      
+      })
       .catch((err) => {
         console.log('post login info error', err)
-      })      
+      })
   }
 
   render() {

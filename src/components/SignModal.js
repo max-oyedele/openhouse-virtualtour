@@ -29,11 +29,14 @@ export default class SignModal extends Component {
   constructor(props) {
     super(props);
     this.state = {
-
+      isDrag: false
     }    
   }
 
   saveSign() {
+    if(!this.state.isDrag) return;
+    this.setState({ isDrag: false });
+
     this.refs["sign"].saveImage();
     this.props.onSignOK();
     this.props.onClose();
@@ -41,10 +44,12 @@ export default class SignModal extends Component {
 
   resetSign() {
     this.refs["sign"].resetImage();
+    this.setState({ isDrag: false });
   }
 
   _onDragEvent() {
     //console.warn('drag');
+    this.setState({ isDrag: true });
   }
 
   _onSaveEvent(result) {    

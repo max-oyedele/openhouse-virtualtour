@@ -16,7 +16,6 @@ import {
 import normalize from "react-native-normalize";
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import { RFPercentage, RFValue } from "react-native-responsive-fontsize";
-import GetLocation from 'react-native-get-location';
 
 import { AppleButton } from '@invertase/react-native-apple-authentication';
 
@@ -40,8 +39,7 @@ export default class SocialLoginScreen extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      logoTxt: 'By downloading and sign-in to this application. You are indicating that you are indicating that you are agreeing with the terms of used and condition of Open House Marketing System',
-      kind: ''
+      logoTxt: 'By downloading and sign-in to this application. You are indicating that you are indicating that you are agreeing with the terms of used and condition of Open House Marketing System'      
     }
   }
 
@@ -109,36 +107,7 @@ export default class SocialLoginScreen extends Component {
         //Alert.alert('Facebook SignIn is failed');
         console.log('fb signin error', err)
       })
-  }
-
-  getLocation = () => {
-    GetLocation.getCurrentPosition({
-      enableHighAccuracy: true,
-      timeout: 15000,
-    })
-      .then(location => {
-        LoginInfo.latitude = location.latitude;
-        LoginInfo.longitude = location.longitude;
-        
-        this.signin();
-      })
-      .catch(error => {
-        //console.log('get location error', error);                
-        Linking.canOpenURL('app-settings:').then(supported => {
-          if (!supported) {
-            console.log('Can\'t handle settings url');
-          } else {
-            return Linking.openURL('app-settings:');                        
-          }
-        }).catch(err => console.log('An error occurred', err));                
-      })
-  }
-
-  signin = () => {
-    if (this.state.kind == 'apple'){ this.onAppleSignin() }
-    else if(this.state.kind == 'google'){ this.onGoogleSignin() }
-    else if(this.state.kind == 'facebook'){ this.onFBSignin() }
-  }
+  }   
 
   render() {
     return (
@@ -152,18 +121,12 @@ export default class SocialLoginScreen extends Component {
 
           <View style={styles.btnsContainer}>
             <View style={styles.btnContainer}>
-              <TouchableOpacity style={styles.btnImg} onPress={() => {
-                this.setState({ kind: 'facebook' });
-                this.getLocation();
-              }}>
+              <TouchableOpacity style={styles.btnImg} onPress={() => this.onFBSignin()}>
                 <Image style={{ width: '100%', height: '100%', borderRadius: normalize(5) }} source={Images.btnFBLogin} resizeMode='stretch' />
               </TouchableOpacity>
             </View>
             <View style={styles.btnContainer}>
-              <TouchableOpacity style={styles.btnImg} onPress={() => {
-                this.setState({ kind: 'google' });
-                this.getLocation();
-              }}>
+              <TouchableOpacity style={styles.btnImg} onPress={() => this.onGoogleSignin()}>
                 <Image style={{ width: '100%', height: '100%', borderRadius: normalize(5) }} source={Images.btnGoogleLogin} resizeMode='stretch' />
               </TouchableOpacity>
             </View>
@@ -172,10 +135,7 @@ export default class SocialLoginScreen extends Component {
                 buttonStyle={AppleButton.Style.BLACK}
                 buttonType={AppleButton.Type.SIGN_IN}
                 style={styles.appleBtn}
-                onPress={() => {
-                  this.setState({ kind: 'apple' });
-                  this.getLocation();
-                }} />
+                onPress={() => this.onAppleSignin()} />
             </View>
           </View>
 

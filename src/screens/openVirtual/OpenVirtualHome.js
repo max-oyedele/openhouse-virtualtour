@@ -62,7 +62,8 @@ export default class OpenVirtualHomeScreen extends Component {
     
     getContentByAction(dataParam)
       .then((res) => {
-        if (res) {          
+        if (res) {        
+          console.log('openvirtual', res);  
           this.setState({
             property_mlsnumber: res[0].property_mlsnumber,
             page_background_photo: res[0].page_background_photo,
