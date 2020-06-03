@@ -8,11 +8,11 @@ import {
   Image,
   TextInput,
   Alert,
+  Linking,
   TouchableOpacity,
   Dimensions,
   Platform,
   ImageBackground,
-  Linking
 } from "react-native";
 import normalize from "react-native-normalize";
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
@@ -40,24 +40,19 @@ export default class SplashScreen extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      logoTxt: 'In-Person & Virtual \n Digital Sign-in Platform'
+      logoTxt: 'In-Person & Virtual \n Digital Sign-in Platform',
+      geoSettingVisible: false
     }
 
-    this.keyboardManager();    
-    this.timer = setInterval(this.watchGeoTimer, 1000);    
-    this.isSettingResult = false;
+    this.keyboardManager();
   }
 
   componentDidMount() {
-    //this.getLocation();
-  
-    // uncomment for skip
-    this.submit();
-    setTimeout(() => { this.props.navigation.navigate('Main') }, 1000);        
-  }
+    this.initialGetLocation();
 
-  componentWillUnmount() {    
-    clearInterval(this.timer);
+    // uncomment for skip
+    // this.submit();
+    // setTimeout(() => { this.props.navigation.navigate('Main') }, 1000);    
   }
 
   keyboardManager = () => {
@@ -82,17 +77,10 @@ export default class SplashScreen extends Component {
     }
   }
 
-  watchGeoTimer = () => {
-    if (this.isSettingResult) {
-      this.isSettingResult = false;
-      this.getLocation();      
-    }
-  }
-
-  getLocation = () => {
+  initialGetLocation = () => {
     GetLocation.getCurrentPosition({
       enableHighAccuracy: true,
-      timeout: 15000,
+      timeout: 150000,
     })
       .then(location => {
         LoginInfo.latitude = location.latitude;
@@ -100,22 +88,25 @@ export default class SplashScreen extends Component {
 
         this.isLoggedInProc();
       })
-      .catch(error => {        
-        this.isSettingResult = true;
-        Linking.canOpenURL('app-settings:').then(supported => {
-          if (!supported) {
-            console.log('Can\'t handle settings url');
-          } else {
-            Linking.openURL('app-settings:')
-              .then(res => {
-                console.log('open settings resp', res);
-              })
-              .catch(err => {
-                console.log('open settings error', err);
-              })
-          }
-        }).catch(err => console.error('An error occurred', err));        
+      .catch(ex => {
+        this.setState({ geoSettingVisible: true })
+      });
+  }
+
+  _requestLocation = () => {
+    GetLocation.getCurrentPosition({
+      enableHighAccuracy: true,
+      timeout: 150000,
+    })
+      .then(location => {
+        LoginInfo.latitude = location.latitude;
+        LoginInfo.longitude = location.longitude;
+                
+        this.isLoggedInProc();
       })
+      .catch(ex => {
+        GetLocation.openAppSettings();
+      });
   }
 
   isLoggedInProc = () => {
@@ -149,17 +140,17 @@ export default class SplashScreen extends Component {
 
   submit = async () => {
     // uncomment for skip
-    LoginInfo.uniqueid = '123';
-    LoginInfo.user_account = '10';
-    LoginInfo.fullname = 'Anthony Robinson';
-    LoginInfo.email = 'opendemo@icloud.com';
-    LoginInfo.telephone = '+13059007270';
-    LoginInfo.photourl = '';
-    LoginInfo.providerid = 'apple';
-    LoginInfo.email_verified = true;
-    LoginInfo.latitude = 40.776611;
-    LoginInfo.longitude = -73.345718;
-    LoginInfo.user_assigned_agent = 0;
+    // LoginInfo.uniqueid = '123';
+    // LoginInfo.user_account = '10';
+    // LoginInfo.fullname = 'Anthony Robinson';
+    // LoginInfo.email = 'opendemo@icloud.com';
+    // LoginInfo.telephone = '+13059007270';
+    // LoginInfo.photourl = '';
+    // LoginInfo.providerid = 'apple';
+    // LoginInfo.email_verified = true;
+    // LoginInfo.latitude = 40.776611;
+    // LoginInfo.longitude = -73.345718;
+    // LoginInfo.user_assigned_agent = 0;
     ///////////////
 
     let bodyFormData = new FormData();
@@ -191,22 +182,56 @@ export default class SplashScreen extends Component {
   render() {
     return (
       <ImageBackground style={styles.container} source={Images.splashBackground}>
-        <View style={styles.modalBack}>
-          <View style={{ width: '100%', height: '9%', /*borderWidth: 1*/ }}></View>
-          <View style={styles.logoImgContainer}>
-            <Image style={{ width: '100%', height: '110%' }} source={Images.logo} resizeMode='contain' />
-          </View>
-          <View style={{ width: '100%', height: '2%', /*borderWidth: 1*/ }}></View>
-          <View style={styles.logoNameContainer}>
-            <Text style={styles.logoName}>Open House</Text>
-            <Text style={styles.logoPlusLabel}>+</Text>
-          </View>
-          <View style={{ width: '100%', height: '5%', /*borderWidth: 1*/ }}></View>
-          <View style={styles.logoTxtContainer}>
-            <Text style={styles.logoTxt}>{this.state.logoTxt}</Text>
-          </View>
-          <View style={{ width: '100%', height: '7%', /*borderWidth: 1*/ }}></View>
-        </View>
+        {
+          !this.state.geoSettingVisible ?
+            (
+              <View style={styles.modalBack}>
+                <View style={{ width: '100%', height: '9%', /*borderWidth: 1*/ }}></View>
+                <View style={styles.logoImgContainer}>
+                  <Image style={{ width: '100%', height: '110%' }} source={Images.logo} resizeMode='contain' />
+                </View>
+                <View style={{ width: '100%', height: '2%', /*borderWidth: 1*/ }}></View>
+                <View style={styles.logoNameContainer}>
+                  <Text style={styles.logoName}>Open House</Text>
+                  <Text style={styles.logoPlusLabel}>+</Text>
+                </View>
+                <View style={{ width: '100%', height: '5%', /*borderWidth: 1*/ }}></View>
+                <View style={styles.logoTxtContainer}>
+                  <Text style={styles.logoTxt}>{this.state.logoTxt}</Text>
+                </View>
+                <View style={{ width: '100%', height: '7%', /*borderWidth: 1*/ }}></View>
+              </View>
+            )
+            :
+            (
+              <View style={styles.modalBackGeo}>
+                <View style={{ width: '100%', height: '5%', /*borderWidth: 1*/ }}></View>
+                <View style={styles.logoImgContainerGeo}>
+                  <Image style={{ width: '100%', height: '100%' }} source={Images.logo} resizeMode='contain' />
+                </View>
+                <View style={{ width: '100%', height: '1%', /*borderWidth: 1*/ }}></View>
+                <View style={styles.logoNameContainerGeo}>
+                  <Text style={styles.logoName}>Open House</Text>
+                  <Text style={styles.logoPlusLabel}>+</Text>
+                </View>
+
+                <View style={styles.geoSettingContainer}>
+                  <View style={styles.settingTxtContainer}>
+                    <Text style={{ fontFamily: 'SFProText-Regular', fontSize: RFPercentage(2), color: Colors.passiveTxtColor, textAlign: 'center' }}>
+                      Open™
+                      requires access to your geo location to operate.
+                      This will enhance our ability to display properties in your area.</Text>
+                  </View>
+                  <View style={styles.btnContainer}>
+                    <TouchableOpacity onPress={() => this._requestLocation()}>
+                      <Text style={{ fontFamily: 'SFProText-Bold', fontSize: RFPercentage(1.7), color: Colors.blueColor, textAlign: 'center' }}>Allow Geo Location / Go To Settings</Text>
+                    </TouchableOpacity>                    
+                  </View>
+                </View>
+              </View>
+            )
+        }
+
       </ImageBackground>
     );
   }
@@ -230,6 +255,7 @@ const styles = StyleSheet.create({
     width: wp(75),
     height: hp(50),
     alignItems: 'center',
+    alignSelf: 'center',
     borderRadius: 8,
     shadowColor: "#000",
     shadowOffset: {
@@ -258,7 +284,7 @@ const styles = StyleSheet.create({
   logoName: {
     fontFamily: 'Billabong',
     fontSize: RFPercentage(7.4),
-    color: '#3A3E4D',
+    color: Colors.blackColor,
     //borderWidth: 1
   },
   logoPlusLabel: {
@@ -283,14 +309,75 @@ const styles = StyleSheet.create({
     color: Colors.passiveTxtColor,
     textAlign: 'center'
   },
-  // signupBtnContainer: {
-  //   marginTop: normalize(20, 'height')
-  // },
-  // loginLinkContainer: {
-  //   marginTop: normalize(20, 'height')
-  // },
-  // loginTxt: {
-  //   fontSize: 12,
-  //   color: Colors.blueColor
-  // }
+
+  /////////////////////////////////////////////////
+  modalBackGeo: {
+    backgroundColor: 'rgba(255,255,255,1)',
+    width: wp(75),
+    height: hp(60),
+    alignItems: 'center',
+    alignSelf: 'center',
+    borderRadius: 8,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 12,
+    },
+    shadowOpacity: 0.58,
+    shadowRadius: 16.00,
+    elevation: 24,
+  },
+  logoImgContainerGeo: {
+    width: '88%',
+    height: '46%',
+    justifyContent: 'center',
+    alignItems: 'center',
+    //borderWidth: 1
+  },
+  logoNameContainerGeo: {
+    width: '88%',
+    height: '15%',
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'flex-start',
+    //borderWidth: 1
+  },
+  logoNameGeo: {
+    fontFamily: 'Billabong',
+    fontSize: RFPercentage(7.4),
+    color: Colors.blackColor,
+    //borderWidth: 1
+  },
+  logoPlusLabelGeo: {
+    fontFamily: 'Helvetica-Bold',
+    fontSize: RFPercentage(3),
+    fontWeight: 'bold',
+    color: '#E02020',
+    alignSelf: 'center',
+    marginBottom: normalize(10, 'height'),
+    //borderWidth: 1
+  },
+  geoSettingContainer: {
+    width: '83%',
+    height: '50%',
+    //borderWidth: 1
+  },
+  settingTxtContainer: {
+    width: '100%',
+    height: '37%',
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    alignSelf: 'center',
+    //borderWidth: 1
+  },
+  btnContainer: {
+    width: '100%',
+    height: '20%',
+    justifyContent: 'space-around',
+    alignItems: 'center',
+    alignSelf: 'center',
+    //borderWidth: 1
+  },
+
 });

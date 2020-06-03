@@ -52,7 +52,7 @@ export default class BrowseCard extends Component {
             paddingLeft: normalize(10),
             //borderWidth: 1
           }}>
-            <Text style={{ fontFamily: 'SFProText-Regular', fontSize: RFPercentage(2), color: '#3A3E4D' }}>{this.props.item.properties_category_short_desc}</Text>
+            <Text style={{ fontFamily: 'SFProText-Regular', fontSize: RFPercentage(2), color: Colors.passiveTxtColor }}>{this.props.item.properties_category_short_desc}</Text>
           </View>
         </View>
       </TouchableOpacity>

@@ -60,6 +60,7 @@ export default class SignatureScreen extends Component {
     });
 
     this.postAttendee();
+    this.props.navigation.navigate('Property');
   }
   
   postAttendee = async () => {    

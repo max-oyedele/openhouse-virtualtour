@@ -36,7 +36,7 @@ export default class SMSScreen extends Component {
   }
 
   componentDidMount() {   
-    
+    console.log('rpcr', RouteParam.confirmResult);
   }
 
   onInputCode = (verificationCode) => {

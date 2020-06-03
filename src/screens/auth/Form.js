@@ -41,8 +41,9 @@ export default class FormScreen extends Component {
   }
 
   validatePhoneNumber = () => {
-    var regexp = /^[0-9]?()[0-9](\s|\S)(\d[0-9]{8,16})$/
-    return regexp.test(this.state.telephone)
+    // var regexp = /^[0-9]?()[0-9](\s|\S)(\d[0-9]{8,16})$/
+    // return regexp.test(this.state.telephone)
+    return true;
   }
 
   onNext = () => {

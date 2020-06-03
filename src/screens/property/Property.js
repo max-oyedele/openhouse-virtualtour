@@ -81,6 +81,7 @@ export default class PropertyScreen extends Component {
     this.setState({ spinner: true });
     getContentByAction(propertyParam)
       .then((res) => {
+        //console.log(res);
         this.setState({
           property: res[0],
           isFavorite: res[0].property_isFavorite,
