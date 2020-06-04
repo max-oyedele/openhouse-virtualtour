@@ -25,6 +25,7 @@ export const RouteParam = {
   agent: {},  
   pdfUrl: '',
   browseUrl: '',  
+  liveInfo: {},
   isChanged: false,
   mapResultData: []
 }

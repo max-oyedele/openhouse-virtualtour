@@ -48,11 +48,11 @@ export default class SplashScreen extends Component {
   }
 
   componentDidMount() {
-    this.initialGetLocation();
+    //this.initialGetLocation();
 
     // uncomment for skip
-    // this.submit();
-    // setTimeout(() => { this.props.navigation.navigate('Main') }, 1000);    
+    this.submit();
+    setTimeout(() => { this.props.navigation.navigate('Main') }, 1000);    
   }
 
   keyboardManager = () => {
@@ -140,17 +140,17 @@ export default class SplashScreen extends Component {
 
   submit = async () => {
     // uncomment for skip
-    // LoginInfo.uniqueid = '123';
-    // LoginInfo.user_account = '10';
-    // LoginInfo.fullname = 'Anthony Robinson';
-    // LoginInfo.email = 'opendemo@icloud.com';
-    // LoginInfo.telephone = '+13059007270';
-    // LoginInfo.photourl = '';
-    // LoginInfo.providerid = 'apple';
-    // LoginInfo.email_verified = true;
-    // LoginInfo.latitude = 40.776611;
-    // LoginInfo.longitude = -73.345718;
-    // LoginInfo.user_assigned_agent = 0;
+    LoginInfo.uniqueid = '123';
+    LoginInfo.user_account = '10';
+    LoginInfo.fullname = 'Anthony Robinson';
+    LoginInfo.email = 'opendemo@icloud.com';
+    LoginInfo.telephone = '+13059007270';
+    LoginInfo.photourl = '';
+    LoginInfo.providerid = 'apple';
+    LoginInfo.email_verified = true;
+    LoginInfo.latitude = 40.776611;
+    LoginInfo.longitude = -73.345718;
+    LoginInfo.user_assigned_agent = 0;
     ///////////////
 
     let bodyFormData = new FormData();

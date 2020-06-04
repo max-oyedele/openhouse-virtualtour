@@ -29,7 +29,7 @@ import {
   SignModal,
 } from '@components';
 import { Colors, Images, LoginInfo, RouteParam } from '@constants';
-import { getContentByAction, postData } from '../../api/rest';
+import { getContentByAction, postData, getLiveInfo } from '../../api/rest';
 
 export default class OpenVirtualHomeScreen extends Component {
   constructor(props) {
@@ -59,38 +59,59 @@ export default class OpenVirtualHomeScreen extends Component {
       user_assigned_agent: LoginInfo.user_assigned_agent,
       property_recordno: RouteParam.propertyRecordNo
     };
-    
+
     getContentByAction(dataParam)
       .then((res) => {
-        if (res) {        
+        if (res) {
           //console.log('openvirtual', res);  
           this.setState({
             property_mlsnumber: res[0].property_mlsnumber,
             page_background_photo: res[0].page_background_photo,
-            display_live_oh_button: res[0].display_live_oh_button,            
+            display_live_oh_button: res[0].display_live_oh_button,
             display_virtual_tour_button: res[0].display_virtual_tour_button,
             property_virtual_tour_url: res[0].property_virtual_tour_url,
             virtual_tour_signagure_required: res[0].virtual_tour_signagure_required
           });
 
-          RouteParam.pdfUrl = res[0].prefill_pdf_url;                    
+          RouteParam.pdfUrl = res[0].prefill_pdf_url;
           RouteParam.browseUrl = res[0].property_virtual_tour_url;
         }
       })
       .catch((err) => {
-        console.log('get openhouse into error', err)
+        console.log('get openhouse into error', err);
       })
   }
 
-  onLiveOpen = () => {}
+  getLiveCallInfo = () => {
+    var param = {
+      user_account: LoginInfo.user_account,
+      user_fullname: LoginInfo.fullname,
+      user_latitude: LoginInfo.latitude,
+      user_longitude: LoginInfo.longitude,
+      property_recordno: RouteParam.propertyRecordNo
+    }
+    getLiveInfo(param)
+      .then((res) => {
+        //console.log('live info', res);
+        RouteParam.liveInfo = res[0];
+        this.props.navigation.navigate('LiveCall');
+      })
+      .catch((err) => {
+        console.log('get live info error', err);
+      })
+  }
+
+  onLiveOpen = () => {
+    this.getLiveCallInfo();
+  }
 
   onVirtualTour = () => {
-    if(!this.state.virtual_tour_signagure_required){      
+    if (!this.state.virtual_tour_signagure_required) {
       Linking.canOpenURL(this.state.property_virtual_tour_url).then(supported => {
         if (supported) {
           Linking.openURL(this.state.property_virtual_tour_url)
-          .then(()=>{})
-          .catch((err)=>console.log('open browse url error'))
+            .then(() => { })
+            .catch((err) => console.log('open browse url error'))
         } else {
           console.log('open browser error');
         }
@@ -98,29 +119,29 @@ export default class OpenVirtualHomeScreen extends Component {
 
       this.postAttendee();
       this.props.navigation.navigate('Property');
-    } 
-    else this.props.navigation.navigate('Signature');        
+    }
+    else this.props.navigation.navigate('Signature');
   }
 
   postAttendee = async () => {
     let bodyFormData = new FormData();
     bodyFormData.append('action', 'post_oh_attendee');
     bodyFormData.append('user_account', LoginInfo.user_account);
-    bodyFormData.append('property_recordno', RouteParam.propertyRecordNo);    
+    bodyFormData.append('property_recordno', RouteParam.propertyRecordNo);
     bodyFormData.append('user_latitude', LoginInfo.latitude);
-    bodyFormData.append('user_longitude', LoginInfo.longitude);    
+    bodyFormData.append('user_longitude', LoginInfo.longitude);
 
     await postData(bodyFormData)
       .then((res) => {
-        console.log('post attendee success', res);        
-      })      
+        console.log('post attendee success', res);
+      })
       .catch((err) => {
         console.log('post attendee error', err)
-      })      
+      })
   }
 
   render() {
-    if(this.state.page_background_photo == '') return null;
+    if (this.state.page_background_photo == '') return null;
     return (
       <ImageBackground style={styles.container} source={{ uri: this.state.page_background_photo }}>
         <View style={{ width: '100%' }}>
@@ -128,13 +149,13 @@ export default class OpenVirtualHomeScreen extends Component {
         </View>
         <View style={styles.body}>
           {
-            this.state.display_live_oh_button && 
+            this.state.display_live_oh_button &&
             <View style={styles.btnContainer}>
               <Button btnTxt='ENTER LIVE OPEN HOUSE' btnStyle={{ width: '100%', height: normalize(50, 'height'), color: 'blue' }} onPress={() => this.onLiveOpen()} />
             </View>
           }
           {
-            this.state.display_virtual_tour_button && 
+            this.state.display_virtual_tour_button &&
             <View style={styles.btnContainer}>
               <Button btnTxt='VIEW VIRTUAL TOUR' btnStyle={{ width: '100%', height: normalize(50, 'height'), color: 'blue' }} onPress={() => this.onVirtualTour()} />
             </View>

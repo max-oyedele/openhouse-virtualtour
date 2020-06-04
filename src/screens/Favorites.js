@@ -102,7 +102,7 @@ export default class FavoritesScreen extends Component {
               this.state.spinner == false) ?
               <View style={styles.emptyContainer}>
                 <Text style={{ fontFamily: 'SFProText-Semibold', fontSize: 14, color: Colors.blackColor }}>Add Properties</Text>
-                <Text style={{ fontFamily: 'SFProText-Regular', fontSize: 12, color: Colors.passiveTxtColor, textAlign: 'center', marginTop: normalize(10, 'height') }}>Press the bookmark button to add an property</Text>
+                <Text style={{ fontFamily: 'SFProText-Regular', fontSize: 12, color: Colors.passiveTxtColor, textAlign: 'center', marginTop: normalize(10, 'height') }}>Press the bookmark button to add a property</Text>
               </View>
               :
               <FlatList

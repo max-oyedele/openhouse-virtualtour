@@ -23,6 +23,7 @@ import OpenVirtualHomeScreen from './screens/openVirtual/OpenVirtualHome';
 import RealtorProfileScreen from "./screens/openVirtual/RealtorProfile";
 import SignatureScreen from "./screens/openVirtual/Signature";
 import MyListingScreen from "./screens/openVirtual/MyListing";
+import LiveCallScreen from './screens/openVirtual/LiveCall';
 
 import SearchByScreen from './screens/search/SearchBy';
 import PropertyTypeScreen from './screens/search/PropertyType';
@@ -46,7 +47,7 @@ function AuthStack() {
       }}
     >      
       <Stack.Screen
-        name='SocailLogin'
+        name='SocialLogin'
         component={SocialLoginScreen}
         options={{
           title: 'SocialLogin'
@@ -149,6 +150,10 @@ function OpenVirtualStack() {
       <Stack.Screen
         name="MyListing"
         component={MyListingScreen}
+      />
+      <Stack.Screen
+        name="LiveCall"
+        component={LiveCallScreen}
       />
     </Stack.Navigator>
   );

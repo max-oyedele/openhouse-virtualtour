@@ -57,13 +57,6 @@ export default class PropertyScreen extends Component {
   }
 
   componentDidMount() {
-    var animatedValue = new Animated.Value(0);
-    Animated.timing(animatedValue, {
-      toValue: 1,
-      duration: 500,
-      useNativeDriver: true,
-    }).start();
-
     this.getProperty();
     this.getPropertyPhoto();
     this.getAgentCard();
@@ -302,7 +295,7 @@ export default class PropertyScreen extends Component {
         {
           this.state.property.property_openhouse &&
           <View style={styles.enterBtnContainer}>
-            <Button btnTxt='Walk Around! Enter Virtual Open House' btnStyle={{ width: '100%', height: normalize(50, 'height'), color: 'blue' }} onPress={() => this.onOpenVirtual()} />
+            <Button btnTxt='Virtual Tour or Live Open House' btnStyle={{ width: '100%', height: normalize(50, 'height'), color: 'blue' }} onPress={() => this.onOpenVirtual()} />
           </View>
         }
 

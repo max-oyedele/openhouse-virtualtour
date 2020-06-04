@@ -49,8 +49,8 @@ export default class WelcomeScreen extends Component {
         'See It Before You \n Buy or Rent It…'
       ],
       description: [
-        'Step Inside Your Dream Home Without Leaving Your Couch with Open House+',
-        'Whether you’re looking to buy your first house, searching for a new home for your growing family or simply checking listings in your area, you’ll find the best list of homes tailored to your needs with Open House+',
+        'Step Inside Your Dream Home Without Leaving Your Couch with Open™',
+        'Whether you’re looking to buy your first house, searching for a new home for your growing family or simply checking listings in your area, you’ll find the best list of homes tailored to your needs with Open™',
         'We want to make your home search experience more interactive, which is why every listing will include high resolution photos and a video of each room.',
         'You can now virtually explore that dream kitchen or that perfect walk-in closet.  Get a genuine feel of what it’s like to live there even when you’re on the go!'
       ]

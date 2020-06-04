@@ -17,6 +17,7 @@ import {
 } from "react-native";
 import normalize from "react-native-normalize";
 import AsyncStorage from '@react-native-community/async-storage';
+import auth from '@react-native-firebase/auth';
 
 import {
   Button,
@@ -36,7 +37,7 @@ export default class SMSScreen extends Component {
   }
 
   componentDidMount() {   
-    console.log('rpcr', RouteParam.confirmResult);
+    
   }
 
   onInputCode = (verificationCode) => {
@@ -50,24 +51,35 @@ export default class SMSScreen extends Component {
   onConfirm = async () => {
     const { verificationCode } = this.state;
     if (verificationCode.length == 6) {
-      RouteParam.confirmResult
-        .confirm(verificationCode)
-        .then(user => {          
-          //Alert.alert('Verified');
-
+        let cred = auth.PhoneAuthProvider.credential(RouteParam.confirmResult.verificationId, verificationCode)
+        console.log('verification cred',cred);
+        if (cred) {
+          auth().currentUser.linkWithCredential(cred)
           LoginInfo.fullname = RouteParam.loginEssentialInfo.fullname;
           LoginInfo.email = RouteParam.loginEssentialInfo.email;
           LoginInfo.telephone = RouteParam.loginEssentialInfo.telephone;
 
           Keyboard.dismiss();
           this.submit();
-        })
-        .catch(error => {
-          //console.log('verification error', error);
-          Alert.alert('Invalid Activation Code. \n You\'ve entered an invalid activation code. \n Please try again');
-        })
+        }
+      // RouteParam.confirmResult
+      //   .confirm(verificationCode)
+      //   .then(user => {          
+      //     //Alert.alert('Verified');
+
+      //     LoginInfo.fullname = RouteParam.loginEssentialInfo.fullname;
+      //     LoginInfo.email = RouteParam.loginEssentialInfo.email;
+      //     LoginInfo.telephone = RouteParam.loginEssentialInfo.telephone;
+
+      //     Keyboard.dismiss();
+      //     this.submit();
+      //   })
+      //   .catch(error => {
+      //     console.log('verification error', error);
+      //     Alert.alert('You\'ve entered an invalid activation code. \n Please try again');
+      //   })
     } else {
-      Alert.alert('Please enter a 6 digit OTP code.')
+      Alert.alert('Please enter a 6 digit activation code.')
     }
   }
 

@@ -33,16 +33,18 @@ export default class FormScreen extends Component {
       fullname: LoginInfo.fullname,
       email: LoginInfo.email,
       telephone: LoginInfo.telephone,
+      country_additional_prefix: LoginInfo.telephone ? false : true
     }
   }
 
   componentDidMount() {
-
+    
   }
 
   validatePhoneNumber = () => {
     // var regexp = /^[0-9]?()[0-9](\s|\S)(\d[0-9]{8,16})$/
     // return regexp.test(this.state.telephone)
+    
     return true;
   }
 
@@ -61,20 +63,46 @@ export default class FormScreen extends Component {
     }
 
     if (this.validatePhoneNumber()) {
+      // auth()
+      //   .signInWithPhoneNumber('+1' + this.state.telephone)
+      //   .then(confirmResult => {
+      //     RouteParam.confirmResult = confirmResult;
+      //     RouteParam.loginEssentialInfo = {
+      //       fullname: this.state.fullname,
+      //       email: this.state.email,
+      //       telephone: this.state.telephone
+      //     };
+      //     this.props.navigation.navigate('SMS');
+      //   })
+      //   .catch(error => {
+      //     Alert.alert('Signin with your phone is failed');
+      //     console.log('signInWithPhoneNumber', error);
+      //   })
+      var phoneNumber = this.state.country_additional_prefix ? '+1' + this.state.telephone : this.state.telephone;
       auth()
-        .signInWithPhoneNumber('+1' + this.state.telephone)
-        .then(confirmResult => {
-          RouteParam.confirmResult = confirmResult;
-          RouteParam.loginEssentialInfo = {
-            fullname: this.state.fullname,
-            email: this.state.email,
-            telephone: this.state.telephone
-          };
-          this.props.navigation.navigate('SMS');
+        .verifyPhoneNumber(phoneNumber)
+        .on('state_changed',
+          confirmResult => {
+            console.log('verifyPhoneNumber', confirmResult);
+            switch(confirmResult.state){
+              case auth.PhoneAuthState.CODE_SENT:
+                RouteParam.confirmResult = confirmResult;
+                RouteParam.loginEssentialInfo = {
+                  fullname: this.state.fullname,
+                  email: this.state.email,
+                  telephone: this.state.telephone
+                };
+                this.props.navigation.navigate('SMS')
+                break
+              case auth.PhoneAuthState.ERROR:
+                Alert.alert('Signin with your phone is failed');
+                console.log('verifyPhoneNumber', error);
+                break
+            }
         })
         .catch(error => {
           Alert.alert('Signin with your phone is failed');
-          console.log('signInWithPhoneNumber', error);
+          console.log('verifyPhoneNumber', error);
         })
     }
     else {
@@ -134,6 +162,7 @@ export default class FormScreen extends Component {
                 style={styles.txtInput}
                 placeholder='Cell Phone Number'
                 placeholderTextColor={Colors.weakBlackColor}
+                value={this.state.telephone}
                 keyboardType={'numeric'}
                 editable={LoginInfo.telephone ? false : true}
                 onChangeText={(formatted, extracted) => {
