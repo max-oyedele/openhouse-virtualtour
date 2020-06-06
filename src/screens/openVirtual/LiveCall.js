@@ -1,13 +1,22 @@
 import React, { Component } from "react";
 import {
   StyleSheet,
-  Text,
-  TextInput,
   View,
-  Button,
+  Animated,
+  ScrollView,
+  Text,
+  Image,
+  TextInput,
+  Alert,
+  FlatList,
+  ActivityIndicator,
   TouchableOpacity,
-  Platform
+  Dimensions,
+  ImageBackground
 } from "react-native";
+import normalize from 'react-native-normalize';
+import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
+import { RFPercentage, RFValue } from "react-native-responsive-fontsize";
 
 import {
   TwilioVideoLocalView,
@@ -15,6 +24,17 @@ import {
   TwilioVideo
 } from "react-native-twilio-video-webrtc";
 
+import {
+  BrowseCard,
+  Button,
+  CallCard,
+  Header,
+  LabelTag,
+  PropertyCard,
+  SearchBox,
+  SideMenu,
+  SignModal,
+} from '@components';
 import { Colors, Images, LoginInfo, RouteParam } from '@constants';
 
 export default class LiveCallScreen extends Component {
@@ -28,7 +48,7 @@ export default class LiveCallScreen extends Component {
     token: ""
   };
 
-  componentDidMount() {  
+  componentDidMount() {
     // this.setState({
     //   roomName: "15549-1-S-3204165-39413",
     //   token: "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiIsImN0eSI6InR3aWxpby1mcGE7dj0xIn0.eyJqdGkiOiJTSzZjYTA4NzA0ZGM1ZTkwY2I0NmQ2YjkxNjFlZjhhYWY0LTE1OTA5NzgxNjMiLCJpc3MiOiJTSzZjYTA4NzA0ZGM1ZTkwY2I0NmQ2YjkxNjFlZjhhYWY0Iiwic3ViIjoiQUNhNjEyZjNjZDE2NzJmYmU1OTFkYTNlYWQwMWU1ODMwNSIsImV4cCI6MTU5MDk4MTc2MywiZ3JhbnRzIjp7ImlkZW50aXR5IjoiNiIsInZpZGVvIjp7InJvb20iOiIxNTU0OS0xLVMtMzIwNDE2NS0zOTQxMyJ9fX0.hzD-Ak4Gz0c5WNfZQTa2ItlUD1lzhd5FtVCPLVKJiIE"
@@ -41,12 +61,15 @@ export default class LiveCallScreen extends Component {
     this._onConnectButtonPress();
   }
 
-  _onConnectButtonPress = () => {    
+  _onConnectButtonPress = () => {
     try {
-      //console.log(this.state.roomName, this.state.token)
+      console.log(this.state.roomName, this.state.token,
+        RouteParam.liveInfo.roomname, RouteParam.liveInfo.token)
       this.twilioRef.connect({
-        roomName: this.state.roomName,
-        accessToken: this.state.token
+        // roomName: this.state.roomName,
+        // accessToken: this.state.token
+        roomName: RouteParam.liveInfo.roomname,
+        accessToken: RouteParam.liveInfo.token
       });
     } catch (error) {
       console.log('live connect error', error);
@@ -56,6 +79,7 @@ export default class LiveCallScreen extends Component {
 
   _onEndButtonPress = () => {
     this.twilioRef.disconnect();
+    this.props.navigation.navigate('Property');
   };
 
   _onMuteButtonPress = () => {
@@ -69,23 +93,22 @@ export default class LiveCallScreen extends Component {
   };
 
   _onRoomDidConnect = () => {
+    console.log("LiveCall :: connected")
     this.setState({ status: "connected" });
   };
 
   _onRoomDidDisconnect = ({ roomName, error }) => {
-    console.log("ERROR: ", error);
-
+    console.log("_onRoomDidDisconnect: ", error);
     this.setState({ status: "disconnected" });
   };
 
   _onRoomDidFailToConnect = error => {
-    console.log("ERROR: ", error);
-
+    console.log("_onRoomDidFailToConnect: ", error);
     this.setState({ status: "disconnected" });
   };
 
   _onParticipantAddedVideoTrack = ({ participant, track }) => {
-    console.log("onParticipantAddedVideoTrack: ", participant, track);
+    //console.log("onParticipantAddedVideoTrack: ", participant, track);
 
     this.setState({
       videoTracks: new Map([
@@ -114,76 +137,42 @@ export default class LiveCallScreen extends Component {
   render() {
     return (
       <View style={styles.container}>
-        {/* {this.state.status === "disconnected" && (
-          <View>
-            <Text style={styles.welcome}>React Native Twilio Webrtc</Text>
-            <TextInput
-              style={styles.input}
-              autoCapitalize="none"
-              value={this.state.roomName}
-              onChangeText={text => this.setState({ roomName: text })}
-            ></TextInput>
-            <TextInput
-              style={styles.input}
-              autoCapitalize="none"
-              value={this.state.token}
-              onChangeText={text => this.setState({ token: text })}
-            ></TextInput>
-            <Button
-              title="Connect"
-              style={styles.button}
-              onPress={this._onConnectButtonPress}
-            ></Button>
+        <ImageBackground style={styles.container} source={{ uri: RouteParam.openHouseIntro.page_background_photo }}>
+          <View style={{ width: '100%' }}>
+            <Header title={RouteParam.openHouseIntro.property_mlsnumber} titleColor={Colors.whiteColor} onPressBack={() => this.props.navigation.navigate('Property')} />
           </View>
-        )} */}
-
-        {this.state.status === "connected" ||
-          this.state.status === "connecting" ? (
-            <View style={styles.callContainer}>
-              {this.state.status === "connected" && (
-                <View style={styles.remoteGrid}>
-                  {Array.from(
-                    this.state.videoTracks,
-                    ([trackSid, trackIdentifier]) => {
-                      return (
-                        <TwilioVideoParticipantView
-                          style={styles.remoteVideo}
-                          key={trackSid}
-                          trackIdentifier={trackIdentifier}
-                        />
-                      );
-                    }
-                  )}
-                </View>
+          {this.state.status === "connected" && (
+            <View style={styles.remoteGrid}>
+              {Array.from(
+                this.state.videoTracks,
+                ([trackSid, trackIdentifier]) => {
+                  return (
+                    <TwilioVideoParticipantView
+                      style={styles.remoteVideo}
+                      key={trackSid}
+                      trackIdentifier={trackIdentifier}
+                    />
+                  );
+                }
               )}
-              <View style={styles.optionsContainer}>
-                <TouchableOpacity
-                  style={styles.optionButton}
-                  onPress={this._onEndButtonPress}
-                >
-                  <Text style={{ fontSize: 12 }}>End</Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                  style={styles.optionButton}
-                  onPress={this._onMuteButtonPress}
-                >
-
-                  <Text style={{ fontSize: 12 }}>
-                    {this.state.isAudioEnabled ? "Mute" : "Unmute"}
-                  </Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                  style={styles.optionButton}
-                  onPress={this._onFlipButtonPress}
-                >
-
-                  <Text style={{ fontSize: 12 }}>Flip</Text>
-                </TouchableOpacity>
-                <TwilioVideoLocalView enabled={true} style={styles.localVideo} />
-                <View />
-              </View>
             </View>
-          ) : null}
+          )}
+          <View style={styles.optionsContainer}>
+            <TouchableOpacity style={styles.optionButton} onPress={this._onEndButtonPress}>
+              <Text style={{ fontSize: 12 }}>End</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.optionButton} onPress={this._onMuteButtonPress}>
+              <Text style={{ fontSize: 12 }}>
+                {this.state.isAudioEnabled ? "Mute" : "Unmute"}
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.optionButton} onPress={this._onFlipButtonPress}>
+              <Text style={{ fontSize: 12 }}>Flip</Text>
+            </TouchableOpacity>
+            <TwilioVideoLocalView enabled={true} style={styles.localVideo} />
+            <View />
+          </View>
+        </ImageBackground>
 
         <TwilioVideo
           ref={this.setTwilioRef}
@@ -198,19 +187,31 @@ export default class LiveCallScreen extends Component {
   }
 };
 
+const width = Dimensions.get('window').width;
+const height = Dimensions.get('window').height;
+
 const styles = StyleSheet.create({
   container: {
+    backgroundColor: "rgba(255,255,255,1)",
     flex: 1,
-    backgroundColor: "white"
+    width: width,
+    height: height
   },
-  callContainer: {
-    flex: 1,
-    position: "absolute",
-    bottom: 0,
-    top: 0,
-    left: 0,
-    right: 0
+  body: {
+    width: '100%',
+    height: height * .8,
+    marginTop: normalize(20, 'height'),
+    justifyContent: 'flex-end',
+    //borderWidth: 1
   },
+  // callContainer: {
+  //   flex: 1,
+  //   position: "absolute",
+  //   bottom: 0,
+  //   top: 0,
+  //   left: 0,
+  //   right: 0
+  // },
   welcome: {
     fontSize: 30,
     textAlign: "center",

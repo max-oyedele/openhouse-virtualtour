@@ -17,6 +17,8 @@ import SocialLoginScreen from "./screens/auth/SocialLogin";
 import FormScreen from "./screens/auth/Form";
 import SMSScreen from "./screens/auth/SMS";
 
+import AgentScreen from "./screens/Agent";
+
 import PropertyScreen from './screens/property/Property';
 
 import OpenVirtualHomeScreen from './screens/openVirtual/OpenVirtualHome';
@@ -196,6 +198,7 @@ function App() {
         <Stack.Screen name="Splash" component={SplashScreen} />
         <Stack.Screen name="Auth" component={AuthStack} />
         <Stack.Screen name="Welcome" component={WelcomeScreen} />
+        <Stack.Screen name="Agent" component={AgentScreen} />
         <Stack.Screen name="Main" component={MainStack} />
         <Stack.Screen name="OpenVirtual" component={OpenVirtualStack} />
       </Stack.Navigator>

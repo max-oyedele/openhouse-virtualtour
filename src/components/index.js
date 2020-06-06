@@ -1,6 +1,7 @@
 import CustomBrowseCard from './BrowseCard';
 import CustomButton from './Button';
 import CustomCallCard from './CallCard';
+import CustomAgentCard from './AgentCard';
 import CustomHeader from './Header';
 import CustomLabelTag from './LabelTag';
 import CustomPropertyCard from './PropertyCard';
@@ -11,6 +12,7 @@ import CustomSignModal from './SignModal';
 export const BrowseCard = CustomBrowseCard;
 export const Button = CustomButton;
 export const CallCard = CustomCallCard;
+export const AgentCard = CustomAgentCard;
 export const Header = CustomHeader;
 export const LabelTag = CustomLabelTag;
 export const PropertyCard = CustomPropertyCard;

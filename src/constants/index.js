@@ -25,6 +25,7 @@ export const RouteParam = {
   agent: {},  
   pdfUrl: '',
   browseUrl: '',  
+  openHouseIntro: {},
   liveInfo: {},
   isChanged: false,
   mapResultData: []

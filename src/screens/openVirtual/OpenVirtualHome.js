@@ -75,52 +75,62 @@ export default class OpenVirtualHomeScreen extends Component {
 
           RouteParam.pdfUrl = res[0].prefill_pdf_url;
           RouteParam.browseUrl = res[0].property_virtual_tour_url;
+          RouteParam.openHouseIntro = res[0];
         }
       })
       .catch((err) => {
         console.log('get openhouse into error', err);
       })
   }
-
-  getLiveCallInfo = () => {
+  
+  onLiveOpen = () => {
     var param = {
       user_account: LoginInfo.user_account,
       user_fullname: LoginInfo.fullname,
       user_latitude: LoginInfo.latitude,
       user_longitude: LoginInfo.longitude,
       property_recordno: RouteParam.propertyRecordNo
-    }
+    };
+
     getLiveInfo(param)
       .then((res) => {
-        //console.log('live info', res);
-        RouteParam.liveInfo = res[0];
-        this.props.navigation.navigate('LiveCall');
+        console.log('live info', res);        
+        RouteParam.liveInfo = res[0];        
+                        
+        if (this.state.live_oh_signagure_required) {          
+          this.props.navigation.navigate('Signature', {from: 'live'});
+        }
+        else {
+          this.postAttendee();
+          if(RouteParam.liveInfo.error === undefined) {
+            this.props.navigation.navigate('LiveCall');
+          }
+        }    
       })
       .catch((err) => {
         console.log('get live info error', err);
       })
   }
 
-  onLiveOpen = () => {
-    this.getLiveCallInfo();
-  }
-
   onVirtualTour = () => {
-    if (!this.state.virtual_tour_signagure_required) {
+    this.postAttendee();
+
+    if (this.state.virtual_tour_signagure_required) {
+      this.props.navigation.navigate('Signature', {from: 'virtual_tour'});
+    }
+    else {
       Linking.canOpenURL(this.state.property_virtual_tour_url).then(supported => {
         if (supported) {
           Linking.openURL(this.state.property_virtual_tour_url)
             .then(() => { })
             .catch((err) => console.log('open browse url error'))
+
+            this.props.navigation.navigate('Property');
         } else {
           console.log('open browser error');
         }
-      });
-
-      this.postAttendee();
-      this.props.navigation.navigate('Property');
+      });     
     }
-    else this.props.navigation.navigate('Signature');
   }
 
   postAttendee = async () => {
@@ -160,11 +170,11 @@ export default class OpenVirtualHomeScreen extends Component {
               <Button btnTxt='VIEW VIRTUAL TOUR' btnStyle={{ width: '100%', height: normalize(50, 'height'), color: 'blue' }} onPress={() => this.onVirtualTour()} />
             </View>
           }
-          <View style={styles.questionContainer}>
+          {/* <View style={styles.questionContainer}>
             <TouchableOpacity onPress={() => this.props.navigation.navigate('RealtorProfile')}>
               <Text style={{ fontSize: RFPercentage(2.2), color: Colors.whiteColor }}>Have a question?</Text>
             </TouchableOpacity>
-          </View>
+          </View> */}
         </View>
       </ImageBackground>
     );

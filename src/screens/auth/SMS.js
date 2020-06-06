@@ -52,32 +52,23 @@ export default class SMSScreen extends Component {
     const { verificationCode } = this.state;
     if (verificationCode.length == 6) {
         let cred = auth.PhoneAuthProvider.credential(RouteParam.confirmResult.verificationId, verificationCode)
-        console.log('verification cred',cred);
+        //console.log('verification cred',cred);
         if (cred) {
           auth().currentUser.linkWithCredential(cred)
+          .then((cred) => {
+            
+          })
+          .catch(error => {
+            
+          })
           LoginInfo.fullname = RouteParam.loginEssentialInfo.fullname;
           LoginInfo.email = RouteParam.loginEssentialInfo.email;
           LoginInfo.telephone = RouteParam.loginEssentialInfo.telephone;
 
           Keyboard.dismiss();
+          
           this.submit();
-        }
-      // RouteParam.confirmResult
-      //   .confirm(verificationCode)
-      //   .then(user => {          
-      //     //Alert.alert('Verified');
-
-      //     LoginInfo.fullname = RouteParam.loginEssentialInfo.fullname;
-      //     LoginInfo.email = RouteParam.loginEssentialInfo.email;
-      //     LoginInfo.telephone = RouteParam.loginEssentialInfo.telephone;
-
-      //     Keyboard.dismiss();
-      //     this.submit();
-      //   })
-      //   .catch(error => {
-      //     console.log('verification error', error);
-      //     Alert.alert('You\'ve entered an invalid activation code. \n Please try again');
-      //   })
+        }        
     } else {
       Alert.alert('Please enter a 6 digit activation code.')
     }
@@ -97,16 +88,18 @@ export default class SMSScreen extends Component {
     bodyFormData.append('user_longitude', LoginInfo.longitude);
     bodyFormData.append('appid', 'com.openhousemarketingsystem.open');
     bodyFormData.append('referredby', 0);
-
+    
     await postData(bodyFormData)
       .then((res) => {
-        //console.log('post login info success', res);
+        console.log('post login info success', res);
 
         LoginInfo.photourl = res[0].user_photourl;
         LoginInfo.user_account = res[0].user_account;
+        LoginInfo.user_pick_an_agent = res[0].user_pick_an_agent;
         LoginInfo.user_assigned_agent = res[0].user_assigned_agent;
 
         AsyncStorage.setItem('LoginInfo', JSON.stringify(LoginInfo));
+
         this.props.navigation.navigate('Welcome');
       })
       .catch((err) => console.log('post login info error', err))

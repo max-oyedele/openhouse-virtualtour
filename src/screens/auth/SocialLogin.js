@@ -115,7 +115,7 @@ export default class SocialLoginScreen extends Component {
         <View style={styles.modalBack}>
           <View style={styles.labelContainer}>
             <Text style={{ fontFamily: 'SFProText-Semibold', fontSize: RFPercentage(2.5), color: Colors.passiveTxtColor, textAlign: 'center' }}>
-              For personalized experiences sign into your account using
+              For Personalized Experience, Please Sign In To Your Account Using:
             </Text>
           </View>
 

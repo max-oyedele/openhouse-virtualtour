@@ -48,22 +48,32 @@ export default class SignatureScreen extends Component {
     
   }
 
-  onSignOK = () => {
-    Linking.canOpenURL(RouteParam.browseUrl).then(supported => {
-      if (supported) {
-        Linking.openURL(RouteParam.browseUrl)
-          .then(() => { })
-          .catch((err) => console.log('open browse url error'))
-      } else {
-        console.log('open browser error');
-      }
-    });
-
+  onSignOK = () => {   
+    this.postSignature();
     this.postAttendee();
-    this.props.navigation.navigate('Property');
+
+    const { from } = this.props.route.params;
+    if(from === 'live') {
+      if(RouteParam.liveInfo.error === undefined) {
+        this.props.navigation.navigate('LiveCall');
+      }
+      console.log('live info error');      
+    }      
+    else if(from === 'virtual_tour') {
+      Linking.canOpenURL(RouteParam.browseUrl).then(supported => {
+        if (supported) {
+          Linking.openURL(RouteParam.browseUrl)
+            .then(() => { })
+            .catch((err) => console.log('open browse url error'))
+            this.props.navigation.navigate('Property');
+        } else {
+          console.log('open browser error');
+        }
+      });     
+    }
   }
   
-  postAttendee = async () => {    
+  postSignature = async () => {    
     let signaturePath = `${RNFetchBlob.fs.dirs.DocumentDir}/signature.png`;    
     let uri = Platform.OS === 'ios' ? signaturePath : 'file://' + signaturePath;
 
@@ -91,9 +101,10 @@ export default class SignatureScreen extends Component {
       .catch((err)=>{
         console.log('post sign error',err);
       })
-      .done();
+      .done();   
+  }
 
-
+  postAttendee = async () => {
     let bodyFormData = new FormData();
     bodyFormData.append('action', 'post_oh_attendee');
     bodyFormData.append('user_account', LoginInfo.user_account);
@@ -103,7 +114,7 @@ export default class SignatureScreen extends Component {
 
     await postData(bodyFormData)
       .then((res) => {
-        //console.log('post attendee success', res);
+        console.log('post attendee success', res);
       })
       .catch((err) => {
         console.log('post attendee error', err)
@@ -128,11 +139,11 @@ export default class SignatureScreen extends Component {
           <View style={styles.btnContainer}>
             <Button btnTxt='AGREE AND SIGN' btnStyle={{ width: '100%', height: normalize(50, 'height'), color: 'blue' }} onPress={() => this.setState({ visibleSignForm: true })} />
           </View>
-          <View style={styles.questionContainer}>
+          {/* <View style={styles.questionContainer}>
             <TouchableOpacity onPress={() => this.props.navigation.navigate('RealtorProfile')}>
               <Text style={{ fontSize: RFPercentage(2.2), color: Colors.blueColor }}>Have a question?</Text>
             </TouchableOpacity>
-          </View>
+          </View> */}
         </View>
       </ImageBackground>
     );
@@ -158,7 +169,7 @@ const styles = StyleSheet.create({
   },
   pdfContainer: {
     width: '95%',
-    height: '70%',
+    height: '75%',
     justifyContent: 'center',
     alignSelf: 'center',
     //borderWidth: 1

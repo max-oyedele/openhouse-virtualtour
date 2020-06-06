@@ -51,8 +51,7 @@ export default class SplashScreen extends Component {
     //this.initialGetLocation();
 
     // uncomment for skip
-    this.submit();
-    setTimeout(() => { this.props.navigation.navigate('Main') }, 1000);    
+    this.submit();    
   }
 
   keyboardManager = () => {
@@ -123,10 +122,10 @@ export default class SplashScreen extends Component {
           LoginInfo.providerid = info.providerid;
           LoginInfo.email_verified = info.email_verified;
           LoginInfo.user_account = info.user_account;
+          LoginInfo.user_pick_an_agent = info.user_pick_an_agent;
           LoginInfo.user_assigned_agent = info.user_assigned_agent,
 
-            this.submit();
-          setTimeout(() => { this.props.navigation.navigate('Main') }, 1000);
+          this.submit();          
         }
         else {
           setTimeout(() => { this.props.navigation.navigate('Auth') }, 1000);
@@ -141,7 +140,7 @@ export default class SplashScreen extends Component {
   submit = async () => {
     // uncomment for skip
     LoginInfo.uniqueid = '123';
-    LoginInfo.user_account = '10';
+    LoginInfo.user_account = '23';
     LoginInfo.fullname = 'Anthony Robinson';
     LoginInfo.email = 'opendemo@icloud.com';
     LoginInfo.telephone = '+13059007270';
@@ -151,7 +150,7 @@ export default class SplashScreen extends Component {
     LoginInfo.latitude = 40.776611;
     LoginInfo.longitude = -73.345718;
     LoginInfo.user_assigned_agent = 0;
-    ///////////////
+    // ///////////////
 
     let bodyFormData = new FormData();
     bodyFormData.append('action', 'newaccount');
@@ -172,7 +171,15 @@ export default class SplashScreen extends Component {
         console.log('post login info success', res);
         LoginInfo.photourl = res[0].user_photourl;
         LoginInfo.user_account = res[0].user_account;
+        LoginInfo.user_pick_an_agent = res[0].user_pick_an_agent;
         LoginInfo.user_assigned_agent = res[0].user_assigned_agent;
+
+        if(LoginInfo.user_pick_an_agent){
+          setTimeout(() => { this.props.navigation.navigate('Agent') }, 1000);
+        }
+        else{
+          setTimeout(() => { this.props.navigation.navigate('Main') }, 1000);
+        }
       })
       .catch((err) => {
         console.log('post login info error', err)
@@ -188,7 +195,7 @@ export default class SplashScreen extends Component {
               <View style={styles.modalBack}>
                 <View style={{ width: '100%', height: '9%', /*borderWidth: 1*/ }}></View>
                 <View style={styles.logoImgContainer}>
-                  <Image style={{ width: '100%', height: '110%' }} source={Images.logo} resizeMode='contain' />
+                  <Image style={{ width: '90%', height: '90%' }} source={Images.logo} resizeMode='contain' />
                 </View>
                 <View style={{ width: '100%', height: '2%', /*borderWidth: 1*/ }}></View>
                 <View style={styles.logoNameContainer}>
@@ -207,7 +214,7 @@ export default class SplashScreen extends Component {
               <View style={styles.modalBackGeo}>
                 <View style={{ width: '100%', height: '5%', /*borderWidth: 1*/ }}></View>
                 <View style={styles.logoImgContainerGeo}>
-                  <Image style={{ width: '100%', height: '100%' }} source={Images.logo} resizeMode='contain' />
+                  <Image style={{ width: '90%', height: '90%' }} source={Images.logo} resizeMode='contain' />
                 </View>
                 <View style={{ width: '100%', height: '1%', /*borderWidth: 1*/ }}></View>
                 <View style={styles.logoNameContainerGeo}>
@@ -217,7 +224,7 @@ export default class SplashScreen extends Component {
 
                 <View style={styles.geoSettingContainer}>
                   <View style={styles.settingTxtContainer}>
-                    <Text style={{ fontFamily: 'SFProText-Regular', fontSize: RFPercentage(2), color: Colors.passiveTxtColor, textAlign: 'center' }}>
+                    <Text style={{ fontFamily: 'SFProText-Regular', fontSize: RFPercentage(1.7), color: Colors.passiveTxtColor, textAlign: 'center' }}>
                       Open™
                       requires access to your geo location to operate.
                       This will enhance our ability to display properties in your area.</Text>

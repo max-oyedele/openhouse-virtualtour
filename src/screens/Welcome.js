@@ -18,7 +18,6 @@ import { RFPercentage, RFValue } from "react-native-responsive-fontsize";
 import SafeAreaView from 'react-native-safe-area-view';
 import { SliderBox } from "react-native-image-slider-box";
 
-import { Colors, Images } from '@constants';
 import {
   BrowseCard,
   Button,
@@ -30,6 +29,7 @@ import {
   SideMenu,
   SignModal,
 } from '@components';
+import { Colors, Images, LoginInfo } from '@constants';
 
 export default class WelcomeScreen extends Component {
   constructor(props) {
@@ -62,8 +62,12 @@ export default class WelcomeScreen extends Component {
   }
 
   onEnter = (index) => {
-    //if(index == 3) this.props.navigation.navigate('Main');
-    this.props.navigation.navigate('Main');
+    if(LoginInfo.user_pick_an_agent){
+      setTimeout(() => { this.props.navigation.navigate('Agent') }, 1000);
+    }
+    else{
+      setTimeout(() => { this.props.navigation.navigate('Main') }, 1000);
+    }
   }
 
   render() {
@@ -86,10 +90,7 @@ export default class WelcomeScreen extends Component {
             <Text style={styles.description}>
               {this.state.description[this.state.index]}
             </Text>
-          </View>
-          {/* <TouchableOpacity style={styles.homeBtnContainer} onPress={() => this.props.navigation.navigate('Main')}>
-            <Image style={styles.homeImg} source={Images.logo} resizeMode='contain'></Image>
-          </TouchableOpacity> */}
+          </View>          
         </View>
       </View>
     );

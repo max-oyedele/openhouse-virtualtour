@@ -92,7 +92,7 @@ export default class DashboardScreen extends Component {
         this.setState({ categoryData: sortedRes });
       })
       .catch((err) => {
-        console.log('get category error', err);
+        //console.log('get category error', err);
       })
   }
 
@@ -115,7 +115,7 @@ export default class DashboardScreen extends Component {
         this.setState({ spinner: false });
       })
       .catch((err) => {
-        console.log('get feature property error', err)
+        //console.log('get feature property error', err)
         this.setState({ spinner: false });
       })
   }
@@ -136,7 +136,7 @@ export default class DashboardScreen extends Component {
         this.setState({ refresh: !this.state.refresh });
       })
       .catch((err) => {
-        console.log('get searchword error', err)
+        //console.log('get searchword error', err)
       })
   }
 

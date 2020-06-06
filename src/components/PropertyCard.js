@@ -90,8 +90,8 @@ export default class PropertyCard extends Component {
                   height: '50%',
                   flexDirection: 'row',
                   //alignItems: 'center',
-                  paddingTop: normalize(13, 'height'),
-                  paddingLeft: normalize(13),
+                  paddingTop: normalize(10, 'height'),
+                  paddingLeft: normalize(10),
                   //borderWidth: 2
                 }}>
                   <View style={{ flex: 0.6, flexDirection: 'row' }}>
