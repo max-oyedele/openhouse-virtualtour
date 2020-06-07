@@ -30,7 +30,7 @@ import {
   SideMenu,
   SignModal
 } from '@components';
-import { Colors, Images, LoginInfo, AgentsData } from '@constants';
+import { Colors, Images, LoginInfo, agentData } from '@constants';
 import { getContentByAction, postData } from '../api/rest';
 
 export default class AgentScreen extends Component {
@@ -39,73 +39,14 @@ export default class AgentScreen extends Component {
     this.state = {
       refresh: false,
       selectedIndex: -1,
-      agentsData: [
-        {
-          realtor_account: "39413",
-          realtor_photo_url: "http://photos.v3.mlsstratus.com/Live/Photos/agents/124724.jpg", realtor_full_name: "Michael Costa",
-          realtor_title: "Sales Associate",
-          realtor_company: "Coldwell Banker Residential"
-        },
-        {
-          realtor_account: "39225",
-          realtor_photo_url: "http://photos.v3.mlsstratus.com/Live/Photos/agents/111539.jpg", realtor_full_name: "Maria Lindh",
-          realtor_title: "Broker Owner",
-          realtor_company: "Next Level Real Estate Ny"
-        },
-        {
-          realtor_account: "39413",
-          realtor_photo_url: "http://photos.v3.mlsstratus.com/Live/Photos/agents/124724.jpg", realtor_full_name: "Michael Costa",
-          realtor_title: "Sales Associate",
-          realtor_company: "Coldwell Banker Residential"
-        },
-        {
-          realtor_account: "39225",
-          realtor_photo_url: "http://photos.v3.mlsstratus.com/Live/Photos/agents/111539.jpg", realtor_full_name: "Maria Lindh",
-          realtor_title: "Broker Owner",
-          realtor_company: "Next Level Real Estate Ny"
-        },
-        {
-          realtor_account: "39413",
-          realtor_photo_url: "http://photos.v3.mlsstratus.com/Live/Photos/agents/124724.jpg", realtor_full_name: "Michael Costa",
-          realtor_title: "Sales Associate",
-          realtor_company: "Coldwell Banker Residential"
-        },
-        {
-          realtor_account: "39225",
-          realtor_photo_url: "http://photos.v3.mlsstratus.com/Live/Photos/agents/111539.jpg", realtor_full_name: "Maria Lindh",
-          realtor_title: "Broker Owner",
-          realtor_company: "Next Level Real Estate Ny"
-        },
-        {
-          realtor_account: "39413",
-          realtor_photo_url: "http://photos.v3.mlsstratus.com/Live/Photos/agents/124724.jpg", realtor_full_name: "Michael Costa",
-          realtor_title: "Sales Associate",
-          realtor_company: "Coldwell Banker Residential"
-        },
-        {
-          realtor_account: "39225",
-          realtor_photo_url: "http://photos.v3.mlsstratus.com/Live/Photos/agents/111539.jpg", realtor_full_name: "Maria Lindh",
-          realtor_title: "Broker Owner",
-          realtor_company: "Next Level Real Estate Ny"
-        },
-        {
-          realtor_account: "39413",
-          realtor_photo_url: "http://photos.v3.mlsstratus.com/Live/Photos/agents/124724.jpg", realtor_full_name: "Michael Costa",
-          realtor_title: "Sales Associate",
-          realtor_company: "Coldwell Banker Residential"
-        },
-        {
-          realtor_account: "39225",
-          realtor_photo_url: "http://photos.v3.mlsstratus.com/Live/Photos/agents/111539.jpg", realtor_full_name: "Maria Lindh",
-          realtor_title: "Broker Owner",
-          realtor_company: "Next Level Real Estate Ny"
-        },
+      agentData: [
+        
       ]
     }
   }
 
   componentDidMount() {
-    //this.getAgent();
+    this.getAgent();
   }
 
   getAgent = () => {
@@ -114,14 +55,14 @@ export default class AgentScreen extends Component {
       user_latitude: LoginInfo.latitude,
       user_longitude: LoginInfo.longitude,
       user_id: LoginInfo.uniqueid,
-      user_email: LoginInfo.email // ?
+      user_email: LoginInfo.email
     };
     console.log('agent Param', agentParam);
     getContentByAction(agentParam)
       .then((res) => {
         console.log('agent data', res);
         this.setState({
-          agentsData: res,
+          agentData: res,
         });
       })
       .catch((err) => {
@@ -131,9 +72,15 @@ export default class AgentScreen extends Component {
 
   onClickAgent = (index) => {
     this.setState({ selectedIndex: index });
+    let desc = 'Are you sure you want to select ' + 
+                this.state.agentData[index].realtor_full_name + 
+                ' from ' + 
+                this.state.agentData[index].realtor_company + 
+                ' as your preferred real estate agent?';
+
     Alert.alert(
-      'Pick the preferred agent',
-      'Are you sure this agent?',
+      'Please confirm',
+      desc,
       [
         {text: 'Yes', onPress: () => this.onYes()},
         {text: 'No', onPress: () => {}},
@@ -145,7 +92,7 @@ export default class AgentScreen extends Component {
   }
 
   onYes = () => {
-    LoginInfo.user_assigned_agent = this.state.agentsData[this.state.selectedIndex].realtor_account;
+    LoginInfo.user_assigned_agent = this.state.agentData[this.state.selectedIndex].realtor_account;
     this.props.navigation.navigate('Main');
   }
 
@@ -170,7 +117,7 @@ export default class AgentScreen extends Component {
         </View>
         <ScrollView style={{ marginTop: normalize(10, 'height') }}>
           {
-            this.state.agentsData.map((each, index) => {
+            this.state.agentData.map((each, index) => {
               return (
                 <TouchableOpacity key={index} style={styles.eachContainer}
                   onPress={() => this.onClickAgent(index)}>

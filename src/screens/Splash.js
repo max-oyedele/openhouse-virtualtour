@@ -142,7 +142,7 @@ export default class SplashScreen extends Component {
     LoginInfo.uniqueid = '123';
     LoginInfo.user_account = '23';
     LoginInfo.fullname = 'Anthony Robinson';
-    LoginInfo.email = 'opendemo@icloud.com';
+    LoginInfo.email = 'kelloggsx@gmail.com';
     LoginInfo.telephone = '+13059007270';
     LoginInfo.photourl = '';
     LoginInfo.providerid = 'apple';
