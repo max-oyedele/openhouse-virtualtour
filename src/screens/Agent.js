@@ -32,6 +32,7 @@ import {
 } from '@components';
 import { Colors, Images, LoginInfo, agentData } from '@constants';
 import { getContentByAction, postData } from '../api/rest';
+import AsyncStorage from "@react-native-community/async-storage";
 
 export default class AgentScreen extends Component {
   constructor(props) {
@@ -91,11 +92,13 @@ export default class AgentScreen extends Component {
     );
   }
 
-  onYes = () => {
-    LoginInfo.user_assigned_agent = this.state.agentData[this.state.selectedIndex].realtor_account;
+  onYes = async () => {
+    let userAssignedAgent = this.state.agentData[this.state.selectedIndex].realtor_account;
+    LoginInfo.user_assigned_agent = userAssignedAgent;
+    await AsyncStorage.setItem('UserAssignedAgent', userAssignedAgent.toString());
+    await AsyncStorage.setItem('LoginInfo', JSON.stringify(LoginInfo));
     this.props.navigation.navigate('Main');
   }
-
 
   render() {
     return (

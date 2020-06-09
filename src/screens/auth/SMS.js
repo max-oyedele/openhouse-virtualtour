@@ -91,7 +91,7 @@ export default class SMSScreen extends Component {
     
     await postData(bodyFormData)
       .then((res) => {
-        console.log('post login info success', res);
+        //console.log('post login info success', res);
 
         LoginInfo.photourl = res[0].user_photourl;
         LoginInfo.user_account = res[0].user_account;

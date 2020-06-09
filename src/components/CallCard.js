@@ -48,7 +48,7 @@ export default class CallCard extends Component {
         </View>
         <View style={{ width: '25%', height: '50%', justifyContent: 'center', alignItems: 'center' }}>
           <TouchableOpacity
-            onPress={this.props.onPress}
+            onPress={()=>this.props.onCall()}
             style={{
               width: '100%',
               height: '90%',
@@ -82,4 +82,5 @@ CallCard.propTypes = {
   userRole: PropTypes.string.isRequired,
   userAct: PropTypes.string.isRequired,
   userImg: PropTypes.object.isRequired, 
+  onCall: PropTypes.func.isRequired
 };

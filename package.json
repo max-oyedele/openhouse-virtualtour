@@ -31,6 +31,7 @@
     "react-native-get-location": "^1.4.2",
     "react-native-image-slider-box": "^1.0.12",
     "react-native-image-view": "^2.1.9",
+    "react-native-immediate-phone-call": "^2.0.0",
     "react-native-keyboard-avoiding-view": "^1.0.0",
     "react-native-keyboard-manager": "^4.0.13-16",
     "react-native-loading-spinner-overlay": "^1.1.0",

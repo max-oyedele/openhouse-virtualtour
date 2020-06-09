@@ -39,7 +39,9 @@ export default class OpenVirtualHomeScreen extends Component {
       page_background_photo: '',
       display_live_oh_button: false,
       display_virtual_tour_button: false,
-      property_virtual_tour_url: ''
+      property_virtual_tour_url: '',
+      live_oh_signagure_required: false,
+      virtual_tour_signagure_required: false,
     }
   }
 
@@ -70,7 +72,8 @@ export default class OpenVirtualHomeScreen extends Component {
             display_live_oh_button: res[0].display_live_oh_button,
             display_virtual_tour_button: res[0].display_virtual_tour_button,
             property_virtual_tour_url: res[0].property_virtual_tour_url,
-            virtual_tour_signagure_required: res[0].virtual_tour_signagure_required
+            live_oh_signagure_required: res[0].live_oh_signagure_required,
+            virtual_tour_signagure_required: res[0].virtual_tour_signagure_required,
           });
 
           RouteParam.pdfUrl = res[0].prefill_pdf_url;
@@ -94,9 +97,9 @@ export default class OpenVirtualHomeScreen extends Component {
 
     getLiveInfo(param)
       .then((res) => {
-        console.log('live info', res);        
+        //console.log('live info', res);        
         RouteParam.liveInfo = res[0];        
-                        
+                
         if (this.state.live_oh_signagure_required) {          
           this.props.navigation.navigate('Signature', {from: 'live'});
         }

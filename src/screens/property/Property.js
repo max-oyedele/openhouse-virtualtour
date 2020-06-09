@@ -22,7 +22,7 @@ import { BlurView } from "@react-native-community/blur";
 import ViewMoreText from 'react-native-view-more-text';
 
 import ImageView from 'react-native-image-view';
-
+import RNImmediatePhoneCall from 'react-native-immediate-phone-call';
 import MapView, { Marker } from 'react-native-maps';
 
 import {
@@ -124,10 +124,11 @@ export default class PropertyScreen extends Component {
       user_id: LoginInfo.uniqueid,
       user_assigned_agent: LoginInfo.user_assigned_agent,
       property_recordno: RouteParam.propertyRecordNo,
-    };
+    };    
 
     getContentByAction(cardParam)
       .then((res) => {
+        //console.log('agentCard', res[0]);
         this.setState({ agentCard: res[0] });
       })
       .catch((err) => {
@@ -174,6 +175,18 @@ export default class PropertyScreen extends Component {
     // RouteParam.agent.sold = this.state.agentCard.sold;
 
     this.props.navigation.navigate('OpenVirtual');
+  }
+
+  onCall = () => {
+    let phoneNumber = this.state.agentCard.agent_telephone;
+    
+    phoneNumber = phoneNumber.replace("(", "");
+    phoneNumber = phoneNumber.replace(")", "");
+    phoneNumber = phoneNumber.replace("-", "");
+    phoneNumber = phoneNumber.replace(/\s+/g, '');
+    phoneNumber = '1' + phoneNumber;
+    
+    RNImmediatePhoneCall.immediatePhoneCall(phoneNumber);
   }
 
   renderViewMore(onPress) {    
@@ -326,6 +339,7 @@ export default class PropertyScreen extends Component {
               userRole={this.state.agentCard.agent_title}
               userAct='Presented By'
               userImg={{ uri: this.state.agentCard.agent_photourl }}
+              onCall={this.onCall}
             />
           }
         </View>

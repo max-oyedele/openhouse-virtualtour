@@ -48,10 +48,10 @@ export default class SplashScreen extends Component {
   }
 
   componentDidMount() {
-    //this.initialGetLocation();
+    this.initialGetLocation();
 
-    // uncomment for skip
-    this.submit();    
+    // skip
+    //this.submit();    
   }
 
   keyboardManager = () => {
@@ -108,7 +108,7 @@ export default class SplashScreen extends Component {
       });
   }
 
-  isLoggedInProc = () => {
+  isLoggedInProc = () => {  
     AsyncStorage.getItem('LoginInfo')
       .then(async (loginInfo) => {
         if (loginInfo) {
@@ -122,36 +122,37 @@ export default class SplashScreen extends Component {
           LoginInfo.providerid = info.providerid;
           LoginInfo.email_verified = info.email_verified;
           LoginInfo.user_account = info.user_account;
-          LoginInfo.user_pick_an_agent = info.user_pick_an_agent;
-          LoginInfo.user_assigned_agent = info.user_assigned_agent,
+          LoginInfo.user_pick_an_agent = info.user_pick_an_agent;          
 
           this.submit();          
         }
         else {
-          setTimeout(() => { this.props.navigation.navigate('Auth') }, 1000);
+          setTimeout(() => { this.props.navigation.navigate('Auth') }, 2000);
         }
       })
       .catch((err) => {
         console.log('get login info error', err);
-        setTimeout(() => { this.props.navigation.navigate('Auth') }, 1000);
+        setTimeout(() => { this.props.navigation.navigate('Auth') }, 2000);
       })
   }
 
   submit = async () => {
-    // uncomment for skip
-    LoginInfo.uniqueid = '123';
-    LoginInfo.user_account = '23';
-    LoginInfo.fullname = 'Anthony Robinson';
-    LoginInfo.email = 'kelloggsx@gmail.com';
-    LoginInfo.telephone = '+13059007270';
-    LoginInfo.photourl = '';
-    LoginInfo.providerid = 'apple';
-    LoginInfo.email_verified = true;
-    LoginInfo.latitude = 40.776611;
-    LoginInfo.longitude = -73.345718;
-    LoginInfo.user_assigned_agent = 0;
+    // skip
+    // LoginInfo.uniqueid = '123';
+    // LoginInfo.user_account = '23';
+    // LoginInfo.fullname = 'Anthony Robinson';
+    // LoginInfo.email = 'kelloggsx@gmail.com';
+    // LoginInfo.telephone = '+13059007270';
+    // LoginInfo.photourl = '';
+    // LoginInfo.providerid = 'apple';
+    // LoginInfo.email_verified = true;
+    // LoginInfo.latitude = 40.776611;
+    // LoginInfo.longitude = -73.345718;
+    // LoginInfo.user_assigned_agent = 0;
     // ///////////////
 
+    let userAssignedAgent = await AsyncStorage.getItem('UserAssignedAgent');    
+    
     let bodyFormData = new FormData();
     bodyFormData.append('action', 'newaccount');
     bodyFormData.append('uniqueid', LoginInfo.uniqueid);
@@ -168,17 +169,17 @@ export default class SplashScreen extends Component {
 
     await postData(bodyFormData)
       .then((res) => {
-        console.log('post login info success', res);
+        //console.log('post login info success', res);
         LoginInfo.photourl = res[0].user_photourl;
         LoginInfo.user_account = res[0].user_account;
         LoginInfo.user_pick_an_agent = res[0].user_pick_an_agent;
-        LoginInfo.user_assigned_agent = res[0].user_assigned_agent;
+        LoginInfo.user_assigned_agent = userAssignedAgent == null ? res[0].user_assigned_agent : parseInt(userAssignedAgent);
 
-        if(LoginInfo.user_pick_an_agent){
-          setTimeout(() => { this.props.navigation.navigate('Agent') }, 1000);
+        if(LoginInfo.user_pick_an_agent && userAssignedAgent == null){
+          setTimeout(() => { this.props.navigation.navigate('Agent') }, 2000);
         }
         else{
-          setTimeout(() => { this.props.navigation.navigate('Main') }, 1000);
+          setTimeout(() => { this.props.navigation.navigate('Main') }, 2000);
         }
       })
       .catch((err) => {
@@ -246,8 +247,6 @@ export default class SplashScreen extends Component {
 
 const width = Dimensions.get('window').width;
 const height = Dimensions.get('window').height;
-// const modalWidth = normalize(width * 0.75);
-// const modalHeight = normalize(height * 0.5 , 'height');
 
 const styles = StyleSheet.create({
   container: {

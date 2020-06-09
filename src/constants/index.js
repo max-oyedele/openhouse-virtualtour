@@ -5,16 +5,7 @@ export const Colors = CustomColors;
 export const Images = DefinedImages;
 
 export const LoginInfo = {
-  uniqueid: '',
-  fullname: '',
-  email: '',
-  telephone: '',
-  photourl: '',
-  providerid: '',
-  email_verified: '',
-  latitude: '',
-  longitude: '',
-  referredby: ''  
+  
 }
 
 export const RouteParam = {
@@ -49,7 +40,7 @@ export const SearchBy = {
 
 export const PropertyTypeData = [];
 
-export const PreferencesData = [
+export const PreferencesData = [  
   { 
     id: 0,   
     question: 'I AM CURRENTLY LOOKING TO...',
@@ -236,6 +227,17 @@ export const PreferencesData = [
       'Pet Policy(Must Accept Pets)',
       'Security \n (Secure Location, Front Desk, Safe Town)',
       'Utilities Included (Rental Units Only)'
+    ],
+    answerType: 'radio',
+    answerIndex: 0
+  },
+  { 
+    id: 14,   
+    question: 'AUTO SIGN ME INTO PROPERTIES',
+    subquery: 'Please auto-sign me into every Virtual Tour or Live Open House Stream that I view',
+    options:[
+      'Yes',
+      'No'
     ],
     answerType: 'radio',
     answerIndex: 0

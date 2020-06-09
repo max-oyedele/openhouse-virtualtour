@@ -39,12 +39,12 @@ export default class SocialLoginScreen extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      logoTxt: 'By sign-in to this application, you are indicating that you agree with the terms and condition of Open™ House Marketing System'      
+      logoTxt: 'By sign-in to this application, you are indicating that you agree with the terms and condition of Open™ House Marketing System'
     }
   }
 
   componentDidMount() {
-    
+
   }
 
   onAppleSignin = async () => {
@@ -89,42 +89,51 @@ export default class SocialLoginScreen extends Component {
       })
   }
 
-  onFBSignin = async () => {
-    await fbSignin()
-      .then(async (res) => {
-        //console.log('fb signin success', res);        
-        LoginInfo.uniqueid = res.user.uid;
-        LoginInfo.fullname = res.user.displayName;
-        LoginInfo.email = res.user.email;
-        LoginInfo.telephone = res.user.phoneNumber;
-        LoginInfo.photourl = res.user.photoURL;
-        LoginInfo.providerid = 'facebook';
-        LoginInfo.email_verified = res.user.emailVerified;
+  // onFBSignin = async () => {
+  //   await fbSignin()
+  //     .then(async (res) => {
+  //       //console.log('fb signin success', res);        
+  //       LoginInfo.uniqueid = res.user.uid;
+  //       LoginInfo.fullname = res.user.displayName;
+  //       LoginInfo.email = res.user.email;
+  //       LoginInfo.telephone = res.user.phoneNumber;
+  //       LoginInfo.photourl = res.user.photoURL;
+  //       LoginInfo.providerid = 'facebook';
+  //       LoginInfo.email_verified = res.user.emailVerified;
 
-        this.props.navigation.navigate('Form');
-      })
-      .catch((err) => {
-        //Alert.alert('Facebook SignIn is failed');
-        console.log('fb signin error', err)
-      })
-  }   
+  //       this.props.navigation.navigate('Form');
+  //     })
+  //     .catch((err) => {
+  //       //Alert.alert('Facebook SignIn is failed');
+  //       console.log('fb signin error', err)
+  //     })
+  // }   
 
   render() {
     return (
       <ImageBackground style={styles.container} source={Images.splashBackground}>
         <View style={styles.modalBack}>
+          
+          <View style={styles.logoImgContainer}>
+            <Image style={{ width: '90%', height: '100%' }} source={Images.logo} resizeMode='contain' />
+          </View>          
+          <View style={styles.logoNameContainer}>
+            <Text style={styles.logoName}>Open House</Text>
+            <Text style={styles.logoPlusLabel}>+</Text>
+          </View>          
+
           <View style={styles.labelContainer}>
-            <Text style={{ fontFamily: 'SFProText-Semibold', fontSize: RFPercentage(2.5), color: Colors.passiveTxtColor, textAlign: 'center' }}>
+            <Text style={{ fontSize: RFPercentage(2), color: Colors.passiveTxtColor, textAlign: 'center' }}>
               For Personalized Experience, Please Sign In To Your Account Using:
             </Text>
           </View>
 
           <View style={styles.btnsContainer}>
-            <View style={styles.btnContainer}>
+            {/* <View style={styles.btnContainer}>
               <TouchableOpacity style={styles.btnImg} onPress={() => this.onFBSignin()}>
                 <Image style={{ width: '100%', height: '100%', borderRadius: normalize(5) }} source={Images.btnFBLogin} resizeMode='stretch' />
               </TouchableOpacity>
-            </View>
+            </View> */}
             <View style={styles.btnContainer}>
               <TouchableOpacity style={styles.btnImg} onPress={() => this.onGoogleSignin()}>
                 <Image style={{ width: '100%', height: '100%', borderRadius: normalize(5) }} source={Images.btnGoogleLogin} resizeMode='stretch' />
@@ -140,7 +149,7 @@ export default class SocialLoginScreen extends Component {
           </View>
 
           <View style={styles.txtContainer}>
-            <Text style={{ fontFamily: 'SFProText-Semibold', fontSize: RFPercentage(1.6), color: Colors.passiveTxtColor, textAlign: 'center' }}>{this.state.logoTxt}</Text>
+            <Text style={{ fontSize: RFPercentage(1.6), color: Colors.passiveTxtColor, textAlign: 'center' }}>{this.state.logoTxt}</Text>
           </View>
         </View>
       </ImageBackground >
@@ -175,48 +184,79 @@ const styles = StyleSheet.create({
     shadowRadius: 16.00,
     elevation: 24,
   },
-  labelContainer: {
-    width: '80%',
-    height: '17%',
-    justifyContent: 'center',
-    alignItems: 'center',
-    //borderWidth: 1  
-  },
-  btnsContainer: {
-    width: '80%',
-    height: normalize(200, 'height'),
+  logoImgContainer: {
+    width: '88%',
+    height: '30%',
     justifyContent: 'center',
     alignItems: 'center',
     //borderWidth: 1
   },
+  logoNameContainer: {
+    width: '88%',
+    height: '12%',
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    //borderWidth: 1
+  },
+  logoName: {
+    fontFamily: 'Billabong',
+    fontSize: RFPercentage(7.4),
+    color: Colors.blackColor,
+    //borderWidth: 1
+  },
+  logoPlusLabel: {
+    fontFamily: 'Helvetica-Bold',
+    fontSize: RFPercentage(3),
+    fontWeight: 'bold',
+    color: '#E02020',
+    alignSelf: 'center',
+    marginBottom: normalize(10, 'height'),
+    //borderWidth: 1
+  },
+  labelContainer: {
+    width: '88%',
+    height: '10%',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: normalize(5, 'height'),
+    //borderWidth: 1  
+  },
+  btnsContainer: {
+    width: '88%',
+    height: '30%',
+    justifyContent: 'center',
+    alignItems: 'center',
+    //borderWidth: 5
+  },
   btnContainer: {
     width: '100%',
-    height: '33%',
+    height: '50%',
     justifyContent: 'center',
     alignItems: 'center',
     //borderWidth: 1
   },
   btnImg: {
     width: '100%',
-    height: '65%',
+    height: '72%',
     //borderWidth: 1
   },
   appleBtnContainer: {
     width: '100%',
-    height: '33%',
+    height: '50%',
     justifyContent: 'center',
     alignItems: 'center',
-    //borderWidth: 2
+    //borderWidth: 1
   },
   appleBtn: {
     width: '100%',
-    height: '70%'
+    height: '72%'
   },
   txtContainer: {
-    width: '80%',
-    height: '17%',
-    justifyContent: 'flex-end',
-    alignItems: 'center',    
+    width: '88%',
+    height: '12%',
+    justifyContent: 'center',
+    alignItems: 'center',
     //borderWidth: 1   
   },
 });
