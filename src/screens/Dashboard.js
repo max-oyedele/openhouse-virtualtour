@@ -313,7 +313,7 @@ const styles = StyleSheet.create({
   },
   browseContainer: {
     width: '95%',
-    height: normalize(190, 'height'),
+    height: normalize(156, 'height'),
     alignSelf: 'center',
     marginTop: normalize(20, 'height'),
     //borderWidth: 2
@@ -331,7 +331,7 @@ const styles = StyleSheet.create({
     width: '95%',
     height: normalize(280, 'height'),
     alignSelf: 'center',
-    marginTop: normalize(10, 'height'),
+    //marginTop: normalize(10, 'height'),
     //borderWidth: 2
   },
   featureTxtContainer: {

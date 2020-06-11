@@ -335,9 +335,10 @@ export default class PropertyScreen extends Component {
           {
             this.state.agentCard != '' &&
             <CallCard
+              userAct='Presented By'
               userName={this.state.agentCard.agent_fullname}
               userRole={this.state.agentCard.agent_title}
-              userAct='Presented By'
+              userCompany={this.state.agentCard.realtor_company}
               userImg={{ uri: this.state.agentCard.agent_photourl }}
               onCall={this.onCall}
             />

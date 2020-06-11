@@ -28,7 +28,8 @@ export default class BrowseCard extends Component {
       <TouchableOpacity onPress={this.props.onPress}>
         <View style={{              
           width: normalize(150),
-          height: normalize(150, 'height'),
+          height: normalize(120, 'height'),
+          backgroundColor: Colors.whiteColor,
           justifyContent: 'center',
           alignItems: 'center',          
           //marginTop: normalize(10, 'height'),        
@@ -52,7 +53,7 @@ export default class BrowseCard extends Component {
             paddingLeft: normalize(10),
             //borderWidth: 1
           }}>
-            <Text style={{ fontFamily: 'SFProText-Regular', fontSize: RFPercentage(2), color: Colors.passiveTxtColor }}>{this.props.item.properties_category_short_desc}</Text>
+            <Text style={{ fontFamily: 'SFProText-Regular', fontSize: RFPercentage(2), color: Colors.blackColor }}>{this.props.item.properties_category_short_desc}</Text>
           </View>
         </View>
       </TouchableOpacity>

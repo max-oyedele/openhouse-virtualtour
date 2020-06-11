@@ -43,8 +43,9 @@ export default class CallCard extends Component {
           <View style={{ width: '100%', height: '23%', justifyContent: 'center', flex: 0.8 }}><Text style={{ fontFamily: 'SFProText-Regular', fontSize: RFPercentage(2), color: Colors.blackColor }}>{this.props.userName}</Text></View>
           <View style={{ width: '100%', height: '23%', justifyContent: 'center', flex: 0.8 }}><Text style={{ fontFamily: 'SFProText-Regular', fontSize: RFPercentage(1.8), color: Colors.passiveTxtColor }}>{this.props.userRole}</Text></View> */}
           <Text style={{ fontFamily: 'SFProText-Regular', fontSize: RFPercentage(1.8), color: Colors.passiveTxtColor }}>{this.props.userAct}:</Text>
-          <Text style={{ fontFamily: 'SFProText-Regular', fontSize: RFPercentage(2), color: Colors.blackColor }}>{this.props.userName}</Text>
+          <Text style={{ fontFamily: 'SFProText-Semibold', fontSize: RFPercentage(1.8), color: Colors.blackColor }}>{this.props.userName}</Text>
           <Text style={{ fontFamily: 'SFProText-Regular', fontSize: RFPercentage(1.8), color: Colors.passiveTxtColor }}>{this.props.userRole}</Text>
+          <Text style={{ fontFamily: 'SFProText-Regular', fontSize: RFPercentage(1.5), color: Colors.passiveTxtColor }}>{this.props.userCompany}</Text>
         </View>
         <View style={{ width: '25%', height: '50%', justifyContent: 'center', alignItems: 'center' }}>
           <TouchableOpacity
@@ -78,9 +79,10 @@ export default class CallCard extends Component {
 }
 
 CallCard.propTypes = {
+  userAct: PropTypes.string.isRequired,
   userName: PropTypes.string.isRequired,
   userRole: PropTypes.string.isRequired,
-  userAct: PropTypes.string.isRequired,
+  userCompany: PropTypes.string.isRequired,
   userImg: PropTypes.object.isRequired, 
   onCall: PropTypes.func.isRequired
 };

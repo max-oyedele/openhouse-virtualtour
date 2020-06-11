@@ -110,7 +110,7 @@ export default class AgentScreen extends Component {
         </View>
         <View style={styles.guideContainer}>
           <Text style={{ fontFamily: 'SFProText-Regular', fontSize: RFPercentage(2.2), color: Colors.blackColor, textAlign: 'center' }}>
-            Welcome to Open™
+            Welcome to Open House+
           </Text>
           <Text style={{ fontFamily: 'SFProText-Regular', fontSize: RFPercentage(2), color: Colors.blackColor, textAlign: 'center', marginTop: normalize(10, 'height') }}>
             To enhance your user's experience,

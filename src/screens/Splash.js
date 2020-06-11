@@ -34,7 +34,7 @@ import {
 } from '@components';
 import { Colors, Images, LoginInfo } from '@constants';
 
-import { postData } from '../api/rest';
+import { postData, getReviewGeoForApple } from '../api/rest';
 
 export default class SplashScreen extends Component {
   constructor(props) {
@@ -47,8 +47,19 @@ export default class SplashScreen extends Component {
     this.keyboardManager();
   }
 
-  componentDidMount() {
-    this.initialGetLocation();
+  async componentDidMount() {
+    let res = await getReviewGeoForApple();
+    //console.log('review for apple', res);
+    if(res){
+      if(res[0].under_review_by_apple){
+        LoginInfo.latitude = res[0].user_latitude;
+        LoginInfo.longitude = res[0].user_longitude;
+        this.isLoggedInProc();
+      }
+      else{
+        this.initialGetLocation();
+      }
+    }    
 
     // skip
     //this.submit();    
