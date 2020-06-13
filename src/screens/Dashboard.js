@@ -163,7 +163,7 @@ export default class DashboardScreen extends Component {
     this.setState({ toggleMenuVisible: !this.state.toggleMenuVisible });
 
     AsyncStorage.removeItem('LoginInfo');
-    this.props.navigation.navigate('Auth');
+    this.props.navigation.navigate('Auth', {screen: 'SocialLogin'});
   }
 
   onSearch = (query) => {

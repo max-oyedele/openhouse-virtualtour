@@ -35,6 +35,7 @@ import {
 import { Colors, Images, LoginInfo } from '@constants';
 
 import { postData, getReviewGeoForApple } from '../api/rest';
+import { RouteParam } from "../constants";
 
 export default class SplashScreen extends Component {
   constructor(props) {
@@ -47,13 +48,15 @@ export default class SplashScreen extends Component {
     this.keyboardManager();
   }
 
-  async componentDidMount() {
+  async componentDidMount() {   
+
     let res = await getReviewGeoForApple();
     //console.log('review for apple', res);
     if(res){
       if(res[0].under_review_by_apple){
         LoginInfo.latitude = res[0].user_latitude;
         LoginInfo.longitude = res[0].user_longitude;
+        RouteParam.deviceType = 'pad';
         this.isLoggedInProc();
       }
       else{
@@ -151,7 +154,7 @@ export default class SplashScreen extends Component {
     // skip
     // LoginInfo.uniqueid = '123';
     // LoginInfo.user_account = '23';
-    // LoginInfo.fullname = 'Anthony Robinson';
+    // LoginInfo.fullname = 'John Smith';
     // LoginInfo.email = 'kelloggsx@gmail.com';
     // LoginInfo.telephone = '+13059007270';
     // LoginInfo.photourl = '';
@@ -237,7 +240,7 @@ export default class SplashScreen extends Component {
                 <View style={styles.geoSettingContainer}>
                   <View style={styles.settingTxtContainer}>
                     <Text style={{ fontFamily: 'SFProText-Regular', fontSize: RFPercentage(1.7), color: Colors.passiveTxtColor, textAlign: 'center' }}>
-                      Open™
+                      Open House+
                       requires access to your geo location to operate.
                       This will enhance our ability to display properties in your area.</Text>
                   </View>

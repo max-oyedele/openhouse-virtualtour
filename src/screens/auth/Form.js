@@ -17,6 +17,7 @@ import {
 import normalize from "react-native-normalize";
 import auth from '@react-native-firebase/auth';
 import TextInputMask from 'react-native-text-input-mask';
+import AsyncStorage from '@react-native-community/async-storage';
 
 import {
   Button,
@@ -38,13 +39,13 @@ export default class FormScreen extends Component {
   }
 
   componentDidMount() {
-    
+
   }
 
   validatePhoneNumber = () => {
     // var regexp = /^[0-9]?()[0-9](\s|\S)(\d[0-9]{8,16})$/
     // return regexp.test(this.state.telephone)
-    
+
     return true;
   }
 
@@ -59,6 +60,15 @@ export default class FormScreen extends Component {
     }
     if (this.state.telephone == null || this.state.telephone == '') {
       Alert.alert('Please enter your phone number');
+      return;
+    }
+
+    if (RouteParam.deviceType === 'pad') {      
+      LoginInfo.fullname = this.state.fullname;
+      LoginInfo.email = this.state.email;
+      LoginInfo.telephone = this.state.telephone;
+
+      this.submit();
       return;
     }
 
@@ -84,7 +94,7 @@ export default class FormScreen extends Component {
         .on('state_changed',
           confirmResult => {
             console.log('verifyPhoneNumber', confirmResult);
-            switch(confirmResult.state){
+            switch (confirmResult.state) {
               case auth.PhoneAuthState.CODE_SENT:
                 RouteParam.confirmResult = confirmResult;
                 RouteParam.loginEssentialInfo = {
@@ -96,10 +106,10 @@ export default class FormScreen extends Component {
                 break
               case auth.PhoneAuthState.ERROR:
                 Alert.alert('Signin with your phone is failed');
-                console.log('verifyPhoneNumber', error);
+                console.log('verifyPhoneNumber');
                 break
             }
-        })
+          })
         .catch(error => {
           Alert.alert('Signin with your phone is failed');
           console.log('verifyPhoneNumber', error);
@@ -109,6 +119,38 @@ export default class FormScreen extends Component {
       Alert.alert('Invalid Phone Number')
     }
   }
+
+  // for apple reivew skip
+  submit = async () => {
+    let bodyFormData = new FormData();
+    bodyFormData.append('action', 'newaccount');
+    bodyFormData.append('uniqueid', LoginInfo.uniqueid);
+    bodyFormData.append('fullname', LoginInfo.fullname);
+    bodyFormData.append('email', LoginInfo.email);
+    bodyFormData.append('telephone', LoginInfo.telephone);
+    bodyFormData.append('photourl', LoginInfo.photourl);
+    bodyFormData.append('providerid', LoginInfo.providerid);
+    bodyFormData.append('email_verified', LoginInfo.email_verified);
+    bodyFormData.append('user_latitude', LoginInfo.latitude);
+    bodyFormData.append('user_longitude', LoginInfo.longitude);
+    bodyFormData.append('appid', 'com.openhousemarketingsystem.open');
+    bodyFormData.append('referredby', 0);
+
+    await postData(bodyFormData)
+      .then((res) => {
+        //console.warn('post login info success', res);
+
+        LoginInfo.photourl = res[0].user_photourl;
+        LoginInfo.user_account = res[0].user_account;
+        LoginInfo.user_pick_an_agent = res[0].user_pick_an_agent;
+        LoginInfo.user_assigned_agent = res[0].user_assigned_agent;
+        
+        AsyncStorage.setItem('LoginInfo', JSON.stringify(LoginInfo));
+        this.props.navigation.navigate('Welcome');
+      })
+      .catch((err) => console.log('post login info error', err))
+  }
+  ///////////////////////
 
   render() {
     return (
@@ -166,9 +208,9 @@ export default class FormScreen extends Component {
                 keyboardType={'numeric'}
                 editable={LoginInfo.telephone ? false : true}
                 onChangeText={(formatted, extracted) => {
-                  this.setState({telephone: extracted});
+                  this.setState({ telephone: extracted });
                 }}
-                mask={"+1 ([000]) [000] - [0000]"}                
+                mask={"+1 ([000]) [000] - [0000]"}
               />
             </View>
             <View style={styles.nextContainer}>

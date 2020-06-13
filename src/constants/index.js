@@ -9,6 +9,7 @@ export const LoginInfo = {
 }
 
 export const RouteParam = {
+  deviceType: 'phone',
   loginEssentialInfo: {},
   confirmResult: {},
   searchKind: '',  

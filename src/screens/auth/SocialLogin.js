@@ -39,7 +39,7 @@ export default class SocialLoginScreen extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      logoTxt: 'By sign-in to this application, you are indicating that you agree with the terms and condition of Open™ House Marketing System'
+      logoTxt: 'By sign-in to this application, you are indicating that you agree with the terms and condition of Open House+ Marketing System'
     }
   }
 
