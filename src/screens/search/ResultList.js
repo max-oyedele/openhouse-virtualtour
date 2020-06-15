@@ -104,6 +104,7 @@ export default class ResultListScreen extends Component {
       user_latitude: LoginInfo.latitude,
       user_longitude: LoginInfo.longitude,
       user_id: LoginInfo.uniqueid,
+      user_account: LoginInfo.user_account,
       search_city: SearchBy.query,
       listingtype: SearchBy.listingType,
       propertytype: SearchBy.propertyType,
@@ -142,6 +143,7 @@ export default class ResultListScreen extends Component {
       user_latitude: LoginInfo.latitude,
       user_longitude: LoginInfo.longitude,
       user_id: LoginInfo.uniqueid,
+      user_account: LoginInfo.user_account,
       propertytype: SearchBy.propertyType,
     };
     this.setState({ spinner: true, resultData: [] });

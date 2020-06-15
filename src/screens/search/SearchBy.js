@@ -165,7 +165,7 @@ export default class SearchByScreen extends Component {
             <View style={{ width: '100%', height: '50%', flexDirection: 'row', alignItems: 'center' }}>
               <View style={{ backgroundColor: Colors.searchBackColor, width: '45%', height: '80%', borderRadius: 8, borderWidth: 1 }}>
                 <TextInput
-                  style={{ width: '100%', height: '100%', paddingLeft: normalize(10) }}
+                  style={{ width: '100%', height: '100%', paddingLeft: normalize(10), color: Colors.blackColor }}
                   placeholder='From'
                   placeholderTextColor={Colors.passiveTxtColor}
                   keyboardType='numeric'
@@ -176,7 +176,7 @@ export default class SearchByScreen extends Component {
               <View style={{ width: '10%', height: '80%', justifyContent: 'center', alignItems: 'center' }}><Text>-</Text></View>
               <View style={{ backgroundColor: Colors.searchBackColor, width: '45%', height: '80%', borderRadius: 8, borderWidth: 1 }}>
                 <TextInput
-                  style={{ width: '100%', height: '100%', paddingLeft: normalize(10) }}
+                  style={{ width: '100%', height: '100%', paddingLeft: normalize(10), color: Colors.blackColor }}
                   placeholder='To'
                   placeholderTextColor={Colors.passiveTxtColor}
                   keyboardType='numeric'

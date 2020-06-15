@@ -68,6 +68,7 @@ export default class PropertyScreen extends Component {
       user_latitude: LoginInfo.latitude,
       user_longitude: LoginInfo.longitude,
       user_id: LoginInfo.uniqueid,
+      user_account: LoginInfo.user_account,
       property_recordno: RouteParam.propertyRecordNo,
     };
 
@@ -128,8 +129,10 @@ export default class PropertyScreen extends Component {
 
     getContentByAction(cardParam)
       .then((res) => {
-        //console.log('agentCard', res[0]);
-        this.setState({ agentCard: res[0] });
+        if(res.length > 0){
+          //console.log('agentCard', res[0]);
+          this.setState({ agentCard: res[0] });
+        }
       })
       .catch((err) => {
         console.log('get agent card error', err)

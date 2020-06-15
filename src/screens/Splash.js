@@ -193,6 +193,7 @@ export default class SplashScreen extends Component {
           setTimeout(() => { this.props.navigation.navigate('Agent') }, 2000);
         }
         else{
+          LoginInfo.user_assigned_agent = res[0].user_assigned_agent;
           setTimeout(() => { this.props.navigation.navigate('Main') }, 2000);
         }
       })

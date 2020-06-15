@@ -11,6 +11,7 @@ import {
   TextInput,
   Alert,
   TouchableOpacity,
+  ActivityIndicator,
   Dimensions,
   Platform,
 } from "react-native";
@@ -18,6 +19,7 @@ import normalize from "react-native-normalize";
 import auth from '@react-native-firebase/auth';
 import TextInputMask from 'react-native-text-input-mask';
 import AsyncStorage from '@react-native-community/async-storage';
+import Spinner from 'react-native-loading-spinner-overlay';
 
 import {
   Button,
@@ -34,7 +36,8 @@ export default class FormScreen extends Component {
       fullname: LoginInfo.fullname,
       email: LoginInfo.email,
       telephone: LoginInfo.telephone,
-      country_additional_prefix: LoginInfo.telephone ? false : true
+      country_additional_prefix: LoginInfo.telephone ? false : true,
+      spinner: false
     }
   }
 
@@ -63,7 +66,7 @@ export default class FormScreen extends Component {
       return;
     }
 
-    if (RouteParam.deviceType === 'pad') {      
+    if (RouteParam.deviceType === 'pad') {
       LoginInfo.fullname = this.state.fullname;
       LoginInfo.email = this.state.email;
       LoginInfo.telephone = this.state.telephone;
@@ -71,6 +74,8 @@ export default class FormScreen extends Component {
       this.submit();
       return;
     }
+
+    this.setState({ spinner: true });
 
     if (this.validatePhoneNumber()) {
       // auth()
@@ -94,6 +99,7 @@ export default class FormScreen extends Component {
         .on('state_changed',
           confirmResult => {
             console.log('verifyPhoneNumber', confirmResult);
+            this.setState({ spinner: false });
             switch (confirmResult.state) {
               case auth.PhoneAuthState.CODE_SENT:
                 RouteParam.confirmResult = confirmResult;
@@ -105,18 +111,21 @@ export default class FormScreen extends Component {
                 this.props.navigation.navigate('SMS')
                 break
               case auth.PhoneAuthState.ERROR:
-                Alert.alert('Signin with your phone is failed');
-                console.log('verifyPhoneNumber');
+                Alert.alert('PhoneAuthState Error');
+                console.log('phone auth state error');
                 break
             }
           })
         .catch(error => {
-          Alert.alert('Signin with your phone is failed');
-          console.log('verifyPhoneNumber', error);
+          Alert.alert('Verify with your phone is failed');
+          console.log('verify phone number', error);
+          this.setState({ spinner: false });
         })
     }
     else {
-      Alert.alert('Invalid Phone Number')
+      Alert.alert('Invalid Phone Number');
+      console.log('invalide phone number');
+      this.setState({ spinner: false });
     }
   }
 
@@ -144,7 +153,7 @@ export default class FormScreen extends Component {
         LoginInfo.user_account = res[0].user_account;
         LoginInfo.user_pick_an_agent = res[0].user_pick_an_agent;
         LoginInfo.user_assigned_agent = res[0].user_assigned_agent;
-        
+
         AsyncStorage.setItem('LoginInfo', JSON.stringify(LoginInfo));
         this.props.navigation.navigate('Welcome');
       })
@@ -159,10 +168,13 @@ export default class FormScreen extends Component {
         style={styles.container}>
         <ImageBackground style={styles.container} source={Images.splashBackground}>
           <View style={styles.overlay} />
+          <Spinner
+            visible={this.state.spinner}            
+          />
           <View style={{ width: '100%' }}>
             <Header title='CONFIRM YOUR INFORMATION' titleColor={Colors.whiteColor} onPressBack={() => this.props.navigation.goBack(null)} />
           </View>
-          <View style={styles.body}>
+          <View style={styles.body}>            
             <View style={styles.txtLabelContainer}>
               <Text style={styles.txtLabel}>Enter your information and we will send you an activation confirmation code.</Text>
             </View>
