@@ -16,7 +16,7 @@ import {
   Platform,
 } from "react-native";
 import normalize from "react-native-normalize";
-import auth from '@react-native-firebase/auth';
+
 import TextInputMask from 'react-native-text-input-mask';
 import AsyncStorage from '@react-native-community/async-storage';
 import Spinner from 'react-native-loading-spinner-overlay';
@@ -27,6 +27,7 @@ import {
 } from '@components';
 
 import { Colors, Images, LoginInfo, RouteParam } from '@constants';
+import { verifyPhoneNumber } from '../../api/Firebase';
 import { postData } from '../../api/rest';
 
 export default class FormScreen extends Component {
@@ -52,7 +53,7 @@ export default class FormScreen extends Component {
     return true;
   }
 
-  onNext = () => {
+  onNext = async () => {
     if (this.state.fullname == null || this.state.fullname == '') {
       Alert.alert('Please enter your full name');
       return;
@@ -66,66 +67,51 @@ export default class FormScreen extends Component {
       return;
     }
 
-    if (RouteParam.deviceType === 'pad') {
-      LoginInfo.fullname = this.state.fullname;
-      LoginInfo.email = this.state.email;
-      LoginInfo.telephone = this.state.telephone;
+    LoginInfo.fullname = this.state.fullname;
+    LoginInfo.email = this.state.email;
+    LoginInfo.telephone = this.state.telephone;
 
-      this.submit();
-      return;
-    }
+    // if (RouteParam.deviceType === 'pad') {
+    //   this.submit();
+    //   return;
+    // }
 
     this.setState({ spinner: true });
 
-    if (this.validatePhoneNumber()) {
-      // auth()
-      //   .signInWithPhoneNumber('+1' + this.state.telephone)
-      //   .then(confirmResult => {
-      //     RouteParam.confirmResult = confirmResult;
-      //     RouteParam.loginEssentialInfo = {
-      //       fullname: this.state.fullname,
-      //       email: this.state.email,
-      //       telephone: this.state.telephone
-      //     };
-      //     this.props.navigation.navigate('SMS');
-      //   })
-      //   .catch(error => {
-      //     Alert.alert('Signin with your phone is failed');
-      //     console.log('signInWithPhoneNumber', error);
-      //   })
-      var phoneNumber = this.state.country_additional_prefix ? '+1' + this.state.telephone : this.state.telephone;
-      auth()
-        .verifyPhoneNumber(phoneNumber)
-        .on('state_changed',
-          confirmResult => {
-            console.log('verifyPhoneNumber', confirmResult);
-            this.setState({ spinner: false });
-            switch (confirmResult.state) {
-              case auth.PhoneAuthState.CODE_SENT:
-                RouteParam.confirmResult = confirmResult;
-                RouteParam.loginEssentialInfo = {
-                  fullname: this.state.fullname,
-                  email: this.state.email,
-                  telephone: this.state.telephone
-                };
-                this.props.navigation.navigate('SMS')
-                break
-              case auth.PhoneAuthState.ERROR:
-                Alert.alert('PhoneAuthState Error');
-                console.log('phone auth state error');
-                break
-            }
-          })
-        .catch(error => {
-          Alert.alert('Verify with your phone is failed');
-          console.log('verify phone number', error);
-          this.setState({ spinner: false });
+    if (this.validatePhoneNumber()) {      
+      var phoneNumber = this.state.country_additional_prefix ? '+86' + this.state.telephone : this.state.telephone;
+      console.log('phonenumber', phoneNumber);
+      await verifyPhoneNumber(phoneNumber)
+        .then((verifyResult) => {
+          //console.log('verifyResult', verifyResult)
+          RouteParam.verifyResult = verifyResult;
+          
+          this.setState({ spinner: false });
+          this.props.navigation.navigate('SMS');
+        })
+        .catch((err) => {          
+          // Alert.alert(
+          //   'Verify Phone Number Failed. Try again later',
+          //   '',
+          //   [
+          //     { text: 'OK', onPress: () => {this.setState({ spinner: false }); this.submit(); }}
+          //   ]
+          // );
+
+          this.setState({ spinner: false }); this.submit();
+
+          console.log('verify phone number error', err);                    
         })
     }
     else {
-      Alert.alert('Invalid Phone Number');
+      Alert.alert(
+        'Invalid Phone Number',
+        '',
+        [
+          { text: 'OK', onPress: () => this.setState({ spinner: false }) }
+        ]
+      );
       console.log('invalide phone number');
-      this.setState({ spinner: false });
     }
   }
 
@@ -140,6 +126,7 @@ export default class FormScreen extends Component {
     bodyFormData.append('photourl', LoginInfo.photourl);
     bodyFormData.append('providerid', LoginInfo.providerid);
     bodyFormData.append('email_verified', LoginInfo.email_verified);
+    bodyFormData.append('phone_verified', 0);
     bodyFormData.append('user_latitude', LoginInfo.latitude);
     bodyFormData.append('user_longitude', LoginInfo.longitude);
     bodyFormData.append('appid', 'com.openhousemarketingsystem.open');
@@ -169,12 +156,12 @@ export default class FormScreen extends Component {
         <ImageBackground style={styles.container} source={Images.splashBackground}>
           <View style={styles.overlay} />
           <Spinner
-            visible={this.state.spinner}            
+            visible={this.state.spinner}
           />
           <View style={{ width: '100%' }}>
             <Header title='CONFIRM YOUR INFORMATION' titleColor={Colors.whiteColor} onPressBack={() => this.props.navigation.goBack(null)} />
           </View>
-          <View style={styles.body}>            
+          <View style={styles.body}>
             <View style={styles.txtLabelContainer}>
               <Text style={styles.txtLabel}>Enter your information and we will send you an activation confirmation code.</Text>
             </View>
@@ -222,7 +209,7 @@ export default class FormScreen extends Component {
                 onChangeText={(formatted, extracted) => {
                   this.setState({ telephone: extracted });
                 }}
-                mask={"+1 ([000]) [000] - [0000]"}
+                mask={"+86 ([000]) [0000] - [0000]"}
               />
             </View>
             <View style={styles.nextContainer}>

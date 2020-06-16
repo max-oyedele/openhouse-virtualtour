@@ -17,27 +17,30 @@ import {
 } from "react-native";
 import normalize from "react-native-normalize";
 import AsyncStorage from '@react-native-community/async-storage';
-import auth from '@react-native-firebase/auth';
+import Spinner from 'react-native-loading-spinner-overlay';
 
 import {
   Button,
   Header,
 } from '@components';
 import { Colors, Images, LoginInfo, RouteParam } from '@constants';
+import { linkWithCredential } from '../../api/Firebase';
 import { postData } from '../../api/rest';
 
 export default class SMSScreen extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      verificationCode: '',      
+      verificationCode: '',
       userId: '',
-      isBtnShow: false
+      isBtnShow: false,
+      isVerified: false,
+      spinner: false,
     }
   }
 
-  componentDidMount() {   
-    
+  componentDidMount() {
+
   }
 
   onInputCode = (verificationCode) => {
@@ -51,26 +54,65 @@ export default class SMSScreen extends Component {
   onConfirm = async () => {
     const { verificationCode } = this.state;
     if (verificationCode.length == 6) {
-        let cred = auth.PhoneAuthProvider.credential(RouteParam.confirmResult.verificationId, verificationCode)
-        //console.log('verification cred',cred);
-        if (cred) {
-          auth().currentUser.linkWithCredential(cred)
-          .then((cred) => {
-            
-          })
-          .catch(error => {
-            
-          })
-          LoginInfo.fullname = RouteParam.loginEssentialInfo.fullname;
-          LoginInfo.email = RouteParam.loginEssentialInfo.email;
-          LoginInfo.telephone = RouteParam.loginEssentialInfo.telephone;
+      this.setState({ spinner: true });
+      await linkWithCredential(RouteParam.verifyResult.verificationId, verificationCode)
+        .then((cred) => {
+          console.log('linkWith cred', cred);
 
           Keyboard.dismiss();
-          
+
+          this.setState({
+            spinner: false,
+            isVerified: 1
+          });
+
           this.submit();
-        }        
+        })
+        .catch((err) => {
+          if (err == "auth/invalid-verification-code") {
+            Alert.alert(
+              'Your code is wrong. \n Please try again',
+              '',
+              [
+                {
+                  text: 'OK',
+                  onPress: () => {
+                    this.setState({
+                      spinner: false,
+                      isVerified: 0
+                    });                    
+                  }
+                }
+              ]
+            );
+          }
+          else{
+            // Alert.alert(
+            //   'Confirmation Failed. Try again later',
+            //   '',
+            //   [
+            //     {
+            //       text: 'OK',
+            //       onPress: () => {
+            //         this.setState({
+            //           spinner: false,
+            //           isVerified: 0
+            //         });
+            //         this.submit();
+            //       }
+            //     }
+            //   ]
+            // );
+            this.setState({
+              spinner: false,
+              isVerified: 0
+            });
+            this.submit();
+          } 
+          console.log('link with credential error', err);
+        })
     } else {
-      Alert.alert('Please enter a 6 digit activation code.')
+      Alert.alert('Please enter a 6 digit activation code.');
     }
   }
 
@@ -84,11 +126,12 @@ export default class SMSScreen extends Component {
     bodyFormData.append('photourl', LoginInfo.photourl);
     bodyFormData.append('providerid', LoginInfo.providerid);
     bodyFormData.append('email_verified', LoginInfo.email_verified);
+    bodyFormData.append('phone_verified', this.state.isVerified);
     bodyFormData.append('user_latitude', LoginInfo.latitude);
     bodyFormData.append('user_longitude', LoginInfo.longitude);
     bodyFormData.append('appid', 'com.openhousemarketingsystem.open');
     bodyFormData.append('referredby', 0);
-    
+
     await postData(bodyFormData)
       .then((res) => {
         //console.log('post login info success', res);
@@ -112,6 +155,9 @@ export default class SMSScreen extends Component {
         style={styles.container}>
         <ImageBackground style={styles.container} source={Images.splashBackground}>
           <View style={styles.overlay} />
+          <Spinner
+            visible={this.state.spinner}
+          />
           <View style={{ width: '100%' }}>
             <Header title='CONFIRMATION' titleColor={Colors.whiteColor} onPressBack={() => this.props.navigation.goBack(null)} />
           </View>
@@ -130,7 +176,7 @@ export default class SMSScreen extends Component {
                 onChangeText={(verificationCode) => this.onInputCode(verificationCode)}
               />
             </View>
-            { this.state.isBtnShow &&  
+            {this.state.isBtnShow &&
               <View style={styles.nextContainer}>
                 <Button btnTxt='Confirm' btnStyle={{ width: '100%', height: normalize(50, 'height'), color: 'blue' }} onPress={() => this.onConfirm()} />
               </View>

@@ -39,6 +39,7 @@ import {
 } from '@components';
 
 import { Colors, Images, LoginInfo, RouteParam, SearchWordData, SearchBy, PropertyTypeData } from '@constants';
+import { signOut } from '../api/Firebase';
 import { getContentByAction } from '../api/rest';
 
 export default class DashboardScreen extends Component {
@@ -160,6 +161,8 @@ export default class DashboardScreen extends Component {
   }
 
   onLogout = () => {
+    signOut();
+    
     this.setState({ toggleMenuVisible: !this.state.toggleMenuVisible });
 
     AsyncStorage.removeItem('LoginInfo');

@@ -135,6 +135,7 @@ export default class SplashScreen extends Component {
           LoginInfo.photourl = info.photourl;
           LoginInfo.providerid = info.providerid;
           LoginInfo.email_verified = info.email_verified;
+          LoginInfo.phone_verified = info.phone_verified;
           LoginInfo.user_account = info.user_account;
           LoginInfo.user_pick_an_agent = info.user_pick_an_agent;          
 
@@ -160,6 +161,7 @@ export default class SplashScreen extends Component {
     // LoginInfo.photourl = '';
     // LoginInfo.providerid = 'apple';
     // LoginInfo.email_verified = true;
+    // LoginInfo.phone_verified = 1;
     // LoginInfo.latitude = 40.776611;
     // LoginInfo.longitude = -73.345718;
     // LoginInfo.user_assigned_agent = 0;
@@ -176,6 +178,7 @@ export default class SplashScreen extends Component {
     bodyFormData.append('photourl', LoginInfo.photourl);
     bodyFormData.append('providerid', LoginInfo.providerid);
     bodyFormData.append('email_verified', LoginInfo.email_verified);
+    bodyFormData.append('phone_verified', LoginInfo.phone_verified);
     bodyFormData.append('user_latitude', LoginInfo.latitude);
     bodyFormData.append('user_longitude', LoginInfo.longitude);
     bodyFormData.append('appid', 'com.openhousemarketingsystem.open');

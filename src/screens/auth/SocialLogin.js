@@ -33,8 +33,6 @@ import {
 import { Colors, Images, LoginInfo } from '@constants';
 import { appleSignin, fbSignin, googleSignin } from '../../api/Firebase';
 
-import { postData } from '../../api/rest';
-
 export default class SocialLoginScreen extends Component {
   constructor(props) {
     super(props);

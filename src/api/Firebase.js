@@ -9,7 +9,6 @@ import appleAuth, {
   AppleAuthRequestOperation,
 } from '@invertase/react-native-apple-authentication';
 
-
 // export const firebaseInit = () => {  
 //   firebase.initializeApp({
 //     apiKey: "AIzaSyBrMHAsTeASvIYb6077oIlasIrT1N0J-Co",       // Auth / General Use
@@ -30,7 +29,7 @@ export const appleSignin = () => {
         requestedOperation: AppleAuthRequestOperation.LOGIN,
         requestedScopes: [AppleAuthRequestScope.EMAIL, AppleAuthRequestScope.FULL_NAME],
       });
-      
+
       // Ensure Apple returned a user identityToken
       if (!appleAuthRequestResponse.identityToken) {
         throw 'Apple Sign-In failed - no identify token returned';
@@ -101,14 +100,54 @@ export const fbSignin = () => {
   })
 }
 
-export const signInWithPhoneNumber = (phoneNumber) => {
-  return new Promise(async (resolve, reject)=>{
-    try{
-      const confirmation = await auth().signInWithPhoneNumber(phoneNumber);      
-      resolve(confirmation);
+export const signOut = () => {
+  return new Promise(async (resolve, reject) => {
+    await auth().currentUser.unlink('phone')
+      .then(() => {
+        console.log('unlink');
+      })
+      .catch((err) => {
+        console.log('unlink error', err.code);
+      })
+
+    await auth().signOut()
+      .then(() => {
+        console.log('signOut');
+        resolve()
+      })
+  })
+}
+
+export const verifyPhoneNumber = (phoneNumber) => {
+  return new Promise(async (resolve, reject) => {
+    await auth()
+      .verifyPhoneNumber(phoneNumber)
+      .on('state_changed', (phoneAuthSnapshot) => {
+        if (phoneAuthSnapshot.state === auth.PhoneAuthState.CODE_SENT) {
+          resolve(phoneAuthSnapshot);
+        }
+      })
+      .catch((err) => {
+        reject(err.code);
+      })
+  })
+}
+
+export const linkWithCredential = (verificationId, verificationCode) => {
+  return new Promise(async (resolve, reject) => {
+    let cred = auth.PhoneAuthProvider.credential(verificationId, verificationCode)
+    console.log('phoneAuth cred', cred);
+    if (cred) {
+      await auth().currentUser.linkWithCredential(cred)
+        .then((cred) => {
+          resolve(cred);
+        })
+        .catch(err => {
+          reject(err.code);
+        })
     }
-    catch (err){
-      reject(err);
+    else {
+      reject('no credential');
     }
   })
 }
