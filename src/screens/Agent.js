@@ -40,10 +40,8 @@ export default class AgentScreen extends Component {
     this.state = {
       refresh: false,
       selectedIndex: -1,
-      agentData: [
-        
-      ]
-    }
+      agentData: []
+    };
   }
 
   componentDidMount() {
@@ -61,10 +59,12 @@ export default class AgentScreen extends Component {
     console.log('agent Param', agentParam);
     getContentByAction(agentParam)
       .then((res) => {
-        console.log('agent data', res);
-        this.setState({
-          agentData: res,
-        });
+        if (res) {
+          console.log('agent data', res);
+          this.setState({
+            agentData: res,
+          });
+        }
       })
       .catch((err) => {
         console.log('get agent error', err);
@@ -73,21 +73,21 @@ export default class AgentScreen extends Component {
 
   onClickAgent = (index) => {
     this.setState({ selectedIndex: index });
-    let desc = 'Are you sure you want to select ' + 
-                this.state.agentData[index].realtor_full_name + 
-                ' from ' + 
-                this.state.agentData[index].realtor_company + 
-                ' as your preferred real estate agent?';
+    let desc = 'Are you sure you want to select ' +
+      this.state.agentData[index].realtor_full_name +
+      ' from ' +
+      this.state.agentData[index].realtor_company +
+      ' as your preferred real estate agent?';
 
     Alert.alert(
       'Please confirm',
       desc,
       [
-        {text: 'Yes', onPress: () => this.onYes()},
-        {text: 'No', onPress: () => {}},
+        { text: 'Yes', onPress: () => this.onYes() },
+        { text: 'No', onPress: () => { } },
       ],
-      { 
-        cancelable: true 
+      {
+        cancelable: true
       }
     );
   }

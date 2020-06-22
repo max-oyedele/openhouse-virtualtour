@@ -48,8 +48,7 @@ export default class BrowseCard extends Component {
           <View style={{                                    
             width: '100%',
             height: '25%',
-            //justifyContent: 'center',
-            paddingTop: normalize(10),
+            justifyContent: 'center',            
             paddingLeft: normalize(10),
             //borderWidth: 1
           }}>

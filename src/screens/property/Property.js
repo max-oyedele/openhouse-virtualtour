@@ -337,11 +337,11 @@ export default class PropertyScreen extends Component {
         <View style={styles.callCardContainer}>
           {
             this.state.agentCard != '' &&
-            <CallCard
-              userAct='Presented By'
+            <CallCard              
               userName={this.state.agentCard.agent_fullname}
               userRole={this.state.agentCard.agent_title}
-              userCompany={this.state.agentCard.realtor_company}
+              //userCompany={this.state.agentCard.realtor_company}
+              userCompany={'Keller Williams Points North kordff sdf  wa AAA sdf ADfff ADfsdfdfsdf  asdfsdf   sdfweff  sdfwefsdf  sdf sadfwef wef d weffsdfs wewefsdf ewerdsf sdfwef df sdf'}
               userImg={{ uri: this.state.agentCard.agent_photourl }}
               onCall={this.onCall}
             />
@@ -349,7 +349,7 @@ export default class PropertyScreen extends Component {
         </View>
 
         <View style={styles.photoContainer}>
-          <Text style={{ fontFamily: 'SFProText-Semibold', fontSize: RFPercentage(2), color: Colors.blackColor, marginTop: normalize(7, 'height') }}>PHOTOS</Text>
+          <Text style={{ fontFamily: 'SFProText-Semibold', fontSize: RFPercentage(2), color: Colors.blackColor}}>PHOTOS</Text>
           <FlatList
             keyExtractor={item => item.property_photourl}
             data={this.state.propertyPhotoData}
@@ -402,7 +402,7 @@ export default class PropertyScreen extends Component {
               }}
               title={this.state.property.property_address1}
             >
-              <View style={{ width: normalize(20), height: normalize(30, 'height') }}>
+              <View style={{ width: normalize(30), height: normalize(30, 'height') }}>
                 <Image style={{ width: '100%', height: '100%' }} source={Images.marker} />
               </View>
             </Marker>
@@ -544,16 +544,16 @@ const styles = StyleSheet.create({
   },
   callCardContainer: {
     width: width * 0.9,
-    height: normalize(100, 'height'),
+    height: normalize(100),
     justifyContent: 'center',
     alignSelf: 'center',
-    marginTop: normalize(8, 'height'),
+    marginTop: normalize(20, 'height'),
     //borderWidth: 1
   },
   photoContainer: {
     width: '90%',
     alignSelf: 'center',
-    marginTop: normalize(8, 'height'),
+    marginTop: normalize(20, 'height'),
     //borderWidth: 1
   },
   mapContainer: {

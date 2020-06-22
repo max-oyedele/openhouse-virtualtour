@@ -210,7 +210,7 @@ export const PreferencesData = [
     options:[
       'Location',
       'Close to shopping are',
-      'Near Transportation (Train/Subway/Bus)',
+      'Near Transportation \n (Train/Subway/Bus)',
       'Quiet Town or Neighborhood',
       'Nightlife',
       'School District',

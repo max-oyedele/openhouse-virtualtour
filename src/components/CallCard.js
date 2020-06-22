@@ -38,14 +38,11 @@ export default class CallCard extends Component {
         <View style={{ width: normalize(60), height: normalize(60), justifyContent: 'center', alignItems: 'center', marginLeft: normalize(2) }}>
           <Image style={{ width: normalize(60), height: normalize(60), borderRadius: normalize(30), borderColor: Colors.borderColor, borderWidth: normalize(0.5) }} resizeMode='stretch' source={this.props.userImg} />
         </View>
-        <View style={{ width: '52%', justifyContent: 'center', paddingLeft: normalize(9) }}>
-          {/* <View style={{ width: '100%', height: '23%', justifyContent: 'center' }}><Text style={{ fontFamily: 'SFProText-Regular', fontSize: RFPercentage(1.8), color: Colors.passiveTxtColor }}>{this.props.userAct}:</Text></View>
-          <View style={{ width: '100%', height: '23%', justifyContent: 'center', flex: 0.8 }}><Text style={{ fontFamily: 'SFProText-Regular', fontSize: RFPercentage(2), color: Colors.blackColor }}>{this.props.userName}</Text></View>
-          <View style={{ width: '100%', height: '23%', justifyContent: 'center', flex: 0.8 }}><Text style={{ fontFamily: 'SFProText-Regular', fontSize: RFPercentage(1.8), color: Colors.passiveTxtColor }}>{this.props.userRole}</Text></View> */}
-          <Text style={{ fontFamily: 'SFProText-Regular', fontSize: RFPercentage(1.8), color: Colors.passiveTxtColor }}>{this.props.userAct}:</Text>
-          <Text style={{ fontFamily: 'SFProText-Semibold', fontSize: RFPercentage(1.8), color: Colors.blackColor }}>{this.props.userName}</Text>
-          <Text style={{ fontFamily: 'SFProText-Regular', fontSize: RFPercentage(1.8), color: Colors.passiveTxtColor }}>{this.props.userRole}</Text>
-          <Text style={{ fontFamily: 'SFProText-Regular', fontSize: RFPercentage(1.5), color: Colors.passiveTxtColor }}>{this.props.userCompany}</Text>
+        <View style={{ width: '52%', height: '100%', justifyContent: 'center', padding: normalize(9)}}>          
+          <Text style={{ fontFamily: 'SFProText-Regular', fontSize: RFPercentage(1.8), color: Colors.passiveTxtColor }}>Presented By:</Text>
+          <Text style={{ fontFamily: 'SFProText-Semibold', fontSize: RFPercentage(1.8), color: Colors.blackColor }} numberOfLines={2} ellipsizeMode='tail'>{this.props.userName}</Text>
+          <Text style={{ fontFamily: 'SFProText-Regular', fontSize: RFPercentage(1.8), color: Colors.passiveTxtColor }} numberOfLines={1} ellipsizeMode='tail'>{this.props.userRole}</Text>
+          <Text style={{ fontFamily: 'SFProText-Regular', fontSize: RFPercentage(1.5), color: Colors.passiveTxtColor }} numberOfLines={1} ellipsizeMode='tail'>{this.props.userCompany}</Text>
         </View>
         <View style={{ width: '25%', height: '50%', justifyContent: 'center', alignItems: 'center' }}>
           <TouchableOpacity
@@ -78,8 +75,7 @@ export default class CallCard extends Component {
   }
 }
 
-CallCard.propTypes = {
-  userAct: PropTypes.string.isRequired,
+CallCard.propTypes = {  
   userName: PropTypes.string.isRequired,
   userRole: PropTypes.string.isRequired,
   userCompany: PropTypes.string.isRequired,

@@ -73,11 +73,11 @@ export default class PreferenceScreen extends Component {
     let bodyFormData = new FormData();
     bodyFormData.append('action', 'update_preferrences');
     bodyFormData.append('user_latitude', LoginInfo.latitude);
-    bodyFormData.append('user_longitude', LoginInfo.longitude);    
+    bodyFormData.append('user_longitude', LoginInfo.longitude);
     bodyFormData.append('user_account', LoginInfo.user_account);
     bodyFormData.append('user_question', postParam.question);
     bodyFormData.append('user_answer', postParam.answer);
-    
+
     await postData(bodyFormData)
       .then((res) => console.log('post save or remove favorite success', res))
       .catch((err) => console.log('post save or remove favorite error', err))
@@ -123,28 +123,21 @@ export default class PreferenceScreen extends Component {
         </View>
 
         <View style={styles.guideContainer}>
-          <Text style={{ fontFamily: 'SFProText-Regular', fontSize: RFPercentage(1.8), color: Colors.blackColor, textAlign: 'center' }}>
-            Tell us a bit about you what you are looking for? 
+          <Text style={{ fontFamily: 'SFProText-Regular', fontSize: RFPercentage(1.7), color: Colors.blackColor, textAlign: 'center' }}>
+            Tell us a bit about you what you are looking for?
           </Text>
-          <Text style={{ fontFamily: 'SFProText-Regular', fontSize: RFPercentage(1.8), color: Colors.blackColor, textAlign: 'center', marginTop: normalize(7, 'height') }}>
+          <Text style={{ fontFamily: 'SFProText-Regular', fontSize: RFPercentage(1.7), color: Colors.blackColor, textAlign: 'center', marginTop: normalize(7, 'height') }}>
             This will better help us match you to the perfect home
           </Text>
         </View>
-        <ScrollView style={{ marginTop: normalize(10, 'height') }}>
+        <ScrollView style={{ marginTop: normalize(10, 'height') }} showsVerticalScrollIndicator={false}>
           {
             PreferencesData.map((each, index) => {
               return (
                 <TouchableOpacity key={index} style={styles.eachContainer} onPress={() => this.onClickQuestion(index)}>
-                  <View style={styles.questionContainer}>
-                    <Text style={{ fontFamily: 'SFProText-Semibold', fontSize: RFPercentage(2), color: Colors.blackColor }}>{each.question}</Text>
-                  </View>
-                  <View style={styles.subqueryContainer}>
-                    <Text style={{ fontFamily: 'SFProText-Regular', fontSize: RFPercentage(2), color: Colors.passiveTxtColor }}>{each.subquery}</Text>
-                  </View>
-                  <View style={styles.answerContainer}>
-                    <Text style={{ fontFamily: 'SFProText-Bold', fontSize: RFPercentage(2), color: Colors.passiveTxtColor }}>Answer:</Text>
-                    <Text style={{ fontFamily: 'SFProText-Regular', fontSize: RFPercentage(2), color: Colors.passiveTxtColor }}> {each.options[each.answerIndex]}</Text>
-                  </View>
+                  <Text style={{ fontFamily: 'SFProText-Semibold', fontSize: RFPercentage(2), color: Colors.blackColor }}>{each.question}</Text>
+                  <Text style={{ fontFamily: 'SFProText-Regular', fontSize: RFPercentage(2), color: Colors.passiveTxtColor }}>{each.subquery}</Text>
+                  <Text style={{ fontFamily: 'SFProText-Bold', fontSize: RFPercentage(2), color: Colors.passiveTxtColor }}>Answer: {each.options[each.answerIndex]}</Text>
                 </TouchableOpacity>
               )
             })
@@ -158,10 +151,9 @@ export default class PreferenceScreen extends Component {
           containerStyle={{ backgroundColor: 'rgba(0, 0, 0, 0.5)' }}
           childrenWrapperStyle={styles.modal}
         >
-          <View style={styles.modalHeader}>            
-            <View style={{ width: '7%', height: '100%', justifyContent: 'center', alignItems: 'center' }}></View>
-            <View style={{ width: '86%', height: '100%', justifyContent: 'center', alignItems: 'center' }}>
-              {/* <Text style={{ fontFamily: 'SFProText-Semibold', fontSize: RFPercentage(2.2), color: Colors.whiteColor }}>ANSWER</Text> */}
+          <View style={styles.modalHeader}>
+            <View style={{ width: '3%', height: '100%', justifyContent: 'center', alignItems: 'center' }}></View>
+            <View style={{ width: '90%', height: '100%', justifyContent: 'center', alignItems: 'center' }}>              
               <Text style={{ fontFamily: 'SFProText-Semibold', fontSize: RFPercentage(2), color: Colors.whiteColor }}>
                 {PreferencesData[this.state.selectedPreferenceIndex].question}
               </Text>
@@ -175,11 +167,9 @@ export default class PreferenceScreen extends Component {
           </View>
 
           <KeyboardAvoidingView style={styles.modalBodyBack} behavior={Platform.OS == "ios" ? "padding" : "height"}>
-            <View style={styles.modalQuery}>
-              <Text style={{ fontFamily: 'SFProText-Semibold', fontSize: RFPercentage(2.2), color: Colors.whiteColor }}>
-                {PreferencesData[this.state.selectedPreferenceIndex].subquery}
-              </Text>
-            </View>
+            <Text style={{ fontFamily: 'SFProText-Semibold', fontSize: RFPercentage(2), color: Colors.whiteColor, marginBottom: normalize(10, 'height') }}>
+              {PreferencesData[this.state.selectedPreferenceIndex].subquery}
+            </Text>
             <View style={styles.modalBody}>
               <ScrollView
                 style={isOptionOverFlow ? { height: normalize(400, 'height') } : {}}
@@ -249,7 +239,7 @@ export default class PreferenceScreen extends Component {
                   <Button btnTxt='OK' btnStyle={{ width: width * 0.42, height: normalize(50, 'height'), color: 'blue' }}
                     onPress={() => {
                       if (this.state.inputValue != '') {
-                        PreferencesData[this.state.selectedPreferenceIndex].options[1] = this.state.inputValue;                        
+                        PreferencesData[this.state.selectedPreferenceIndex].options[1] = this.state.inputValue;
                         this.updatePreference(1);
                       }
                       this.setState({
@@ -283,48 +273,24 @@ const styles = StyleSheet.create({
   },
   guideContainer: {
     width: '100%',
-    height: '10%',
+    height: '12%',
     justifyContent: 'center',
     alignItems: 'center',
     borderColor: Colors.borderColor,
     borderTopWidth: normalize(0.5, 'height'),
     borderBottomWidth: normalize(0.5, 'height'),
-    marginTop: normalize(20, 'height'),    
+    marginTop: normalize(20, 'height'),
   },
   eachContainer: {
     width: '95%',
     height: normalize(120, 'height'),
-    justifyContent: 'center',
+    justifyContent: 'space-between',
     alignSelf: 'center',
-    borderColor: Colors.borderColor,
-    borderWidth: normalize(0.5, 'height'),
     marginBottom: normalize(10, 'height'),
-    borderWidth: 2
+    borderColor: Colors.borderColor,
+    borderWidth: normalize(2),
+    padding: normalize(15)
   },
-  questionContainer: {
-    width: '90%',
-    height: '27%',
-    justifyContent: 'center',
-    alignSelf: 'center',
-    //borderWidth: 1
-  },
-  subqueryContainer: {
-    width: '90%',
-    height: '27%',
-    flex: 0.8,
-    justifyContent: 'center',
-    alignSelf: 'center',
-    //borderWidth: 1
-  },
-  answerContainer: {
-    width: '90%',
-    height: '27%',
-    flexDirection: 'row',
-    alignItems: 'center',
-    alignSelf: 'center',
-    //borderWidth: 1
-  },
-
   modal: {
     backgroundColor: '#323643',
     width: width,
@@ -335,19 +301,10 @@ const styles = StyleSheet.create({
   },
   modalHeader: {
     width: '100%',
-    height: normalize(30, 'height'),
-    flexDirection: 'row',
+    height: normalize(50, 'height'),
+    flexDirection: 'row',    
+    alignSelf: 'center',
     marginTop: normalize(30, 'height'),
-    alignSelf: 'center',
-    //borderWidth: 1
-  },
-  modalQuery: {
-    width: '100%',
-    height: normalize(60, 'height'),
-    justifyContent: 'center',
-    //alignItems: 'center',
-    alignSelf: 'center',
-    marginBottom: normalize(10, 'height'),
     //borderWidth: 1
   },
   modalBodyBack: {

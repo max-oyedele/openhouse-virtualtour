@@ -243,7 +243,7 @@ export default class ResultListScreen extends Component {
           </View>
 
           <View style={styles.searchBoxContainer}>
-            <SearchBox boxStyle={{ width: width * 0.9, height: normalize(40, 'height'), backgroundColor: Colors.searchBackColor, borderColor: Colors.searchBackColor, btnColor: Colors.weakBlackColor }} onSearch={this.onSearch} />
+            <SearchBox boxStyle={{ width: width * 0.9, height: normalize(35, 'height'), backgroundColor: Colors.searchBackColor, borderColor: Colors.searchBackColor, btnColor: Colors.weakBlackColor }} onSearch={this.onSearch} />
           </View>
 
           <View style={styles.listContainer}>
@@ -414,17 +414,17 @@ const styles = StyleSheet.create({
   },
   conditionContainer: {
     width: '95%',
-    height: '40%',
+    height: '43%',
     justifyContent: 'center',
     alignItems: 'center',
-    marginTop: normalize(45, 'height'),
+    marginTop: normalize(40, 'height'),
     borderColor: Colors.borderColor,
     borderTopWidth: normalize(0.5),
     //borderWidth: 1
   },
   conditionInnerContainer: {
     width: '95%',
-    height: '70%',
+    height: '83%',
     flexDirection: 'row',
     //borderWidth: 1
   },

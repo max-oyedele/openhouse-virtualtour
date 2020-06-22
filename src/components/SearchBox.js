@@ -89,7 +89,7 @@ export default class SearchBox extends Component {
           <View
             style={[
               styles.autoCompleteContainer,
-              { height: data.length * 15 > 150 ? normalize(150, 'height') : normalize((data.length + 1) * 22, 'height') }
+              { height: data.length > 5 ? normalize(150, 'height') : data.length > 1 ? normalize((data.length) * 30, 'height') : normalize((data.length + 1) * 30, 'height') }
             ]}
           >
             <View style={{ width: '100%', height: '100%', backgroundColor: '#ffffff' }}>
@@ -128,6 +128,7 @@ const styles = StyleSheet.create({
     // borderWidth: 2
   },
   txtInput: {
+    fontSize: RFPercentage(2),
     paddingLeft: normalize(10),
     color: Colors.blackColor,
   },

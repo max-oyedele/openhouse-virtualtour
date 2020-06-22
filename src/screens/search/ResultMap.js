@@ -165,8 +165,8 @@ export default class ResultMapScreen extends Component {
     var param = {
       animated: true,
       index: index,
-      viewOffset: 50,
-      viewPosition: 0.5
+      viewOffset: 0,
+      viewPosition: 0
     }
     this.flatListRef.scrollToIndex(param);
   }
@@ -240,7 +240,7 @@ export default class ResultMapScreen extends Component {
                 showsHorizontalScrollIndicator={false}
                 data={this.state.resultData}
                 getItemLayout={(data, index) => (
-                  { length: normalize(335), offset: normalize(338) * index, index }
+                  { length: normalize(335), offset: normalize(335) * index, index }
                 )}
                 renderItem={({ item }) => <PropertyCard cardStyle={{ width: normalize(325), height: normalize(245, 'height'), marginTop: normalize(10, 'height'), marginRight: normalize(10) }} item={item} onPress={() => this.onPropertyPress(item.property_recordno)} />}
               />

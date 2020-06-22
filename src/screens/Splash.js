@@ -50,22 +50,22 @@ export default class SplashScreen extends Component {
 
   async componentDidMount() {   
 
-    let res = await getReviewGeoForApple();
-    //console.log('review for apple', res);
-    if(res){
-      if(res[0].under_review_by_apple){
-        LoginInfo.latitude = res[0].user_latitude;
-        LoginInfo.longitude = res[0].user_longitude;
-        RouteParam.deviceType = 'pad';
-        this.isLoggedInProc();
-      }
-      else{
-        this.initialGetLocation();
-      }
-    }    
+    //let res = await getReviewGeoForApple();
+    ////console.log('review for apple', res);
+    //if(res){
+    //  if(res[0].under_review_by_apple){
+    //    LoginInfo.latitude = res[0].user_latitude;
+    //    LoginInfo.longitude = res[0].user_longitude;
+    //    RouteParam.deviceType = 'pad';
+    //    this.isLoggedInProc();
+    //  }
+    //  else{
+    //    this.initialGetLocation();
+    //  }
+    //}    
 
     // skip
-    //this.submit();    
+    this.submit();    
   }
 
   keyboardManager = () => {
@@ -153,18 +153,18 @@ export default class SplashScreen extends Component {
 
   submit = async () => {
     // skip
-    // LoginInfo.uniqueid = '123';
-    // LoginInfo.user_account = '23';
-    // LoginInfo.fullname = 'John Smith';
-    // LoginInfo.email = 'kelloggsx@gmail.com';
-    // LoginInfo.telephone = '+13059007270';
-    // LoginInfo.photourl = '';
-    // LoginInfo.providerid = 'apple';
-    // LoginInfo.email_verified = true;
-    // LoginInfo.phone_verified = 1;
-    // LoginInfo.latitude = 40.776611;
-    // LoginInfo.longitude = -73.345718;
-    // LoginInfo.user_assigned_agent = 0;
+     LoginInfo.uniqueid = '1234567890';
+     LoginInfo.user_account = '32';
+     LoginInfo.fullname = 'tomas andersson';
+     LoginInfo.email = 'eastsea1020n@gmail.com';
+     LoginInfo.telephone = '+12125551212';
+     LoginInfo.photourl = '';
+     LoginInfo.providerid = 'apple';
+     LoginInfo.email_verified = true;
+     LoginInfo.phone_verified = 1;
+     LoginInfo.latitude = 40.776611;
+     LoginInfo.longitude = -73.345718;
+     LoginInfo.user_assigned_agent = 0;
     // ///////////////
 
     let userAssignedAgent = await AsyncStorage.getItem('UserAssignedAgent');    
@@ -193,7 +193,7 @@ export default class SplashScreen extends Component {
         LoginInfo.user_assigned_agent = userAssignedAgent == null ? res[0].user_assigned_agent : parseInt(userAssignedAgent);
 
         if(LoginInfo.user_pick_an_agent && userAssignedAgent == null){
-          setTimeout(() => { this.props.navigation.navigate('Agent') }, 2000);
+          setTimeout(() => { this.props.navigation.navigate('Agent') }, 2000);          
         }
         else{
           LoginInfo.user_assigned_agent = res[0].user_assigned_agent;

@@ -98,17 +98,16 @@ export default class DashboardScreen extends Component {
   }
 
   getFeatureProperty = () => {
-    var featurePrpertyParam = {
+    var featurePropertyParam = {
       action: 'feature_properties',
       user_latitude: LoginInfo.latitude,
       user_longitude: LoginInfo.longitude,
       user_id: LoginInfo.uniqueid,
       listingtype: SearchBy.listingType
     };
-
+    //console.log('featurePropertyParam', featurePropertyParam);
     this.setState({ spinner: true });
-
-    getContentByAction(featurePrpertyParam)
+    getContentByAction(featurePropertyParam)
       .then((res) => {
         //console.log('feature property', res)
         var sortedRes = res.sort((a, b) => { return a.properties_displayorder - b.properties_displayorder })
@@ -318,10 +317,10 @@ const styles = StyleSheet.create({
     width: '95%',
     height: normalize(156, 'height'),
     alignSelf: 'center',
-    marginTop: normalize(20, 'height'),
+    marginTop: normalize(25, 'height'),
     //borderWidth: 2
   },
-  browseTxtContainer: {
+  browseTxtContainer:{
     height: '15%',
     justifyContent: 'center',
     paddingLeft: 5,
