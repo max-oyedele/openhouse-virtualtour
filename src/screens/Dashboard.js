@@ -140,12 +140,14 @@ export default class DashboardScreen extends Component {
       })
   }
 
-  onCategoryPress = (categoryId) => {
+  onCategoryPress = (categoryId, categoryName) => {    
     RouteParam.isChanged = true;
     RouteParam.searchKind = 'searchByCategory';
     SearchBy.propertyType = categoryId;
-    SearchBy.categoryForHeader = '';
+    SearchBy.categoryName = categoryName;
     SearchBy.listingType = this.state.listingType;
+    SearchBy.bedrooms = 0;
+    SearchBy.bathrooms = 0;
 
     this.props.navigation.navigate('SearchStack');
   }
@@ -243,7 +245,7 @@ export default class DashboardScreen extends Component {
                   horizontal={true}
                   showsHorizontalScrollIndicator={false}
                   data={this.state.categoryData}
-                  renderItem={({ item, index }) => <BrowseCard item={item} onPress={() => this.onCategoryPress(item.properties_category_id)} />}
+                  renderItem={({ item, index }) => <BrowseCard item={item} onPress={() => this.onCategoryPress(item.properties_category_id, item.properties_category_short_desc)} />}
                   keyExtractor={item => item.properties_category_id}
                 />
               </View>

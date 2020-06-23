@@ -71,6 +71,7 @@ export default class PropertyTypeScreen extends Component {
         if (index != selectedIndex) propertyTypeCheckedList[index] = 0;
       })
       SearchBy.propertyType = PropertyTypeData[selectedIndex].properties_category_id;
+      SearchBy.categoryName = PropertyTypeData[selectedIndex].properties_category_short_desc;
     }
 
     if (!selectedValue) {
@@ -81,6 +82,7 @@ export default class PropertyTypeScreen extends Component {
       if (nonSelectedCount == propertyTypeCheckedList.length) {
         propertyTypeCheckedList[0] = 1;
         SearchBy.propertyType = PropertyTypeData[0].properties_category_id;
+        SearchBy.categoryName = PropertyTypeData[0].properties_category_short_desc;
       }
     }    
 

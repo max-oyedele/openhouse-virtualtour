@@ -61,37 +61,22 @@ export default class ResultListScreen extends Component {
   }
 
   componentDidMount() {
-
+    if (RouteParam.searchKind === 'searchByQuery') {
+      if (SearchBy.propertyType == 6) {
+        SearchBy.listingType = 'R';
+      }
+      this.getSearchByQuery();
+    }
+    else if (RouteParam.searchKind === 'searchByCategory') {
+      this.getSearchByCategory();
+    }
   }
 
   componentDidFocus() {
     if (!RouteParam.isChanged) return;
     RouteParam.isChanged = false;
 
-    let numberOfRooms = this.state.numberOfRooms;
-    numberOfRooms[0].count = SearchBy.bedrooms;
-    numberOfRooms[1].count = SearchBy.bathrooms;
-    this.setState({
-      numberOfRooms: numberOfRooms,
-      refresh: !this.state.refresh
-    });
-
-    if (RouteParam.searchKind === 'searchByQuery') {
-      if (SearchBy.propertyType == 6) {
-        SearchBy.listingType = 'R';
-      }
-      this.setState({ headerTitle: SearchBy.query })
-      this.getSearchByQuery();
-    }
-    else if (RouteParam.searchKind === 'searchByCategory') {
-      if (SearchBy.categoryForHeader != '') {
-        this.setState({ headerTitle: SearchBy.categoryForHeader })
-      }
-      else {
-        this.setState({ headerTitle: this.getPropertyTypeFromId(SearchBy.propertyType).properties_category_short_desc });
-      }
-      this.getSearchByCategory();
-    }
+    this.updateScreen();
   }
 
   componentWillUnmount() {
@@ -117,6 +102,7 @@ export default class ResultListScreen extends Component {
       ascdesc: SearchBy.sortOrder
     };
     this.setState({ spinner: true, resultData: [] });
+    RouteParam.mapResultData = [];
 
     getContentByAction(searchParam)
       .then((res) => {
@@ -147,6 +133,7 @@ export default class ResultListScreen extends Component {
       propertytype: SearchBy.propertyType,
     };
     this.setState({ spinner: true, resultData: [] });
+    RouteParam.mapResultData = [];
 
     getContentByAction(searchParam)
       .then((res) => {
@@ -163,13 +150,32 @@ export default class ResultListScreen extends Component {
         console.log('get search data error', err);
         this.setState({ spinner: false });
       })
-  }
+  } 
 
-  getPropertyTypeFromId = (categoryId) => {
-    var propertyType = PropertyTypeData.filter((each) => each.properties_category_id == categoryId);
-    var retValue = propertyType[0];
-    retValue.properties_category_short_desc = retValue.properties_category_short_desc ? retValue.properties_category_short_desc : 'No title';
-    return retValue;
+  updateScreen = () => {
+    let numberOfRooms = this.state.numberOfRooms;
+    numberOfRooms[0].count = SearchBy.bedrooms;
+    numberOfRooms[1].count = SearchBy.bathrooms;
+    this.setState({
+      numberOfRooms: numberOfRooms,
+    });
+
+    if (RouteParam.searchKind === 'searchByQuery') {
+      this.setState({ headerTitle: SearchBy.query })
+    }
+    else if (RouteParam.searchKind === 'searchByCategory') {
+      this.setState({ headerTitle: SearchBy.categoryName })
+    }
+
+    RouteParam.searchKind = 'searchByQuery';    
+    if (SearchBy.propertyType == 6) {
+      SearchBy.listingType = 'R';
+    }
+    else{
+      SearchBy.listingType = 'S';
+    }
+
+    this.getSearchByQuery();
   }
 
   onPropertyPress = (propertyRecordNo) => {
@@ -178,14 +184,14 @@ export default class ResultListScreen extends Component {
   }
 
   onSearch = (query) => {
-    RouteParam.searchKind = 'searchByQuery';
-    SearchBy.query = query;    
-    this.getSearchByQuery();
+    //if (query == '') return;
+    SearchBy.query = query;
+    this.updateScreen();    
   }
 
   onApply = () => {
-    this.setState({ visibleNumberOfRooms: false })
-    this.getSearchByQuery();
+    this.setState({ visibleNumberOfRooms: false });
+    this.updateScreen();
   }
 
   render() {
@@ -204,7 +210,7 @@ export default class ResultListScreen extends Component {
                   <Image style={{ width: '100%', height: '100%' }} source={Images.iconFilter} resizeMode='contain' />
                 </TouchableOpacity>
               </View>
-              
+
               <View style={styles.conditionContainer}>
                 <View style={styles.conditionInnerContainer}>
                   <TouchableOpacity style={{ width: '50%', height: '100%' }} onPress={() => this.props.navigation.navigate('PropertyType')}>
@@ -212,7 +218,7 @@ export default class ResultListScreen extends Component {
                       <Text style={{ fontFamily: 'SFProText-Regular', fontSize: RFPercentage(1.8), color: Colors.passiveTxtColor }}>PROPERTY TYPE</Text>
                     </View>
                     <View style={{ width: '100%', height: '50%', justifyContent: 'center' }}>
-                      <Text style={{ fontFamily: 'SFProText-Regular', fontSize: RFPercentage(2.2), color: Colors.blackColor }}>{this.getPropertyTypeFromId(SearchBy.propertyType).properties_category_short_desc}</Text>
+                      <Text style={{ fontFamily: 'SFProText-Regular', fontSize: RFPercentage(2.2), color: Colors.blackColor }}>{SearchBy.categoryName}</Text>
                     </View>
                   </TouchableOpacity>
 
@@ -305,7 +311,7 @@ export default class ResultListScreen extends Component {
                         <View style={{ width: '20%', height: '100%', justifyContent: 'center', alignItems: 'center' }}>
                           <TouchableOpacity style={{ width: '70%', height: '50%' }} onPress={() => {
                             let numberOfRooms = this.state.numberOfRooms;
-                            numberOfRooms[index].count = each.count > 1 ? each.count - 1 : 1;
+                            numberOfRooms[index].count = each.count > 0 ? each.count - 1 : 0;
                             this.setState({ numberOfRooms: numberOfRooms });
 
                             if (index == 0) SearchBy.bedrooms = numberOfRooms[index].count;

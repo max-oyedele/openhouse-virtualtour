@@ -41,7 +41,6 @@ export default class SplashScreen extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      logoTxt: 'In-Person & Virtual \n Digital Sign-in Platform',
       geoSettingVisible: false
     }
 
@@ -65,7 +64,7 @@ export default class SplashScreen extends Component {
     //}    
 
     // skip
-    this.submit();    
+    this.submit();        
   }
 
   keyboardManager = () => {
@@ -223,7 +222,11 @@ export default class SplashScreen extends Component {
                 </View>
                 <View style={{ width: '100%', height: '5%', /*borderWidth: 1*/ }}></View>
                 <View style={styles.logoTxtContainer}>
-                  <Text style={styles.logoTxt}>{this.state.logoTxt}</Text>
+                  <Text style={styles.logoTxt}>
+                    Property Search, Virtual Tour 
+                    {'\n'}
+                    Live Open House Stream
+                  </Text>
                 </View>
                 <View style={{ width: '100%', height: '7%', /*borderWidth: 1*/ }}></View>
               </View>
@@ -321,17 +324,18 @@ const styles = StyleSheet.create({
     //borderWidth: 1
   },
   logoTxtContainer: {
-    width: '88%',
-    height: '11%',
+    // width: '88%',
+    // height: '11%',
     justifyContent: 'center',
     alignItems: 'center',
     //borderWidth: 1
   },
   logoTxt: {
     fontFamily: 'SFProText-Semibold',
-    fontSize: RFPercentage(2),
+    fontSize: RFPercentage(2.3),
     color: Colors.passiveTxtColor,
-    textAlign: 'center'
+    textAlign: 'center',
+    //borderWidth: 1
   },
 
   /////////////////////////////////////////////////

@@ -44,6 +44,7 @@ export default class ResultMapScreen extends Component {
     this.state = {
       refresh: false,
       visibleModal: false,
+      spinner: false,
       resultData: [],
       markerData: [],
       markerIdentifierData: [],
@@ -85,23 +86,19 @@ export default class ResultMapScreen extends Component {
   }
 
   componentDidMount() {
+  }
+  
+  componentDidFocus() {
     RouteParam.isChanged = false;
-
+  
     this.setState({ resultData: RouteParam.mapResultData });
     this.getMarkerData(RouteParam.mapResultData);
-  }
 
-  componentDidFocus() {
     if (RouteParam.searchKind === 'searchByQuery') {
       this.setState({ headerTitle: SearchBy.query })
     }
     else if (RouteParam.searchKind === 'searchByCategory') {
-      if (SearchBy.categoryForHeader) {
-        this.setState({ headerTitle: SearchBy.categoryForHeader })
-      }
-      else {
-        this.setState({ headerTitle: this.getPropertyTypeFromId(SearchBy.propertyType).properties_category_short_desc });
-      }
+      this.setState({ headerTitle: SearchBy.categoryName })
     }
   }
 
@@ -128,14 +125,7 @@ export default class ResultMapScreen extends Component {
       markerData: markerData,
       markerIdentifierData: markerIdentifierData
     });
-  }
-
-  getPropertyTypeFromId = (categoryId) => {
-    var propertyType = PropertyTypeData.filter((each) => each.properties_category_id == categoryId);
-    var retValue = propertyType[0];
-    retValue.properties_category_short_desc = retValue.properties_category_short_desc ? retValue.properties_category_short_desc : 'No title';
-    return retValue;
-  }
+  } 
 
   onPropertyPress = (propertyRecordNo) => {
     RouteParam.propertyRecordNo = propertyRecordNo;

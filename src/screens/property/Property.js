@@ -340,8 +340,7 @@ export default class PropertyScreen extends Component {
             <CallCard              
               userName={this.state.agentCard.agent_fullname}
               userRole={this.state.agentCard.agent_title}
-              //userCompany={this.state.agentCard.realtor_company}
-              userCompany={'Keller Williams Points North kordff sdf  wa AAA sdf ADfff ADfsdfdfsdf  asdfsdf   sdfweff  sdfwefsdf  sdf sadfwef wef d weffsdfs wewefsdf ewerdsf sdfwef df sdf'}
+              userCompany={this.state.agentCard.realtor_company}              
               userImg={{ uri: this.state.agentCard.agent_photourl }}
               onCall={this.onCall}
             />

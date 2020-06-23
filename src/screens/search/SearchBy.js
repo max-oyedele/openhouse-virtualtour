@@ -207,7 +207,7 @@ export default class SearchByScreen extends Component {
                     <View style={{ width: '20%', height: '100%', justifyContent: 'center', alignItems: 'center' }}>
                       <TouchableOpacity style={{ width: '70%', height: '50%' }} onPress={() => {
                         let numberOfRooms = this.state.numberOfRooms;
-                        numberOfRooms[index].count = each.count > 1 ? each.count - 1 : 1;
+                        numberOfRooms[index].count = each.count > 0 ? each.count - 1 : 0;
                         this.setState({ numberOfRooms: numberOfRooms });
                       }}>
                         <Image style={{ width: '100%', height: '100%' }} source={Images.iconMinus} resizeMode='contain' />

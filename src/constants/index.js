@@ -26,7 +26,7 @@ export const SearchWordData = [];
 
 export const SearchBy = {
   query: '',
-  categoryForHeader: '', //not used really for search
+  categoryName: '', //not used really for search
   listingType: 'S',
   propertyType: 1,
   priceFrom: 1,
