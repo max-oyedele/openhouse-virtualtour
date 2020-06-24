@@ -144,8 +144,7 @@ export default class DashboardScreen extends Component {
     RouteParam.isChanged = true;
     RouteParam.searchKind = 'searchByCategory';
     SearchBy.propertyType = categoryId;
-    SearchBy.categoryName = categoryName;
-    SearchBy.listingType = this.state.listingType;
+    SearchBy.categoryName = categoryName;    
     SearchBy.bedrooms = 0;
     SearchBy.bathrooms = 0;
 
@@ -172,9 +171,9 @@ export default class DashboardScreen extends Component {
 
   onSearch = (query) => {
     RouteParam.searchKind = 'searchByQuery';
-    SearchBy.query = query;
-    SearchBy.propertyType = 1;
-    SearchBy.listingType = this.state.listingType;
+    SearchBy.query = query;    
+    
+    SearchBy.listingType = SearchBy.propertyType == 6 ? 'R' : 'S';
     if (query) {
       RouteParam.isChanged = true;
       this.props.navigation.navigate('SearchStack');

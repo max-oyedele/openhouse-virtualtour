@@ -96,6 +96,7 @@ export default class PropertyTypeScreen extends Component {
       if(each != this.state.oldCheckedList[index]) isChanged = true;              
     });    
     RouteParam.isChanged = isChanged;
+    RouteParam.searchKind = 'searchByQuery';
   }
 
   render() {

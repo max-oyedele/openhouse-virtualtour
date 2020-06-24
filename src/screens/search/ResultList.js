@@ -166,8 +166,7 @@ export default class ResultListScreen extends Component {
     else if (RouteParam.searchKind === 'searchByCategory') {
       this.setState({ headerTitle: SearchBy.categoryName })
     }
-
-    RouteParam.searchKind = 'searchByQuery';    
+    
     if (SearchBy.propertyType == 6) {
       SearchBy.listingType = 'R';
     }
@@ -175,7 +174,9 @@ export default class ResultListScreen extends Component {
       SearchBy.listingType = 'S';
     }
 
-    this.getSearchByQuery();
+    if(RouteParam.searchKind === 'searchByQuery'){
+      this.getSearchByQuery();
+    }
   }
 
   onPropertyPress = (propertyRecordNo) => {
@@ -185,12 +186,14 @@ export default class ResultListScreen extends Component {
 
   onSearch = (query) => {
     //if (query == '') return;
+    RouteParam.searchKind = 'searchByQuery';
     SearchBy.query = query;
     this.updateScreen();    
   }
 
   onApply = () => {
     this.setState({ visibleNumberOfRooms: false });
+    RouteParam.searchKind = 'searchByQuery';
     this.updateScreen();
   }
 

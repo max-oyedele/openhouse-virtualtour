@@ -26,9 +26,9 @@ export const SearchWordData = [];
 
 export const SearchBy = {
   query: '',
-  categoryName: '', //not used really for search
-  listingType: 'S',
   propertyType: 1,
+  categoryName: 'Single Family', //not used really for search
+  listingType: 'S',
   priceFrom: 1,
   priceTo: 10000000,
   bedrooms: 1,

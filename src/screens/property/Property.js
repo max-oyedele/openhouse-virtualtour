@@ -80,7 +80,7 @@ export default class PropertyScreen extends Component {
           property: res[0],
           isFavorite: res[0].property_isFavorite,
           spinner: false
-        });        
+        });
       })
       .catch((err) => {
         console.log('get feature property error', err);
@@ -125,12 +125,12 @@ export default class PropertyScreen extends Component {
       user_id: LoginInfo.uniqueid,
       user_assigned_agent: LoginInfo.user_assigned_agent,
       property_recordno: RouteParam.propertyRecordNo,
-    };    
+    };
 
     getContentByAction(cardParam)
       .then((res) => {
-        if(res.length > 0){
-          //console.log('agentCard', res[0]);
+        if (res.length > 0) {
+          //console.log('agentCard', res[0]);          
           this.setState({ agentCard: res[0] });
         }
       })
@@ -172,7 +172,7 @@ export default class PropertyScreen extends Component {
 
   onOpenVirtual = () => {
     RouteParam.agent.fullname = this.state.agentCard.agent_fullname;
-    RouteParam.agent.title = this.state.agentCard.agent_title;    
+    RouteParam.agent.title = this.state.agentCard.agent_title;
     RouteParam.agent.img = this.state.agentCard.agent_photourl;
     // RouteParam.agent.activeListing = this.state.agentCard.activeListing;
     // RouteParam.agent.sold = this.state.agentCard.sold;
@@ -182,22 +182,22 @@ export default class PropertyScreen extends Component {
 
   onCall = () => {
     let phoneNumber = this.state.agentCard.agent_telephone;
-    
+
     phoneNumber = phoneNumber.replace("(", "");
     phoneNumber = phoneNumber.replace(")", "");
     phoneNumber = phoneNumber.replace("-", "");
     phoneNumber = phoneNumber.replace(/\s+/g, '');
     phoneNumber = '1' + phoneNumber;
-    
+
     RNImmediatePhoneCall.immediatePhoneCall(phoneNumber);
   }
 
-  renderViewMore(onPress) {    
+  renderViewMore(onPress) {
     return (
       <Text style={{ fontSize: RFPercentage(1.7), color: Colors.blueColor, alignSelf: 'flex-end', marginTop: normalize(5, 'height') }} onPress={onPress}>View more</Text>
     )
   }
-  renderViewLess(onPress) {    
+  renderViewLess(onPress) {
     return (
       <Text style={{ fontSize: RFPercentage(1.7), color: Colors.blueColor, alignSelf: 'flex-end', marginTop: normalize(5, 'height') }} onPress={onPress}>View less</Text>
     )
@@ -334,21 +334,21 @@ export default class PropertyScreen extends Component {
           <Text style={{ fontFamily: 'SFProText-Regular', fontSize: RFPercentage(1.7), color: Colors.passiveTxtColor, marginTop: normalize(7, 'height') }}>{this.state.property.property_city}, {this.state.property.property_state} {this.state.property.property_recordno}</Text>
         </View>
 
-        <View style={styles.callCardContainer}>
-          {
-            this.state.agentCard != '' &&
-            <CallCard              
+        {
+          LoginInfo.user_assigned_agent != 0 && this.state.agentCard != '' &&
+          <View style={styles.callCardContainer}>
+            <CallCard
               userName={this.state.agentCard.agent_fullname}
               userRole={this.state.agentCard.agent_title}
-              userCompany={this.state.agentCard.realtor_company}              
+              userCompany={this.state.agentCard.realtor_company}
               userImg={{ uri: this.state.agentCard.agent_photourl }}
               onCall={this.onCall}
             />
-          }
-        </View>
+          </View>
+        }
 
         <View style={styles.photoContainer}>
-          <Text style={{ fontFamily: 'SFProText-Semibold', fontSize: RFPercentage(2), color: Colors.blackColor}}>PHOTOS</Text>
+          <Text style={{ fontFamily: 'SFProText-Semibold', fontSize: RFPercentage(2), color: Colors.blackColor }}>PHOTOS</Text>
           <FlatList
             keyExtractor={item => item.property_photourl}
             data={this.state.propertyPhotoData}

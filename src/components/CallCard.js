@@ -78,7 +78,7 @@ export default class CallCard extends Component {
 CallCard.propTypes = {  
   userName: PropTypes.string.isRequired,
   userRole: PropTypes.string.isRequired,
-  userCompany: PropTypes.string.isRequired,
+  userCompany: PropTypes.string,
   userImg: PropTypes.object.isRequired, 
   onCall: PropTypes.func.isRequired
 };
