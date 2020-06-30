@@ -851,7 +851,11 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.ecaptureinc.openhouseplus;
 				PRODUCT_NAME = open;
+<<<<<<< HEAD
 				PROVISIONING_PROFILE_SPECIFIER = "";
+=======
+				PROVISIONING_PROFILE_SPECIFIER = likewagonOpenHousePlusDevSierra;
+>>>>>>> eeacf38204feb84eecb5e9884bad9a109b9be33c
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
@@ -880,7 +884,11 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.ecaptureinc.openhouseplus;
 				PRODUCT_NAME = open;
+<<<<<<< HEAD
 				PROVISIONING_PROFILE_SPECIFIER = "";
+=======
+				PROVISIONING_PROFILE_SPECIFIER = likewagonOpenHousePlusDevSierra;
+>>>>>>> eeacf38204feb84eecb5e9884bad9a109b9be33c
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
