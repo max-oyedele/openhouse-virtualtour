@@ -850,7 +850,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.openhousemarketingsystem.open;
+				PRODUCT_BUNDLE_IDENTIFIER = com.ecaptureinc.openhouseplus;
 				PRODUCT_NAME = open;
 				PROVISIONING_PROFILE_SPECIFIER = LikeWagonOpenDevelopment;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -879,7 +879,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.openhousemarketingsystem.open;
+				PRODUCT_BUNDLE_IDENTIFIER = com.ecaptureinc.openhouseplus;
 				PRODUCT_NAME = open;
 				PROVISIONING_PROFILE_SPECIFIER = LikeWagonOpenDevelopment;
 				SWIFT_VERSION = 5.0;

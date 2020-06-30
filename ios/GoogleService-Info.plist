@@ -3,9 +3,9 @@
 <plist version="1.0">
 <dict>
 	<key>CLIENT_ID</key>
-	<string>1006237194994-6l0vqo9al9d1jhjbonh6hsgbsnv0f9pn.apps.googleusercontent.com</string>
+	<string>1006237194994-vs1quk5kkjupbtifhtp1fnq28494est2.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.1006237194994-6l0vqo9al9d1jhjbonh6hsgbsnv0f9pn</string>
+	<string>com.googleusercontent.apps.1006237194994-vs1quk5kkjupbtifhtp1fnq28494est2</string>
 	<key>API_KEY</key>
 	<string>AIzaSyDtWfisE1asFGtcCWXglIKtREs_bH3-QuI</string>
 	<key>GCM_SENDER_ID</key>
@@ -13,7 +13,7 @@
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>com.openhousemarketingsystem.open</string>
+	<string>com.ecaptureinc.openhouseplus</string>
 	<key>PROJECT_ID</key>
 	<string>open-6eecb</string>
 	<key>STORAGE_BUCKET</key>
@@ -29,7 +29,7 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:1006237194994:ios:e45673ac04425952450e6b</string>
+	<string>1:1006237194994:ios:b341e35c9db07d97450e6b</string>
 	<key>DATABASE_URL</key>
 	<string>https://open-6eecb.firebaseio.com</string>
 </dict>
