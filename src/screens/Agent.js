@@ -18,6 +18,9 @@ import normalize from 'react-native-normalize';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import { RFPercentage, RFValue } from "react-native-responsive-fontsize";
 
+import AsyncStorage from "@react-native-community/async-storage";
+import messaging from '@react-native-firebase/messaging';
+
 import {
   BrowseCard,
   Button,
@@ -32,7 +35,6 @@ import {
 } from '@components';
 import { Colors, Images, LoginInfo, agentData } from '@constants';
 import { getContentByAction, postData } from '../api/rest';
-import AsyncStorage from "@react-native-community/async-storage";
 
 export default class AgentScreen extends Component {
   constructor(props) {
@@ -46,6 +48,20 @@ export default class AgentScreen extends Component {
 
   componentDidMount() {
     this.getAgent();
+
+    messaging().onMessage(async remoteMessage => {
+      Alert.alert('A new FCM message arrived!', JSON.stringify(remoteMessage));
+    });    
+    messaging().setBackgroundMessageHandler(async remoteMessage => {
+      console.log('Message handled in the background!', remoteMessage);
+    });
+    
+    messaging()
+    .getToken()
+    .then(token => {
+      console.log('my token', token);
+    });
+    
   }
 
   getAgent = () => {
@@ -56,11 +72,11 @@ export default class AgentScreen extends Component {
       user_id: LoginInfo.uniqueid,
       user_email: LoginInfo.email
     };
-    console.log('agent Param', agentParam);
+    //console.log('agent Param', agentParam);
     getContentByAction(agentParam)
       .then((res) => {
         if (res) {
-          console.log('agent data', res);
+          //console.log('agent data', res);
           this.setState({
             agentData: res,
           });
