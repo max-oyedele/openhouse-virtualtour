@@ -31,6 +31,7 @@ static void InitializeFlipper(UIApplication *application) {
   if([FIRApp defaultApp] == nil){
     [FIRApp configure];
   }
+
 #if DEBUG
   InitializeFlipper(application);
 #endif

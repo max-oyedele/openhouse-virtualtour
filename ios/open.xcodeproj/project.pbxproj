@@ -852,7 +852,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.ecaptureinc.openhouseplus;
 				PRODUCT_NAME = open;
-				PROVISIONING_PROFILE_SPECIFIER = LikeWagonOpenDevelopment;
+				PROVISIONING_PROFILE_SPECIFIER = likewagonOpenHousePlusDevSierra;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
@@ -881,7 +881,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.ecaptureinc.openhouseplus;
 				PRODUCT_NAME = open;
-				PROVISIONING_PROFILE_SPECIFIER = LikeWagonOpenDevelopment;
+				PROVISIONING_PROFILE_SPECIFIER = likewagonOpenHousePlusDevSierra;
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
