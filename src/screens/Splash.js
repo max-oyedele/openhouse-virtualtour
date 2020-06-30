@@ -20,6 +20,7 @@ import { RFPercentage, RFValue } from "react-native-responsive-fontsize";
 import GetLocation from 'react-native-get-location';
 import AsyncStorage from '@react-native-community/async-storage';
 import KeyboardManager from 'react-native-keyboard-manager';
+import messaging from '@react-native-firebase/messaging';
 
 import {
   BrowseCard,
@@ -47,7 +48,7 @@ export default class SplashScreen extends Component {
     this.keyboardManager();
   }
 
-  async componentDidMount() {   
+  async componentDidMount() {
 
     //let res = await getReviewGeoForApple();
     ////console.log('review for apple', res);
@@ -61,10 +62,24 @@ export default class SplashScreen extends Component {
     //  else{
     //    this.initialGetLocation();
     //  }
-    //}    
+    //}
 
+    this.requestUserMessagingPermission();
+    
     // skip
-    this.submit();        
+    this.submit();
+  }
+
+  async requestUserMessagingPermission() {
+    const authStatus = await messaging().requestPermission();
+    const enabled = authStatus === messaging.AuthorizationStatus.AUTHORIZED || authStatus === messaging.AuthorizationStatus.PROVISIONAL;
+
+    if (enabled) {
+      console.log('Authorization status:', authStatus);
+    }
+    else{
+      console.log('Authorization status: disabled')
+    }
   }
 
   keyboardManager = () => {
@@ -113,7 +128,7 @@ export default class SplashScreen extends Component {
       .then(location => {
         LoginInfo.latitude = location.latitude;
         LoginInfo.longitude = location.longitude;
-                
+
         this.isLoggedInProc();
       })
       .catch(ex => {
@@ -121,7 +136,7 @@ export default class SplashScreen extends Component {
       });
   }
 
-  isLoggedInProc = () => {  
+  isLoggedInProc = () => {
     AsyncStorage.getItem('LoginInfo')
       .then(async (loginInfo) => {
         if (loginInfo) {
@@ -136,9 +151,9 @@ export default class SplashScreen extends Component {
           LoginInfo.email_verified = info.email_verified;
           LoginInfo.phone_verified = info.phone_verified;
           LoginInfo.user_account = info.user_account;
-          LoginInfo.user_pick_an_agent = info.user_pick_an_agent;          
+          LoginInfo.user_pick_an_agent = info.user_pick_an_agent;
 
-          this.submit();          
+          this.submit();
         }
         else {
           setTimeout(() => { this.props.navigation.navigate('Auth') }, 2000);
@@ -152,22 +167,22 @@ export default class SplashScreen extends Component {
 
   submit = async () => {
     // skip
-     LoginInfo.uniqueid = '1234567890';
-     LoginInfo.user_account = '32';
-     LoginInfo.fullname = 'tomas andersson';
-     LoginInfo.email = 'eastsea1020n@gmail.com';
-     LoginInfo.telephone = '+12125551212';
-     LoginInfo.photourl = '';
-     LoginInfo.providerid = 'apple';
-     LoginInfo.email_verified = true;
-     LoginInfo.phone_verified = 1;
-     LoginInfo.latitude = 40.776611;
-     LoginInfo.longitude = -73.345718;
-     LoginInfo.user_assigned_agent = 0;
+    LoginInfo.uniqueid = '1234567890';
+    LoginInfo.user_account = '32';
+    LoginInfo.fullname = 'tomas andersson';
+    LoginInfo.email = 'eastsea1020n@gmail.com';
+    LoginInfo.telephone = '+12125551212';
+    LoginInfo.photourl = '';
+    LoginInfo.providerid = 'apple';
+    LoginInfo.email_verified = true;
+    LoginInfo.phone_verified = 1;
+    LoginInfo.latitude = 40.776611;
+    LoginInfo.longitude = -73.345718;
+    LoginInfo.user_assigned_agent = 0;
     // ///////////////
 
-    let userAssignedAgent = await AsyncStorage.getItem('UserAssignedAgent');    
-    
+    let userAssignedAgent = await AsyncStorage.getItem('UserAssignedAgent');
+
     let bodyFormData = new FormData();
     bodyFormData.append('action', 'newaccount');
     bodyFormData.append('uniqueid', LoginInfo.uniqueid);
@@ -191,10 +206,10 @@ export default class SplashScreen extends Component {
         LoginInfo.user_pick_an_agent = res[0].user_pick_an_agent;
         LoginInfo.user_assigned_agent = userAssignedAgent == null ? res[0].user_assigned_agent : parseInt(userAssignedAgent);
 
-        if(LoginInfo.user_pick_an_agent && userAssignedAgent == null){
-          setTimeout(() => { this.props.navigation.navigate('Agent') }, 2000);          
+        if (LoginInfo.user_pick_an_agent && userAssignedAgent == null) {
+          setTimeout(() => { this.props.navigation.navigate('Agent') }, 2000);
         }
-        else{
+        else {
           LoginInfo.user_assigned_agent = res[0].user_assigned_agent;
           setTimeout(() => { this.props.navigation.navigate('Main') }, 2000);
         }
@@ -223,7 +238,7 @@ export default class SplashScreen extends Component {
                 <View style={{ width: '100%', height: '5%', /*borderWidth: 1*/ }}></View>
                 <View style={styles.logoTxtContainer}>
                   <Text style={styles.logoTxt}>
-                    Property Search, Virtual Tour 
+                    Property Search, Virtual Tour
                     {'\n'}
                     Live Open House Stream
                   </Text>
@@ -254,7 +269,7 @@ export default class SplashScreen extends Component {
                   <View style={styles.btnContainer}>
                     <TouchableOpacity onPress={() => this._requestLocation()}>
                       <Text style={{ fontFamily: 'SFProText-Bold', fontSize: RFPercentage(1.7), color: Colors.blueColor, textAlign: 'center' }}>Allow Geo Location / Go To Settings</Text>
-                    </TouchableOpacity>                    
+                    </TouchableOpacity>
                   </View>
                 </View>
               </View>
