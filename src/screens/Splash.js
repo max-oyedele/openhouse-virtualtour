@@ -20,7 +20,6 @@ import { RFPercentage, RFValue } from "react-native-responsive-fontsize";
 import GetLocation from 'react-native-get-location';
 import AsyncStorage from '@react-native-community/async-storage';
 import KeyboardManager from 'react-native-keyboard-manager';
-import messaging from '@react-native-firebase/messaging';
 
 import {
   BrowseCard,
@@ -37,6 +36,14 @@ import { Colors, Images, LoginInfo } from '@constants';
 
 import { postData, getReviewGeoForApple } from '../api/rest';
 import { RouteParam } from "../constants";
+
+import messaging from '@react-native-firebase/messaging';
+messaging().onMessage(async remoteMessage => {
+  alert('A new FCM message arrived!', JSON.stringify(remoteMessage));
+});
+messaging().setBackgroundMessageHandler(async remoteMessage => {
+  console.log('Message handled in the background!', remoteMessage);
+});
 
 export default class SplashScreen extends Component {
   constructor(props) {
@@ -65,9 +72,6 @@ export default class SplashScreen extends Component {
     //}
 
     this.requestUserMessagingPermission();
-    
-    // skip
-    this.submit();
   }
 
   async requestUserMessagingPermission() {
@@ -76,9 +80,22 @@ export default class SplashScreen extends Component {
 
     if (enabled) {
       console.log('Authorization status:', authStatus);
+      messaging()
+        .getToken()
+        .then(token => {
+          console.log('my token', token);
+          LoginInfo.fcmToken = token;
+
+          // skip
+          this.submit();
+        });
     }
-    else{
-      console.log('Authorization status: disabled')
+    else {
+      console.log('Authorization status: disabled');
+      LoginInfo.fcmToken = '';
+
+      // skip
+      this.submit();
     }
   }
 
@@ -150,6 +167,7 @@ export default class SplashScreen extends Component {
           LoginInfo.providerid = info.providerid;
           LoginInfo.email_verified = info.email_verified;
           LoginInfo.phone_verified = info.phone_verified;
+          LoginInfo.fcmToken = info.fcmToken;
           LoginInfo.user_account = info.user_account;
           LoginInfo.user_pick_an_agent = info.user_pick_an_agent;
 
@@ -164,7 +182,7 @@ export default class SplashScreen extends Component {
         setTimeout(() => { this.props.navigation.navigate('Auth') }, 2000);
       })
   }
-
+  
   submit = async () => {
     // skip
     LoginInfo.uniqueid = '1234567890';
@@ -179,8 +197,8 @@ export default class SplashScreen extends Component {
     LoginInfo.latitude = 40.776611;
     LoginInfo.longitude = -73.345718;
     LoginInfo.user_assigned_agent = 0;
-    // ///////////////
-
+    //////////////////
+    
     let userAssignedAgent = await AsyncStorage.getItem('UserAssignedAgent');
 
     let bodyFormData = new FormData();
@@ -193,6 +211,7 @@ export default class SplashScreen extends Component {
     bodyFormData.append('providerid', LoginInfo.providerid);
     bodyFormData.append('email_verified', LoginInfo.email_verified);
     bodyFormData.append('phone_verified', LoginInfo.phone_verified);
+    bodyFormData.append('fcmToken', LoginInfo.fcmToken);
     bodyFormData.append('user_latitude', LoginInfo.latitude);
     bodyFormData.append('user_longitude', LoginInfo.longitude);
     bodyFormData.append('appid', 'com.openhousemarketingsystem.open');
@@ -202,6 +221,7 @@ export default class SplashScreen extends Component {
       .then((res) => {
         //console.log('post login info success', res);
         LoginInfo.photourl = res[0].user_photourl;
+        LoginInfo.fcmToken = res[0].fcmToken;
         LoginInfo.user_account = res[0].user_account;
         LoginInfo.user_pick_an_agent = res[0].user_pick_an_agent;
         LoginInfo.user_assigned_agent = userAssignedAgent == null ? res[0].user_assigned_agent : parseInt(userAssignedAgent);

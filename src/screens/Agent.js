@@ -19,7 +19,6 @@ import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-nat
 import { RFPercentage, RFValue } from "react-native-responsive-fontsize";
 
 import AsyncStorage from "@react-native-community/async-storage";
-import messaging from '@react-native-firebase/messaging';
 
 import {
   BrowseCard,
@@ -48,20 +47,7 @@ export default class AgentScreen extends Component {
 
   componentDidMount() {
     this.getAgent();
-
-    messaging().onMessage(async remoteMessage => {
-      Alert.alert('A new FCM message arrived!', JSON.stringify(remoteMessage));
-    });    
-    messaging().setBackgroundMessageHandler(async remoteMessage => {
-      console.log('Message handled in the background!', remoteMessage);
-    });    
-    
-    messaging()
-    .getToken()
-    .then(token => {
-      console.log('my token', token);
-    });
-    
+    this.sendPushNotification();
   }
 
   getAgent = () => {
@@ -84,6 +70,50 @@ export default class AgentScreen extends Component {
       })
       .catch((err) => {
         console.log('get agent error', err);
+      })
+  }
+
+  sendPushNotification = async () => {
+    const FIREBASE_API_KEY = "AAAA6khpGvI:APA91bElZqWvEebRsUXMwIxdEF3s21admbURH9MBx5K9ztGw-GU9at5IJ0OVRd9uMzcQHu34vfl_4pdZZOfhhRtM8v-Ya2-QLUwtbtBFxrtczhf4C7j0vhfZueJDVN1NabnXYfZ_r-o1";
+    const message = {
+      registration_ids: [
+        "dgabk9gW4kABkiZocvSEZ7:APA91bGM8ToZ96BvrDU8xRwYYMWQQA-KKgwbEQ2lR444DEQwcHaxKgjk6WvdSAafehQFAvWYgdm6F2g5v1CTTXQqNVVSMT2yvpMSsMbke8LnhWkQM9bsRg9SL7JH8cntxlE2j4RJUnR3",
+        "e9Y56VdyJkLPmgmPnZxDI8:APA91bFfdNb_sd9b089xkjYZXVOn79HmjDUWTNMmL_-PYW5C__qp5qDyCTgIKBZXwIEiLXwfzOyCpdeq_xGvtHxPL1YzSAxfvGbWINIOd_dCRkGbJ6ZRxurhIaGwsrBCtBeJzoEElv4D",        
+      ],
+      notification: {
+        "title": "my test message",
+        "body": "IND chose to bat",
+        "vibrate": 1000,
+        "sound": "default",
+        "show-in-foreground": true,
+        "priority": "high",
+        "content-available": true,
+      },      
+      data: {
+        title: "india vs south africa test",
+        body: "IND chose to bat",
+        score: 50,
+        wicket: 1
+      },      
+    }
+
+    fetch("https://fcm.googleapis.com/fcm/send",
+      {
+        method: "POST",
+        headers: {
+          "Authorization": "key=" + FIREBASE_API_KEY,
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(message)
+      })
+      .then((response)=>{        
+        return response.json();
+      })
+      .then((responseJson)=>{
+        console.log('push notification response', responseJson);
+      })
+      .catch(err=>{
+        console.log('response error', err);
       })
   }
 
