@@ -39,10 +39,7 @@ import { RouteParam } from "../constants";
 
 import messaging from '@react-native-firebase/messaging';
 messaging().onMessage(async remoteMessage => {
-  alert('A new FCM message arrived!', JSON.stringify(remoteMessage));
-});
-messaging().setBackgroundMessageHandler(async remoteMessage => {
-  console.log('Message handled in the background!', remoteMessage);
+  Alert.alert('A new FCM message arrived!', JSON.stringify(remoteMessage.notification));
 });
 
 export default class SplashScreen extends Component {
@@ -79,7 +76,8 @@ export default class SplashScreen extends Component {
     const enabled = authStatus === messaging.AuthorizationStatus.AUTHORIZED || authStatus === messaging.AuthorizationStatus.PROVISIONAL;
 
     if (enabled) {
-      console.log('Authorization status:', authStatus);
+      //console.log('Authorization status:', authStatus);
+
       messaging()
         .getToken()
         .then(token => {
@@ -182,7 +180,7 @@ export default class SplashScreen extends Component {
         setTimeout(() => { this.props.navigation.navigate('Auth') }, 2000);
       })
   }
-  
+
   submit = async () => {
     // skip
     LoginInfo.uniqueid = '1234567890';
@@ -198,7 +196,7 @@ export default class SplashScreen extends Component {
     LoginInfo.longitude = -73.345718;
     LoginInfo.user_assigned_agent = 0;
     //////////////////
-    
+
     let userAssignedAgent = await AsyncStorage.getItem('UserAssignedAgent');
 
     let bodyFormData = new FormData();
