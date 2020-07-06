@@ -39,7 +39,8 @@ import { RouteParam } from "../constants";
 
 import messaging from '@react-native-firebase/messaging';
 messaging().onMessage(async remoteMessage => {
-  Alert.alert('A new FCM message arrived!', JSON.stringify(remoteMessage.notification));
+  //console.log('remotemessage', remoteMessage);
+  Alert.alert('Open House Plus Notification!', remoteMessage.data.body);
 });
 
 export default class SplashScreen extends Component {
@@ -54,6 +55,8 @@ export default class SplashScreen extends Component {
 
   async componentDidMount() {
 
+    this.requestUserMessagingPermission();
+    
     //let res = await getReviewGeoForApple();
     ////console.log('review for apple', res);
     //if(res){
@@ -68,7 +71,6 @@ export default class SplashScreen extends Component {
     //  }
     //}
 
-    this.requestUserMessagingPermission();
   }
 
   async requestUserMessagingPermission() {

@@ -19,6 +19,7 @@ import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-nat
 import { RFPercentage, RFValue } from "react-native-responsive-fontsize";
 
 import AsyncStorage from "@react-native-community/async-storage";
+import messaging from '@react-native-firebase/messaging';
 
 import {
   BrowseCard,
@@ -46,7 +47,7 @@ export default class AgentScreen extends Component {
   }
 
   componentDidMount() {
-    this.getAgent();    
+    this.getAgent();
   }
 
   getAgent = () => {
@@ -73,44 +74,70 @@ export default class AgentScreen extends Component {
   }
 
   sendPushNotification = async (fcmToken) => {
-    const FIREBASE_API_KEY = "AAAA6khpGvI:APA91bElZqWvEebRsUXMwIxdEF3s21admbURH9MBx5K9ztGw-GU9at5IJ0OVRd9uMzcQHu34vfl_4pdZZOfhhRtM8v-Ya2-QLUwtbtBFxrtczhf4C7j0vhfZueJDVN1NabnXYfZ_r-o1";
+    if (fcmToken == '' || fcmToken == null) return;
+    const FIREBASE_API_KEY = "AAAA6khpGvI:APA91bElZqWvEebRsUXMwIxdEF3s21admbURH9MBx5K9ztGw-GU9at5IJ0OVRd9uMzcQHu34vfl_4pdZZOfhhRtM8v-Ya2-QLUwtbtBFxrtczhf4C7j0vhfZueJDVN1NabnXYfZ_r-o1";    
+    // const message = {
+    //   // registration_ids: [        
+    //   //   fcmToken,
+    //   //   LoginInfo.fcmToken
+    //   // ],
+    //   to: fcmToken,        
+    //   // notification: {
+    //   //   title: "Open House Plus Notification",
+    //   //   body: LoginInfo.fullname + ' selected you as preferred agent.',      
+    //   // },
+    //   data: {
+    //     title: "Open House Plus Notification",
+    //     body: LoginInfo.fullname + ' selected you as preferred agent.',        
+    //   },           
+    //   //vibrate: 1000,
+    //   sound: "default",      
+    //   priority: "high",
+    //   contentAvailable: true,
+    //   content_available: true
+    // }
+    
     const message = {
-      registration_ids: [
-        "dgabk9gW4kABkiZocvSEZ7:APA91bGM8ToZ96BvrDU8xRwYYMWQQA-KKgwbEQ2lR444DEQwcHaxKgjk6WvdSAafehQFAvWYgdm6F2g5v1CTTXQqNVVSMT2yvpMSsMbke8LnhWkQM9bsRg9SL7JH8cntxlE2j4RJUnR3",
-        "e9Y56VdyJkLPmgmPnZxDI8:APA91bFfdNb_sd9b089xkjYZXVOn79HmjDUWTNMmL_-PYW5C__qp5qDyCTgIKBZXwIEiLXwfzOyCpdeq_xGvtHxPL1YzSAxfvGbWINIOd_dCRkGbJ6ZRxurhIaGwsrBCtBeJzoEElv4D",        
-        fcmToken
-      ],
-      notification: {
-        "title": "Open House Plus Notification",
-        "body": LoginInfo.fullname + ' selected you as preferred agent.'        
-      },      
       data: {
         title: "Open House Plus Notification",
-        body: LoginInfo.fullname + ' selected you as preferred agent.'        
+        body: LoginInfo.fullname + ' selected you as preferred agent.',
       },
-      vibrate: 1000,
-      sound: "default",
-      "show-in-foreground": true,
-      priority: "high",
+      apns: {
+        payload: {
+          aps: {
+            contentAvailable: true
+          }
+        },
+        headers: {
+          'apns-push-type': 'background',
+          'apns-priority': '5',
+          'apns-topic': 'com.ecaptureinc.agentplus' // your app bundle identifier
+        }
+      },
+      //must include token, topic, or condition
+      to: fcmToken,
       contentAvailable: true,
+      content_available: true,
+      //topic: //notification topic
+      //condition: //notification condition
     }
 
-    fetch("https://fcm.googleapis.com/fcm/send",
+    fetch("https://fcm.googleapis.com/fcm/send",    
       {
         method: "POST",
         headers: {
-          "Authorization": "key=" + FIREBASE_API_KEY,
+          "Authorization": "key=" + FIREBASE_API_KEY,          
           "Content-Type": "application/json"
         },
         body: JSON.stringify(message)
       })
-      .then((response)=>{        
+      .then((response) => {
         return response.json();
       })
-      .then((responseJson)=>{
+      .then((responseJson) => {
         console.log('push notification response', responseJson);
       })
-      .catch(err=>{
+      .catch(err => {
         console.log('response error', err);
       })
   }
@@ -138,8 +165,8 @@ export default class AgentScreen extends Component {
 
   onYes = async () => {
     let userAssignedAgent = this.state.agentData[this.state.selectedIndex].realtor_account;
-    LoginInfo.user_assigned_agent = userAssignedAgent;    
-    await AsyncStorage.setItem('UserAssignedAgent', userAssignedAgent.toString());
+    LoginInfo.user_assigned_agent = userAssignedAgent;
+    //await AsyncStorage.setItem('UserAssignedAgent', userAssignedAgent.toString());
     await AsyncStorage.setItem('LoginInfo', JSON.stringify(LoginInfo));
 
     let agentFCMToken = this.state.agentData[this.state.selectedIndex].fcmToken;
