@@ -74,52 +74,33 @@ export default class AgentScreen extends Component {
   }
 
   sendPushNotification = async (fcmToken) => {
+    console.log('target token', fcmToken);
     if (fcmToken == '' || fcmToken == null) return;
-    const FIREBASE_API_KEY = "AAAA6khpGvI:APA91bElZqWvEebRsUXMwIxdEF3s21admbURH9MBx5K9ztGw-GU9at5IJ0OVRd9uMzcQHu34vfl_4pdZZOfhhRtM8v-Ya2-QLUwtbtBFxrtczhf4C7j0vhfZueJDVN1NabnXYfZ_r-o1";    
-    // const message = {
-    //   // registration_ids: [        
-    //   //   fcmToken,
-    //   //   LoginInfo.fcmToken
-    //   // ],
-    //   to: fcmToken,        
-    //   // notification: {
-    //   //   title: "Open House Plus Notification",
-    //   //   body: LoginInfo.fullname + ' selected you as preferred agent.',      
-    //   // },
-    //   data: {
-    //     title: "Open House Plus Notification",
-    //     body: LoginInfo.fullname + ' selected you as preferred agent.',        
-    //   },           
-    //   //vibrate: 1000,
-    //   sound: "default",      
-    //   priority: "high",
-    //   contentAvailable: true,
-    //   content_available: true
-    // }
+    const FIREBASE_API_KEY = "AAAA6khpGvI:APA91bElZqWvEebRsUXMwIxdEF3s21admbURH9MBx5K9ztGw-GU9at5IJ0OVRd9uMzcQHu34vfl_4pdZZOfhhRtM8v-Ya2-QLUwtbtBFxrtczhf4C7j0vhfZueJDVN1NabnXYfZ_r-o1";        
     
     const message = {
+      to: fcmToken,
+      // notification: {
+      //   title: "Open House Plus Notification",
+      //   body: LoginInfo.fullname + ' selected you as preferred agent.',      
+      // },
       data: {
-        title: "Open House Plus Notification",
+        title: "Open House Notification",
         body: LoginInfo.fullname + ' selected you as preferred agent.',
       },
+      content_available: true,      
       apns: {
         payload: {
-          aps: {
+          aps: {            
             contentAvailable: true
-          }
+          }          
         },
         headers: {
           'apns-push-type': 'background',
           'apns-priority': '5',
-          'apns-topic': 'com.ecaptureinc.agentplus' // your app bundle identifier
+          'apns-topic': 'com.ecaptureinc.agentplus'
         }
-      },
-      //must include token, topic, or condition
-      to: fcmToken,
-      contentAvailable: true,
-      content_available: true,
-      //topic: //notification topic
-      //condition: //notification condition
+      },            
     }
 
     fetch("https://fcm.googleapis.com/fcm/send",    
