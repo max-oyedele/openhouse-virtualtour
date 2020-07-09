@@ -81,7 +81,7 @@ export default class AgentScreen extends Component {
     const message = {
       to: fcmToken,
       // notification: {
-      //   title: "Open House Plus Notification",
+      //   title: "Open House Notification",
       //   body: LoginInfo.fullname + ' selected you as preferred agent.',      
       // },
       data: {
