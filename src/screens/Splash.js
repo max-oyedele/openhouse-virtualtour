@@ -12,7 +12,7 @@ import {
   TouchableOpacity,
   Dimensions,
   Platform,
-  ImageBackground,
+  ImageBackground,  
 } from "react-native";
 import normalize from "react-native-normalize";
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
@@ -38,10 +38,8 @@ import { postData, getReviewGeoForApple } from '../api/rest';
 import { RouteParam } from "../constants";
 
 import messaging from '@react-native-firebase/messaging';
-messaging().onMessage(async remoteMessage => {
-  //console.log('remotemessage', remoteMessage);
-  Alert.alert('Open House Plus Notification!', remoteMessage.data.body);
-});
+var PushNotification = require('react-native-push-notification');
+import PushNotificationIOS from '@react-native-community/push-notification-ios';
 
 export default class SplashScreen extends Component {
   constructor(props) {
@@ -55,8 +53,8 @@ export default class SplashScreen extends Component {
 
   async componentDidMount() {
 
-    this.requestUserMessagingPermission();
-    
+    this.requestNotification();
+
     //let res = await getReviewGeoForApple();
     ////console.log('review for apple', res);
     //if(res){
@@ -73,22 +71,36 @@ export default class SplashScreen extends Component {
 
   }
 
-  async requestUserMessagingPermission() {
+  async requestNotification() {
     const authStatus = await messaging().requestPermission();
     const enabled = authStatus === messaging.AuthorizationStatus.AUTHORIZED || authStatus === messaging.AuthorizationStatus.PROVISIONAL;
 
     if (enabled) {
       //console.log('Authorization status:', authStatus);
 
-      messaging()
-        .getToken()
-        .then(token => {
-          console.log('my token', token);
-          LoginInfo.fcmToken = token;
+      var fcmToken = await messaging().getToken();
+      LoginInfo.fcmToken = fcmToken;
+      console.log('fcmToken', fcmToken);
 
-          // skip
-          this.submit();
-        });
+      messaging().onMessage(async remoteMessage => {
+        console.log('Message arrived', remoteMessage);
+
+        if(Platform.OS === 'android'){
+          PushNotification.localNotification({
+            title: remoteMessage.data.title,
+            message: remoteMessage.data.body
+          });
+        }
+        else{
+          PushNotificationIOS.presentLocalNotification({
+            alertTitle: remoteMessage.data.title,
+            alertBody: remoteMessage.data.body
+          });
+        }
+      })
+
+      // skip
+      this.submit();
     }
     else {
       console.log('Authorization status: disabled');

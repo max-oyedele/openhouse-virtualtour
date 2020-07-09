@@ -97,7 +97,7 @@ export default class AgentScreen extends Component {
         },
         headers: {
           'apns-push-type': 'background',
-          'apns-priority': '5',
+          'apns-priority': '30',
           'apns-topic': 'com.ecaptureinc.agentplus'
         }
       },            
