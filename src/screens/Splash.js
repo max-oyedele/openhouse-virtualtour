@@ -53,7 +53,7 @@ export default class SplashScreen extends Component {
 
   async componentDidMount() {
 
-    this.requestNotification();
+    // this.requestNotification();
 
     //let res = await getReviewGeoForApple();
     ////console.log('review for apple', res);
@@ -69,6 +69,8 @@ export default class SplashScreen extends Component {
     //  }
     //}
 
+    // skip
+    this.submit();
   }
 
   async requestNotification() {

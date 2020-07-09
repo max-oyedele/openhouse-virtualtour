@@ -85,7 +85,7 @@ export default class OpenVirtualHomeScreen extends Component {
         console.log('get openhouse into error', err);
       })
   }
-  
+
   onLiveOpen = () => {
     var param = {
       user_account: LoginInfo.user_account,
@@ -98,17 +98,18 @@ export default class OpenVirtualHomeScreen extends Component {
     getLiveInfo(param)
       .then((res) => {
         //console.log('live info', res);        
-        RouteParam.liveInfo = res[0];        
-                
-        if (this.state.live_oh_signagure_required) {          
-          this.props.navigation.navigate('Signature', {from: 'live'});
+        RouteParam.liveInfo = res[0];
+
+        if (this.state.live_oh_signagure_required) {
+          this.props.navigation.navigate('Signature', { from: 'live' });
         }
         else {
           this.postAttendee();
-          if(RouteParam.liveInfo.error === undefined) {
+          if (RouteParam.liveInfo.error === undefined) {
+            this.sendPushNotification(RouteParam.agent.fcmToken);
             this.props.navigation.navigate('LiveCall');
           }
-        }    
+        }
       })
       .catch((err) => {
         console.log('get live info error', err);
@@ -119,7 +120,7 @@ export default class OpenVirtualHomeScreen extends Component {
     this.postAttendee();
 
     if (this.state.virtual_tour_signagure_required) {
-      this.props.navigation.navigate('Signature', {from: 'virtual_tour'});
+      this.props.navigation.navigate('Signature', { from: 'virtual_tour' });
     }
     else {
       Linking.canOpenURL(this.state.property_virtual_tour_url).then(supported => {
@@ -128,11 +129,11 @@ export default class OpenVirtualHomeScreen extends Component {
             .then(() => { })
             .catch((err) => console.log('open browse url error'))
 
-            this.props.navigation.navigate('Property');
+          this.props.navigation.navigate('Property');
         } else {
           console.log('open browser error');
         }
-      });     
+      });
     }
   }
 
@@ -150,6 +151,56 @@ export default class OpenVirtualHomeScreen extends Component {
       })
       .catch((err) => {
         console.log('post attendee error', err)
+      })
+  }
+
+  sendPushNotification = async (fcmToken) => {
+    console.log('target token', fcmToken);
+    if (fcmToken == '' || fcmToken == null) return;
+    const FIREBASE_API_KEY = "AAAA6khpGvI:APA91bElZqWvEebRsUXMwIxdEF3s21admbURH9MBx5K9ztGw-GU9at5IJ0OVRd9uMzcQHu34vfl_4pdZZOfhhRtM8v-Ya2-QLUwtbtBFxrtczhf4C7j0vhfZueJDVN1NabnXYfZ_r-o1";
+
+    const message = {
+      to: fcmToken,
+      // notification: {
+      //   title: "Open House Notification",
+      //   body: LoginInfo.fullname + ' applied you live call.',      
+      // },
+      data: {
+        title: "Open House Notification",
+        body: LoginInfo.fullname + ' applied you live call.',
+      },
+      content_available: true,
+      apns: {
+        payload: {
+          aps: {
+            contentAvailable: true
+          }
+        },
+        headers: {
+          'apns-push-type': 'background',
+          'apns-priority': '30',
+          'apns-topic': 'com.ecaptureinc.agentplus'
+        }
+      },
+    }
+
+    fetch("https://fcm.googleapis.com/fcm/send",
+      {
+        method: "POST",
+        headers: {
+          "Authorization": "key=" + FIREBASE_API_KEY,
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(message)
+      })
+      .then((response) => {
+        return response.json();
+      })
+      .then((responseJson) => {
+        console.log('push notification response', responseJson);
+      })
+      .catch(err => {
+        console.log('response error', err);
       })
   }
 

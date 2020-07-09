@@ -64,7 +64,8 @@ export default class LiveCallScreen extends Component {
   _onConnectButtonPress = () => {
     try {
       console.log(this.state.roomName, this.state.token,
-        RouteParam.liveInfo.roomname, RouteParam.liveInfo.token)
+        RouteParam.liveInfo.roomname, RouteParam.liveInfo.token);
+        
       this.twilioRef.connect({
         // roomName: this.state.roomName,
         // accessToken: this.state.token

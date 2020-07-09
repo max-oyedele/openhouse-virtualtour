@@ -103,7 +103,7 @@ export default class PropertyCard extends Component {
                 <View style={{//left bottom part
                   width: '100%',
                   height: '50%',
-                  paddingLeft: normalize(13),
+                  paddingLeft: normalize(10),
                   //borderWidth: 2
                 }}>
                   <View style={{ width: '100%', height: '100%', flexDirection: 'row', alignItems: 'center', marginTop: normalize(-8, 'height') }}>
@@ -132,9 +132,8 @@ export default class PropertyCard extends Component {
                 <View style={{//right top part
                   width: '100%',
                   height: '50%',
-                  alignItems: 'flex-end',
-                  //marginTop: normalize(15, 'height'),
-                  paddingTop: normalize(13, 'height'),
+                  alignItems: 'flex-end',                  
+                  paddingTop: normalize(10, 'height'),
                   paddingRight: normalize(10),
                   //borderWidth: 2
                 }}>

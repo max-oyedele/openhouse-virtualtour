@@ -174,6 +174,7 @@ export default class PropertyScreen extends Component {
     RouteParam.agent.fullname = this.state.agentCard.agent_fullname;
     RouteParam.agent.title = this.state.agentCard.agent_title;
     RouteParam.agent.img = this.state.agentCard.agent_photourl;
+    RouteParam.agent.fcmToken = this.state.agentCard.fcmToken;
     // RouteParam.agent.activeListing = this.state.agentCard.activeListing;
     // RouteParam.agent.sold = this.state.agentCard.sold;
 
