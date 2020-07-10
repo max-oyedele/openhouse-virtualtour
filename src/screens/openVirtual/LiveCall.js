@@ -140,7 +140,7 @@ export default class LiveCallScreen extends Component {
       <View style={styles.container}>
         <ImageBackground style={styles.container} source={{ uri: RouteParam.openHouseIntro.page_background_photo }}>
           <View style={{ width: '100%' }}>
-            <Header title={RouteParam.openHouseIntro.property_mlsnumber} titleColor={Colors.whiteColor} onPressBack={() => this.props.navigation.navigate('Property')} />
+            {/* <Header title={RouteParam.openHouseIntro.property_mlsnumber} titleColor={Colors.whiteColor} onPressBack={() => this.props.navigation.navigate('Property')} /> */}
           </View>
           {this.state.status === "connected" && (
             <View style={styles.remoteGrid}>
@@ -167,9 +167,9 @@ export default class LiveCallScreen extends Component {
                 {this.state.isAudioEnabled ? "Mute" : "Unmute"}
               </Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.optionButton} onPress={this._onFlipButtonPress}>
+            {/* <TouchableOpacity style={styles.optionButton} onPress={this._onFlipButtonPress}>
               <Text style={{ fontSize: 12 }}>Flip</Text>
-            </TouchableOpacity>
+            </TouchableOpacity> */}
             <TwilioVideoLocalView enabled={true} style={styles.localVideo} />
             <View />
           </View>

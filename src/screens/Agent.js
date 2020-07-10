@@ -62,7 +62,7 @@ export default class AgentScreen extends Component {
     getContentByAction(agentParam)
       .then((res) => {
         if (res) {
-          //console.log('agent data', res);
+          console.log('agent data', res);
           this.setState({
             agentData: res,
           });
@@ -79,14 +79,10 @@ export default class AgentScreen extends Component {
     const FIREBASE_API_KEY = "AAAA6khpGvI:APA91bElZqWvEebRsUXMwIxdEF3s21admbURH9MBx5K9ztGw-GU9at5IJ0OVRd9uMzcQHu34vfl_4pdZZOfhhRtM8v-Ya2-QLUwtbtBFxrtczhf4C7j0vhfZueJDVN1NabnXYfZ_r-o1";        
     
     const message = {
-      to: fcmToken,
-      // notification: {
-      //   title: "Open House Notification",
-      //   body: LoginInfo.fullname + ' selected you as preferred agent.',      
-      // },
+      to: fcmToken,      
       data: {
-        title: "Open House Notification",
-        body: LoginInfo.fullname + ' selected you as preferred agent.',
+        title: 'New Client Alert',
+        body: 'Congratulations! ' + LoginInfo.fullname + ' have selected you as his/her preferred real estate agent.',
       },
       content_available: true,      
       apns: {

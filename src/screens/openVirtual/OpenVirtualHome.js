@@ -160,14 +160,13 @@ export default class OpenVirtualHomeScreen extends Component {
     const FIREBASE_API_KEY = "AAAA6khpGvI:APA91bElZqWvEebRsUXMwIxdEF3s21admbURH9MBx5K9ztGw-GU9at5IJ0OVRd9uMzcQHu34vfl_4pdZZOfhhRtM8v-Ya2-QLUwtbtBFxrtczhf4C7j0vhfZueJDVN1NabnXYfZ_r-o1";
 
     const message = {
-      to: fcmToken,
-      // notification: {
-      //   title: "Open House Notification",
-      //   body: LoginInfo.fullname + ' applied you live call.',      
-      // },
+      to: fcmToken,      
       data: {
-        title: "Open House Notification",
-        body: LoginInfo.fullname + ' applied you live call.',
+        title: 'Incoming Attendee Request',
+        body: LoginInfo.fullname + ' would like to enter your live stream',
+        alertTitle: 'Incoming Video-Chat Request',
+        alertBody: LoginInfo.fullname + ' would like to enter your live open house stream. Would you like to accept the incoming video call?',
+        propertyNo: RouteParam.propertyRecordNo        
       },
       content_available: true,
       apns: {
