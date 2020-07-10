@@ -32,6 +32,11 @@ const Images = {
   btnBookmark: require('../assets/images/btnBookmark.png'),
   btnMsg: require('../assets/images/btnMsg.png'),   
   
+  btnMute: require('../assets/images/btnMute.png'),
+  btnUnmute: require('../assets/images/btnUnmute.png'),
+  btnFlipCam: require('../assets/images/btnFlipCam.png'),  
+  btnCallOff: require('../assets/images/btnCallOff.png'),  
+  
   sideBlurBack: require('../assets/images/sideBlurBack.png')
 }
 

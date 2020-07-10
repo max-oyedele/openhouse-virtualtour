@@ -18,6 +18,7 @@ import normalize from 'react-native-normalize';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import { RFPercentage, RFValue } from "react-native-responsive-fontsize";
 
+import KeepAwake from 'react-native-keep-awake';
 import {
   TwilioVideoLocalView,
   TwilioVideoParticipantView,
@@ -48,26 +49,26 @@ export default class LiveCallScreen extends Component {
     token: ""
   };
 
-  componentDidMount() {
-    // this.setState({
-    //   roomName: "15549-1-S-3204165-39413",
-    //   token: "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiIsImN0eSI6InR3aWxpby1mcGE7dj0xIn0.eyJqdGkiOiJTSzZjYTA4NzA0ZGM1ZTkwY2I0NmQ2YjkxNjFlZjhhYWY0LTE1OTA5NzgxNjMiLCJpc3MiOiJTSzZjYTA4NzA0ZGM1ZTkwY2I0NmQ2YjkxNjFlZjhhYWY0Iiwic3ViIjoiQUNhNjEyZjNjZDE2NzJmYmU1OTFkYTNlYWQwMWU1ODMwNSIsImV4cCI6MTU5MDk4MTc2MywiZ3JhbnRzIjp7ImlkZW50aXR5IjoiNiIsInZpZGVvIjp7InJvb20iOiIxNTU0OS0xLVMtMzIwNDE2NS0zOTQxMyJ9fX0.hzD-Ak4Gz0c5WNfZQTa2ItlUD1lzhd5FtVCPLVKJiIE"
-    // })
+  componentDidMount() {    
     this.setState({
       roomName: RouteParam.liveInfo.roomname,
       token: RouteParam.liveInfo.token
     });
 
+    KeepAwake.activate();
+
     this._onConnectButtonPress();
+  }
+
+  componentWillUnmount(){
+    KeepAwake.deactivate();
   }
 
   _onConnectButtonPress = () => {
     try {
       console.log(this.state.roomName, this.state.token,
         RouteParam.liveInfo.roomname, RouteParam.liveInfo.token)
-      this.twilioRef.connect({
-        // roomName: this.state.roomName,
-        // accessToken: this.state.token
+      this.twilioRef.connect({        
         roomName: RouteParam.liveInfo.roomname,
         accessToken: RouteParam.liveInfo.token
       });
@@ -160,18 +161,19 @@ export default class LiveCallScreen extends Component {
           <View style={styles.smallVideoContainer}>
             <TwilioVideoLocalView enabled={true} style={styles.localVideo} />
           </View>
-          <View style={styles.optionsContainer}>
-            <TouchableOpacity style={styles.optionButton} onPress={this._onEndButtonPress}>
-              <Text style={{ fontSize: 12 }}>End</Text>
+          <View style={styles.btnsContainer}>
+            <TouchableOpacity onPress={() => {
+              this._onMuteButtonPress();
+              this.setState({ mute: !this.state.mute });
+            }}>
+              <Image style={styles.btnImg} source={this.state.mute ? Images.btnUnmute : Images.btnMute} resizeMode='cover' />
             </TouchableOpacity>
-            <TouchableOpacity style={styles.optionButton} onPress={this._onMuteButtonPress}>
-              <Text style={{ fontSize: 12 }}>
-                {this.state.isAudioEnabled ? "Mute" : "Unmute"}
-              </Text>
-            </TouchableOpacity>
-            {/* <TouchableOpacity style={styles.optionButton} onPress={this._onFlipButtonPress}>
-              <Text style={{ fontSize: 12 }}>Flip</Text>
+            {/* <TouchableOpacity onPress={() => this._onFlipButtonPress()}>
+              <Image style={styles.btnImg} source={Images.btnFlipCam} resizeMode='cover' />
             </TouchableOpacity> */}
+            <TouchableOpacity onPress={() => this._onEndButtonPress()}>
+              <Image style={styles.btnImg} source={Images.btnCallOff} resizeMode='cover' />
+            </TouchableOpacity>
           </View>
         </ImageBackground>
 
@@ -224,26 +226,20 @@ const styles = StyleSheet.create({
     borderWidth: normalize(2),
     borderColor: '#4e4e4e'
   },
-  optionsContainer: {
-    position: "absolute",
-    left: 0,
-    bottom: 0,
-    right: 0,
-    height: 100,
-    // backgroundColor: "blue",
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: 'center'
+  btnsContainer: {
+    position: 'absolute',
+    bottom: normalize(15, 'height'),
+    width: '75%',
+    height: '17%',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    alignSelf: 'center',
+    //borderWidth: 2
   },
-  optionButton: {
-    width: 60,
-    height: 60,
-    marginLeft: 10,
-    marginRight: 10,
-    borderRadius: 100 / 2,
-    backgroundColor: "grey",
-    justifyContent: "center",
-    alignItems: "center"
-  }
+  btnImg: {
+    width: normalize(60),
+    height: normalize(60),
+  },
 });
 
