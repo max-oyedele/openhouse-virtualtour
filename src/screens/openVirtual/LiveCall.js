@@ -64,8 +64,7 @@ export default class LiveCallScreen extends Component {
   _onConnectButtonPress = () => {
     try {
       console.log(this.state.roomName, this.state.token,
-        RouteParam.liveInfo.roomname, RouteParam.liveInfo.token);
-        
+        RouteParam.liveInfo.roomname, RouteParam.liveInfo.token)
       this.twilioRef.connect({
         // roomName: this.state.roomName,
         // accessToken: this.state.token
@@ -158,6 +157,9 @@ export default class LiveCallScreen extends Component {
               )}
             </View>
           )}
+          <View style={styles.smallVideoContainer}>
+            <TwilioVideoLocalView enabled={true} style={styles.localVideo} />
+          </View>
           <View style={styles.optionsContainer}>
             <TouchableOpacity style={styles.optionButton} onPress={this._onEndButtonPress}>
               <Text style={{ fontSize: 12 }}>End</Text>
@@ -170,8 +172,6 @@ export default class LiveCallScreen extends Component {
             {/* <TouchableOpacity style={styles.optionButton} onPress={this._onFlipButtonPress}>
               <Text style={{ fontSize: 12 }}>Flip</Text>
             </TouchableOpacity> */}
-            <TwilioVideoLocalView enabled={true} style={styles.localVideo} />
-            <View />
           </View>
         </ImageBackground>
 
@@ -205,49 +205,24 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end',
     //borderWidth: 1
   },
-  // callContainer: {
-  //   flex: 1,
-  //   position: "absolute",
-  //   bottom: 0,
-  //   top: 0,
-  //   left: 0,
-  //   right: 0
-  // },
-  welcome: {
-    fontSize: 30,
-    textAlign: "center",
-    paddingTop: 40
-  },
-  input: {
-    height: 50,
-    borderWidth: 1,
-    marginRight: 70,
-    marginLeft: 70,
-    marginTop: 50,
-    textAlign: "center",
-    backgroundColor: "white"
-  },
-  button: {
-    marginTop: 100
-  },
-  localVideo: {
-    flex: 1,
-    width: 125,
-    height: 200,
-    position: "absolute",
-    right: 10,
-    bottom: 400,
-    borderRadius: 2,
-    borderColor: '#4e4e4e'
-  },
-  remoteGrid: {
-    flex: 1,
-    flexDirection: "row",
-    flexWrap: "wrap"
-  },
   remoteVideo: {
     width: '100%',
     height: '100%'
+  },
+  smallVideoContainer: {
+    position: 'absolute',
+    top: normalize(40, 'height'),
+    width: '100%',
+    height: normalize(100),
+    flexDirection: 'row',
+  },
+  localVideo: {
+    width: normalize(100),
+    height: normalize(100),
+    marginLeft: normalize(18),
+    borderRadius: normalize(5),
+    borderWidth: normalize(2),
+    borderColor: '#4e4e4e'
   },
   optionsContainer: {
     position: "absolute",
