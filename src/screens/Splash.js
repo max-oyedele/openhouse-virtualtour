@@ -201,16 +201,16 @@ export default class SplashScreen extends Component {
     // skip
     LoginInfo.uniqueid = '1234567890';
     LoginInfo.user_account = '32';
-    LoginInfo.fullname = 'opendemo';
-    LoginInfo.email = 'opendemo@icloud.com';
-    LoginInfo.telephone = '+13473040074';
+    LoginInfo.fullname = 'Tomas Andersson';
+    LoginInfo.email = 'eastsea1020n@gmail.com';
+    LoginInfo.telephone = '+12125551212';
     LoginInfo.photourl = '';
     LoginInfo.providerid = 'google';
     LoginInfo.email_verified = true;
     LoginInfo.phone_verified = 1;
     LoginInfo.latitude = 40.776611;
     LoginInfo.longitude = -73.345718;
-    LoginInfo.user_assigned_agent = 55
+    LoginInfo.user_assigned_agent = 54
     //////////////////
 
     let userAssignedAgent = await AsyncStorage.getItem('UserAssignedAgent');
