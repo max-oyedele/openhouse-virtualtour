@@ -40,8 +40,7 @@ import { Colors, Images, LoginInfo, RouteParam } from '@constants';
 
 export default class LiveCallScreen extends Component {
   state = {
-    isAudioEnabled: true,
-    isVideoEnabled: true,
+    mute: false,    
     status: "disconnected",
     participants: new Map(),
     videoTracks: new Map(),
@@ -76,6 +75,10 @@ export default class LiveCallScreen extends Component {
       console.log('live connect error', error);
     }
     this.setState({ status: "connecting" });
+
+    var alertTitle = 'Contacting Host';
+    var alertBody = 'Welcome to ' + RouteParam.propertyAddress + ' Live Stream Open House. \n Please wait while we contact the host.';
+    Alert(alertTitle, alertBody);
   };
 
   _onEndButtonPress = () => {
@@ -85,8 +88,8 @@ export default class LiveCallScreen extends Component {
 
   _onMuteButtonPress = () => {
     this.twilioRef
-      .setLocalAudioEnabled(!this.state.isAudioEnabled)
-      .then(isEnabled => this.setState({ isAudioEnabled: isEnabled }));
+      .setLocalAudioEnabled(!this.state.mute)
+      .then(isEnabled => this.setState({ mute: isEnabled }));
   };
 
   _onFlipButtonPress = () => {
@@ -166,7 +169,7 @@ export default class LiveCallScreen extends Component {
               this._onMuteButtonPress();
               this.setState({ mute: !this.state.mute });
             }}>
-              <Image style={styles.btnImg} source={this.state.mute ? Images.btnUnmute : Images.btnMute} resizeMode='cover' />
+              <Image style={styles.btnImg} source={this.state.mute ? Images.btnMute : Images.btnUnmute} resizeMode='cover' />
             </TouchableOpacity>
             {/* <TouchableOpacity onPress={() => this._onFlipButtonPress()}>
               <Image style={styles.btnImg} source={Images.btnFlipCam} resizeMode='cover' />
@@ -223,8 +226,8 @@ const styles = StyleSheet.create({
     height: normalize(100),
     marginLeft: normalize(18),
     borderRadius: normalize(5),
-    borderWidth: normalize(2),
-    borderColor: '#4e4e4e'
+    // borderWidth: normalize(2),
+    // borderColor: '#4e4e4e'
   },
   btnsContainer: {
     position: 'absolute',

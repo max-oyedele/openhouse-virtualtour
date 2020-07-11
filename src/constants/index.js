@@ -13,6 +13,7 @@ export const RouteParam = {
   verifyResult: {},
   searchKind: '',  
   propertyRecordNo: '',
+  propertyAddress: '',
   agent: {},  
   pdfUrl: '',
   browseUrl: '',  

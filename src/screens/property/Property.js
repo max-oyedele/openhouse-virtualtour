@@ -178,6 +178,8 @@ export default class PropertyScreen extends Component {
     // RouteParam.agent.activeListing = this.state.agentCard.activeListing;
     // RouteParam.agent.sold = this.state.agentCard.sold;
 
+    RouteParam.propertyAddress = this.state.property.property_address1;
+
     this.props.navigation.navigate('OpenVirtual');
   }
 
