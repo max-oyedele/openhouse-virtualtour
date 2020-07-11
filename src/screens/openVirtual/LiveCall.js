@@ -49,13 +49,7 @@ export default class LiveCallScreen extends Component {
   };
 
   componentDidMount() {    
-    this.setState({
-      roomName: RouteParam.liveInfo.roomname,
-      token: RouteParam.liveInfo.token
-    });
-
     KeepAwake.activate();
-
     this._onConnectButtonPress();
   }
 
@@ -64,9 +58,7 @@ export default class LiveCallScreen extends Component {
   }
 
   _onConnectButtonPress = () => {
-    try {
-      console.log(this.state.roomName, this.state.token,
-        RouteParam.liveInfo.roomname, RouteParam.liveInfo.token)
+    try {      
       this.twilioRef.connect({        
         roomName: RouteParam.liveInfo.roomname,
         accessToken: RouteParam.liveInfo.token
@@ -78,7 +70,7 @@ export default class LiveCallScreen extends Component {
 
     var alertTitle = 'Contacting Host';
     var alertBody = 'Welcome to ' + RouteParam.propertyAddress + ' Live Stream Open House. \n Please wait while we contact the host.';
-    Alert(alertTitle, alertBody);
+    Alert.alert(alertTitle, alertBody);
   };
 
   _onEndButtonPress = () => {
