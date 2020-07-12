@@ -61,11 +61,11 @@
 		</dict>
 	</dict>
 	<key>NSCameraUsageDescription</key>
-	<string>Your message to user when the camera is accessed for the first time</string>
-	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>Open Requires to access your camera</string>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
 	<string>Open Requires to access your geo location to operate. Allowing geo location will increase the accuracy of the properties displayed by Open</string>
 	<key>NSMicrophoneUsageDescription</key>
-	<string>Your message to user when the microphone is accessed for the first time</string>
+	<string>Open Requires to access your microphone</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>Billabong.ttf</string>
@@ -75,7 +75,9 @@
 	</array>
 	<key>UIBackgroundModes</key>
 	<array>
-		<string>remote-notification</string>
+		<string>fetch</string>
+		<string>processing</string>
+		<string>remote-notification</string>		
 	</array>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
