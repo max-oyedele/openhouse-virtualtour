@@ -12,7 +12,7 @@ import {
   TouchableOpacity,
   Dimensions,
   Platform,
-  ImageBackground,  
+  ImageBackground,
 } from "react-native";
 import normalize from "react-native-normalize";
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
@@ -20,6 +20,11 @@ import { RFPercentage, RFValue } from "react-native-responsive-fontsize";
 import GetLocation from 'react-native-get-location';
 import AsyncStorage from '@react-native-community/async-storage';
 import KeyboardManager from 'react-native-keyboard-manager';
+
+import { request, requestMultiple, check, checkMultiple, PERMISSIONS, RESULTS } from 'react-native-permissions';
+import messaging from '@react-native-firebase/messaging';
+var PushNotification = require('react-native-push-notification');
+import PushNotificationIOS from '@react-native-community/push-notification-ios';
 
 import {
   BrowseCard,
@@ -37,10 +42,6 @@ import { Colors, Images, LoginInfo } from '@constants';
 import { postData, getReviewGeoForApple } from '../api/rest';
 import { RouteParam } from "../constants";
 
-import messaging from '@react-native-firebase/messaging';
-var PushNotification = require('react-native-push-notification');
-import PushNotificationIOS from '@react-native-community/push-notification-ios';
-
 export default class SplashScreen extends Component {
   constructor(props) {
     super(props);
@@ -52,9 +53,6 @@ export default class SplashScreen extends Component {
   }
 
   async componentDidMount() {
-
-    // this.requestNotification();
-
     //let res = await getReviewGeoForApple();
     ////console.log('review for apple', res);
     //if(res){
@@ -64,53 +62,19 @@ export default class SplashScreen extends Component {
     //    RouteParam.deviceType = 'pad';
     //    this.isLoggedInProc();
     //  }
-    //  else{
-    //    this.initialGetLocation();
+    //  else{    
+          this.requestCameraMicroPhonePermission()
+          .then(()=>{
+            //this.requestLocation();
+
+            // skip
+            this.submit();
+          })
+          .catch((err)=>{
+            console.log('request camera and microphone error', err);
+          })
     //  }
-    //}
-
-    // skip
-    this.submit();
-  }
-
-  async requestNotification() {
-    const authStatus = await messaging().requestPermission();
-    const enabled = authStatus === messaging.AuthorizationStatus.AUTHORIZED || authStatus === messaging.AuthorizationStatus.PROVISIONAL;
-
-    if (enabled) {
-      //console.log('Authorization status:', authStatus);
-
-      var fcmToken = await messaging().getToken();
-      LoginInfo.fcmToken = fcmToken;
-      console.log('fcmToken', fcmToken);
-
-      messaging().onMessage(async remoteMessage => {
-        console.log('Message arrived', remoteMessage);
-
-        if(Platform.OS === 'android'){
-          PushNotification.localNotification({
-            title: remoteMessage.data.title,
-            message: remoteMessage.data.body
-          });
-        }
-        else{
-          PushNotificationIOS.presentLocalNotification({
-            alertTitle: remoteMessage.data.title,
-            alertBody: remoteMessage.data.body
-          });
-        }
-      })
-
-      // skip
-      this.submit();
-    }
-    else {
-      console.log('Authorization status: disabled');
-      LoginInfo.fcmToken = '';
-
-      // skip
-      this.submit();
-    }
+    //}    
   }
 
   keyboardManager = () => {
@@ -135,7 +99,21 @@ export default class SplashScreen extends Component {
     }
   }
 
-  initialGetLocation = () => {
+  requestCameraMicroPhonePermission = () => {
+    return new Promise((resolve, reject)=>{
+      requestMultiple([PERMISSIONS.IOS.CAMERA, PERMISSIONS.IOS.MICROPHONE]).then(
+        (statuses) => {
+          console.log('Camera', statuses[PERMISSIONS.IOS.CAMERA]);
+          console.log('Microphone', statuses[PERMISSIONS.IOS.MICROPHONE]);
+          resolve();
+        },
+      ).catch((err)=>{        
+        reject(err);
+      })      
+    })
+  }
+
+  requestLocation = () => {
     GetLocation.getCurrentPosition({
       enableHighAccuracy: true,
       timeout: 150000,
@@ -144,27 +122,48 @@ export default class SplashScreen extends Component {
         LoginInfo.latitude = location.latitude;
         LoginInfo.longitude = location.longitude;
 
-        this.isLoggedInProc();
+        this.requestNotification();
       })
       .catch(ex => {
-        this.setState({ geoSettingVisible: true })
+        this.setState({ geoSettingVisible: true });
+        GetLocation.openAppSettings();
       });
   }
 
-  _requestLocation = () => {
-    GetLocation.getCurrentPosition({
-      enableHighAccuracy: true,
-      timeout: 150000,
-    })
-      .then(location => {
-        LoginInfo.latitude = location.latitude;
-        LoginInfo.longitude = location.longitude;
+  async requestNotification() {
+    const authStatus = await messaging().requestPermission();
+    const enabled = authStatus === messaging.AuthorizationStatus.AUTHORIZED || authStatus === messaging.AuthorizationStatus.PROVISIONAL;
 
-        this.isLoggedInProc();
+    if (enabled) {
+      //console.log('Authorization status:', authStatus);
+
+      var fcmToken = await messaging().getToken();
+      LoginInfo.fcmToken = fcmToken;
+      console.log('fcmToken', fcmToken);
+
+      messaging().onMessage(async remoteMessage => {
+        console.log('Message arrived', remoteMessage);
+
+        if (Platform.OS === 'android') {
+          PushNotification.localNotification({
+            title: remoteMessage.data.title,
+            message: remoteMessage.data.body
+          });
+        }
+        else {
+          PushNotificationIOS.presentLocalNotification({
+            alertTitle: remoteMessage.data.title,
+            alertBody: remoteMessage.data.body
+          });
+        }
       })
-      .catch(ex => {
-        GetLocation.openAppSettings();
-      });
+    }
+    else {
+      console.log('Authorization status: disabled');
+      LoginInfo.fcmToken = '';
+    }
+
+    this.isLoggedInProc();
   }
 
   isLoggedInProc = () => {
@@ -301,7 +300,7 @@ export default class SplashScreen extends Component {
                       This will enhance our ability to display properties in your area.</Text>
                   </View>
                   <View style={styles.btnContainer}>
-                    <TouchableOpacity onPress={() => this._requestLocation()}>
+                    <TouchableOpacity onPress={() => this.requestLocation()}>
                       <Text style={{ fontFamily: 'SFProText-Bold', fontSize: RFPercentage(1.7), color: Colors.blueColor, textAlign: 'center' }}>Allow Geo Location / Go To Settings</Text>
                     </TouchableOpacity>
                   </View>

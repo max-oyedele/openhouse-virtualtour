@@ -18,7 +18,7 @@ import normalize from 'react-native-normalize';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import { RFPercentage, RFValue } from "react-native-responsive-fontsize";
 
-import KeepAwake from 'react-native-keep-awake';
+import { activateKeepAwake, deactivateKeepAwake} from "@sayem314/react-native-keep-awake";
 import {
   TwilioVideoLocalView,
   TwilioVideoParticipantView,
@@ -49,12 +49,12 @@ export default class LiveCallScreen extends Component {
   };
 
   componentDidMount() {    
-    KeepAwake.activate();
+    activateKeepAwake();
     this._onConnectButtonPress();
   }
 
   componentWillUnmount(){
-    KeepAwake.deactivate();
+    deactivateKeepAwake();
   }
 
   _onConnectButtonPress = () => {

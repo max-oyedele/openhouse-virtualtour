@@ -87,27 +87,22 @@ export default class SMSScreen extends Component {
             );
           }
           else{
-            // Alert.alert(
-            //   'Confirmation Failed. Try again later',
-            //   '',
-            //   [
-            //     {
-            //       text: 'OK',
-            //       onPress: () => {
-            //         this.setState({
-            //           spinner: false,
-            //           isVerified: 0
-            //         });
-            //         this.submit();
-            //       }
-            //     }
-            //   ]
-            // );
-            this.setState({
-              spinner: false,
-              isVerified: 0
-            });
-            this.submit();
+            Alert.alert(
+              'Confirmation Failed. Try again later',
+              '',
+              [
+                {
+                  text: 'OK',
+                  onPress: () => {
+                    this.setState({
+                      spinner: false,
+                      isVerified: 0
+                    });
+                    this.submit();
+                  }
+                }
+              ]
+            );            
           } 
           console.log('link with credential error', err);
         })
