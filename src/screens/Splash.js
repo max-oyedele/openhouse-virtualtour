@@ -162,8 +162,7 @@ export default class SplashScreen extends Component {
       this.isLoggedInProc();
     }
     else {
-      console.log('Authorization status: disabled');
-      this.setState({ pnSettingVisible: true });
+      console.log('Authorization status: disabled');      
       Linking.openSettings();
     }
 

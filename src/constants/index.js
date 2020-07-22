@@ -1,24 +1,24 @@
 import CustomColors from './Colors';
 import DefinedImages from './Images';
-import {watchdogTimer as definedWatchdogTimer} from './Util';
+import { watchdogTimer as definedWatchdogTimer } from './Util';
 
 export const Colors = CustomColors;
 export const Images = DefinedImages;
 export const watchdogTimer = definedWatchdogTimer;
 
 export const LoginInfo = {
-  
+
 }
 
 export const RouteParam = {
-  deviceType: 'phone',  
+  deviceType: 'phone',
   verifyResult: {},
-  searchKind: '',  
+  searchKind: '',
   propertyRecordNo: '',
   propertyAddress: '',
-  agent: {},  
+  agent: {},
   pdfUrl: '',
-  browseUrl: '',  
+  browseUrl: '',
   openHouseIntro: {},
   liveInfo: {},
   isChanged: false,
@@ -43,12 +43,12 @@ export const SearchBy = {
 
 export const PropertyTypeData = [];
 
-export const PreferencesData = [  
-  { 
-    id: 0,   
+export const PreferencesData = [
+  {
+    id: 0,
     question: 'I AM CURRENTLY LOOKING TO...',
     subquery: 'The reason why I am using this app is because I am looking to:',
-    options:[
+    options: [
       'Buy a property',
       'Rent a property'
     ],
@@ -59,7 +59,7 @@ export const PreferencesData = [
     id: 1,
     question: 'WORKING WITH AN AGENT?',
     subquery: 'Are you currently working exclusively with a Licensed Real Estate Agent at this time?',
-    options:[
+    options: [
       'Yes',
       'No'
     ],
@@ -70,7 +70,7 @@ export const PreferencesData = [
     id: 2,
     question: 'HOW SOON ARE YOU LOOKING TO?',
     subquery: 'How soon are you looking to buy or rent your next property?',
-    options:[
+    options: [
       'As soon as possible',
       'Within 3 Months',
       'Within 6 Months',
@@ -84,7 +84,7 @@ export const PreferencesData = [
     id: 3,
     question: 'I NEED A PLACE BECAUSE?',
     subquery: 'I am currently looking to buy or rent property because?',
-    options:[
+    options: [
       'Need more space',
       'Currently Relocating',
       'Current lease will expire soon',
@@ -100,7 +100,7 @@ export const PreferencesData = [
     id: 4,
     question: 'OWN OR RENT?',
     subquery: 'Do you currently own or rent a property?',
-    options:[
+    options: [
       'Yes',
       'No'
     ],
@@ -111,7 +111,7 @@ export const PreferencesData = [
     id: 5,
     question: 'SELL OR END LEASE?',
     subquery: 'Do you need to sell your property or end your current lease before moving to your property?',
-    options:[
+    options: [
       'Yes',
       'No'
     ],
@@ -122,7 +122,7 @@ export const PreferencesData = [
     id: 6,
     question: 'MORTGAGE QUALIFICATIONS?',
     subquery: 'I\'ve been pre-qualified by a mortgage lender within the last 60 days?',
-    options:[
+    options: [
       'Yes',
       'No'
     ],
@@ -133,17 +133,17 @@ export const PreferencesData = [
     id: 7,
     question: 'I WOULD PREFER TO FIND A PLACE IN...',
     subquery: 'My ideal location will be near...',
-    options:[
-      'ANYWHERE'      
+    options: [
+      'ANYWHERE'
     ],
     answerType: 'input',
-    answerIndex: 0,    
+    answerIndex: 0,
   },
   {
     id: 8,
     question: 'MY IDEAL PROPERTY WILL BE A...',
     subquery: '',
-    options:[
+    options: [
       'Single Family Home',
       'Multi-Family Home',
       'Condominium',
@@ -158,8 +158,8 @@ export const PreferencesData = [
     id: 9,
     question: 'My BUDGET IS...',
     subquery: '',
-    options:[
-      'NO BUDGET'      
+    options: [
+      'NO BUDGET'
     ],
     answerType: 'input',
     answerIndex: 0,
@@ -168,7 +168,7 @@ export const PreferencesData = [
     id: 10,
     question: 'BEDROOMS?',
     subquery: 'My ideal property will have this number of bedrooms',
-    options:[
+    options: [
       '1',
       '2',
       '3',
@@ -182,7 +182,7 @@ export const PreferencesData = [
     id: 11,
     question: 'BATHROOMS?',
     subquery: 'My ideal property will have this number of bathrooms',
-    options:[
+    options: [
       '1',
       '2',
       '3',
@@ -196,7 +196,7 @@ export const PreferencesData = [
     id: 12,
     question: 'PETS?',
     subquery: 'I currently own...',
-    options:[
+    options: [
       'No Pets',
       'Small Dog(s)',
       'Large Dog(s)',
@@ -210,7 +210,7 @@ export const PreferencesData = [
     id: 13,
     question: 'THE MOST IMPORTANT THING...',
     subquery: 'The most important thing for me while looking for a property is...',
-    options:[
+    options: [
       'Location',
       'Close to shopping are',
       'Near Transportation \n (Train/Subway/Bus)',
@@ -234,11 +234,11 @@ export const PreferencesData = [
     answerType: 'radio',
     answerIndex: 0
   },
-  { 
-    id: 14,   
+  {
+    id: 14,
     question: 'AUTO SIGN ME INTO PROPERTIES',
     subquery: 'Please auto-sign me into every Virtual Tour or Live Open House Stream that I view',
-    options:[
+    options: [
       'Yes',
       'No'
     ],
