@@ -63,7 +63,8 @@ export default class SplashScreen extends Component {
     //    RouteParam.deviceType = 'pad';
     //    this.isLoggedInProc();
     //  }
-    //  else{    
+    //  else{  
+          watchdogTimer();  
           this.requestCameraMicroPhonePermission()
           .then(()=>{
             //this.requestLocation();
@@ -158,8 +159,7 @@ export default class SplashScreen extends Component {
           });
         }
       })
-
-      watchdogTimer();
+      
       this.isLoggedInProc();
     }
     else {
