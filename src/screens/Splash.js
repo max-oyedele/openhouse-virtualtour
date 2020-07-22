@@ -159,14 +159,13 @@ export default class SplashScreen extends Component {
         }
       })
 
+      watchdogTimer();
       this.isLoggedInProc();
     }
     else {
       console.log('Authorization status: disabled');      
       Linking.openSettings();
     }
-
-    watchdogTimer();
   }
 
   isLoggedInProc = () => {
