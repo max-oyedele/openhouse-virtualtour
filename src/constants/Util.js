@@ -30,15 +30,8 @@ export const watchdogTimer = () => {
       (result) => {
         if (result != RESULTS.GRANTED) {
           console.log('location permission:', result);
-          if(result == RESULTS.DENIED){
-            request(PERMISSIONS.IOS.LOCATION_WHEN_IN_USE).then((result)=>{
-              
-            })
-          }
-          else{
-            Linking.openSettings().then(() => { }).catch((err) => { console.log('open setting err', err) })
-          }
-        }        
+          Linking.openSettings().then(() => { }).catch((err) => { console.log('open setting err', err) })
+        }
       },
     );
     // checkNotifications().then(({ status, settings }) => {

@@ -87,15 +87,11 @@ export default class AgentScreen extends Component {
       data: {
         title: 'New Client Alert',
         body: 'Congratulations! ' + LoginInfo.fullname + ' have selected you as his/her preferred real estate agent.',
-      },
-      contentAvailable: true,
-      content_available: true,
-      'content-available': true,
+      },      
       apns: {
         payload: {
           aps: {
-            contentAvailable: true,
-            content_available: true,
+            contentAvailable: true,            
             'content-available': true,
           }
         },

@@ -174,15 +174,11 @@ export default class OpenVirtualHomeScreen extends Component {
         alertTitle: 'Incoming Video-Chat Request',
         alertBody: LoginInfo.fullname + ' would like to enter your live open house stream. Would you like to accept the incoming video call?',
         propertyNo: RouteParam.propertyRecordNo
-      },
-      contentAvailable: true,
-      content_available: true,
-      'content-available': true,
+      },      
       apns: {
         payload: {
           aps: {
-            contentAvailable: true,
-            content_available: true,
+            contentAvailable: true,            
             'content-available': true,            
           }
         },

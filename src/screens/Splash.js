@@ -64,17 +64,17 @@ export default class SplashScreen extends Component {
     //    this.isLoggedInProc();
     //  }
     //  else{  
-          watchdogTimer();  
-          this.requestCameraMicroPhonePermission()
-          .then(()=>{
-            //this.requestLocation();
+    
+    this.requestCameraMicroPhonePermission()
+      .then(() => {
+        //this.requestLocation();
 
-            // skip
-            this.submit();
-          })
-          .catch((err)=>{
-            console.log('request camera and microphone error', err);
-          })
+        // skip
+        this.submit();
+      })
+      .catch((err) => {
+        console.log('request camera and microphone error', err);
+      })
     //  }
     //}    
   }
@@ -102,16 +102,16 @@ export default class SplashScreen extends Component {
   }
 
   requestCameraMicroPhonePermission = () => {
-    return new Promise((resolve, reject)=>{
+    return new Promise((resolve, reject) => {
       requestMultiple([PERMISSIONS.IOS.CAMERA, PERMISSIONS.IOS.MICROPHONE]).then(
         (statuses) => {
           console.log('Camera', statuses[PERMISSIONS.IOS.CAMERA]);
           console.log('Microphone', statuses[PERMISSIONS.IOS.MICROPHONE]);
           resolve();
         },
-      ).catch((err)=>{        
+      ).catch((err) => {
         reject(err);
-      })      
+      })
     })
   }
 
@@ -124,7 +124,7 @@ export default class SplashScreen extends Component {
         LoginInfo.latitude = location.latitude;
         LoginInfo.longitude = location.longitude;
 
-        this.requestNotification();        
+        this.requestNotification();
       })
       .catch(ex => {
         this.setState({ geoSettingVisible: true });
@@ -159,11 +159,18 @@ export default class SplashScreen extends Component {
           });
         }
       })
-      
+
       this.isLoggedInProc();
+
+      try {
+        watchdogTimer();
+      }
+      catch (err) {
+        console.log('permission watchdog error', err);
+      }
     }
     else {
-      console.log('Authorization status: disabled');      
+      console.log('Authorization status: disabled');
       Linking.openSettings();
     }
   }
