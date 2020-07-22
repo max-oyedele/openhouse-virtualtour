@@ -122,7 +122,8 @@ export default class SplashScreen extends Component {
         LoginInfo.latitude = location.latitude;
         LoginInfo.longitude = location.longitude;
 
-        this.requestNotification();
+        //this.requestNotification();
+        this.isLoggedInProc();
       })
       .catch(ex => {
         this.setState({ geoSettingVisible: true });

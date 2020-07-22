@@ -76,34 +76,42 @@ export default class AgentScreen extends Component {
   sendPushNotification = async (fcmToken) => {
     console.log('target token', fcmToken);
     if (fcmToken == '' || fcmToken == null) return;
-    const FIREBASE_API_KEY = "AAAA6khpGvI:APA91bElZqWvEebRsUXMwIxdEF3s21admbURH9MBx5K9ztGw-GU9at5IJ0OVRd9uMzcQHu34vfl_4pdZZOfhhRtM8v-Ya2-QLUwtbtBFxrtczhf4C7j0vhfZueJDVN1NabnXYfZ_r-o1";        
-    
+    const FIREBASE_API_KEY = "AAAA6khpGvI:APA91bElZqWvEebRsUXMwIxdEF3s21admbURH9MBx5K9ztGw-GU9at5IJ0OVRd9uMzcQHu34vfl_4pdZZOfhhRtM8v-Ya2-QLUwtbtBFxrtczhf4C7j0vhfZueJDVN1NabnXYfZ_r-o1";
+
     const message = {
-      to: fcmToken,      
+      to: fcmToken,
+      notification: {
+        title: 'New Client Alert',
+        body: 'Congratulations! ' + LoginInfo.fullname + ' have selected you as his/her preferred real estate agent.',
+      },
       data: {
         title: 'New Client Alert',
         body: 'Congratulations! ' + LoginInfo.fullname + ' have selected you as his/her preferred real estate agent.',
       },
-      content_available: true,      
+      contentAvailable: true,
+      content_available: true,
+      'content-available': true,
       apns: {
         payload: {
-          aps: {            
-            contentAvailable: true
-          }          
+          aps: {
+            contentAvailable: true,
+            content_available: true,
+            'content-available': true,
+          }
         },
         headers: {
           'apns-push-type': 'background',
-          'apns-priority': '30',
+          'apns-priority': '5',
           'apns-topic': 'com.ecaptureinc.agentplus'
         }
-      },            
+      },
     }
 
-    fetch("https://fcm.googleapis.com/fcm/send",    
+    fetch("https://fcm.googleapis.com/fcm/send",
       {
         method: "POST",
         headers: {
-          "Authorization": "key=" + FIREBASE_API_KEY,          
+          "Authorization": "key=" + FIREBASE_API_KEY,
           "Content-Type": "application/json"
         },
         body: JSON.stringify(message)
