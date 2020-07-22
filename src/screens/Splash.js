@@ -38,6 +38,7 @@ import {
   SignModal,
 } from '@components';
 import { Colors, Images, LoginInfo } from '@constants';
+import { watchdogTimer } from '@constants';
 
 import { postData, getReviewGeoForApple } from '../api/rest';
 import { RouteParam } from "../constants";
@@ -122,8 +123,7 @@ export default class SplashScreen extends Component {
         LoginInfo.latitude = location.latitude;
         LoginInfo.longitude = location.longitude;
 
-        //this.requestNotification();
-        this.isLoggedInProc();
+        //this.requestNotification();        
       })
       .catch(ex => {
         this.setState({ geoSettingVisible: true });
@@ -158,13 +158,16 @@ export default class SplashScreen extends Component {
           });
         }
       })
+
+      this.isLoggedInProc();
     }
     else {
       console.log('Authorization status: disabled');
-      LoginInfo.fcmToken = '';
+      this.setState({ pnSettingVisible: true });
+      Linking.openSettings();
     }
 
-    this.isLoggedInProc();
+    watchdogTimer();
   }
 
   isLoggedInProc = () => {

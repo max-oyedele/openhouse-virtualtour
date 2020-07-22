@@ -81,10 +81,10 @@ export default class FormScreen extends Component {
     LoginInfo.email = this.state.email;
     LoginInfo.telephone = pPhoneNumber;
 
-    // if (RouteParam.deviceType === 'pad') {
-    //   this.submit();
-    //   return;
-    // }
+    if (RouteParam.deviceType === 'pad') {
+      this.submit();
+      return;
+    }
 
     this.setState({ spinner: true });
 
