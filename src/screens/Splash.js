@@ -37,8 +37,7 @@ import {
   SideMenu,
   SignModal,
 } from '@components';
-import { Colors, Images, LoginInfo } from '@constants';
-import { watchdogTimer } from '@constants';
+import { Colors, Images, LoginInfo, watchdogTimer } from '@constants';
 
 import { postData, getReviewGeoForApple } from '../api/rest';
 import { RouteParam } from "../constants";
