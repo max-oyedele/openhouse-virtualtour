@@ -89,7 +89,7 @@ export default class FormScreen extends Component {
 
     this.setState({ spinner: true });
 
-    console.log('phonenumber', vPhoneNumber);
+    //console.log('phonenumber', vPhoneNumber);
     await verifyPhoneNumber(vPhoneNumber)
       .then((verifyResult) => {
         //console.log('verifyResult', verifyResult)
@@ -108,8 +108,7 @@ export default class FormScreen extends Component {
         // );
 
         this.setState({ spinner: false }); this.submit();
-
-        console.log('verify phone number error', err);
+        //console.log('verify phone number error', err);
       })
   }
 
@@ -133,7 +132,7 @@ export default class FormScreen extends Component {
 
     await postData(bodyFormData)
       .then((res) => {
-        //console.warn('post login info success', res);
+        //console.log('post login info success', res);
 
         LoginInfo.photourl = res[0].user_photourl;
         LoginInfo.fcmToken = res[0].fcmToken;
@@ -144,9 +143,10 @@ export default class FormScreen extends Component {
         AsyncStorage.setItem('LoginInfo', JSON.stringify(LoginInfo));
         this.props.navigation.navigate('Welcome');
       })
-      .catch((err) => console.log('post login info error', err))
+      .catch((err) => {
+        //console.log('post login info error', err);
+      })
   }
-  ///////////////////////
 
   render() {
     return (

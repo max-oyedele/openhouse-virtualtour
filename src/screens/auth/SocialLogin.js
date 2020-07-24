@@ -31,7 +31,7 @@ import {
   SignModal,
 } from '@components';
 import { Colors, Images, LoginInfo } from '@constants';
-import { appleSignin, fbSignin, googleSignin } from '../../api/Firebase';
+import { appleSignin, googleSignin } from '../../api/Firebase';
 
 export default class SocialLoginScreen extends Component {
   constructor(props) {
@@ -48,21 +48,20 @@ export default class SocialLoginScreen extends Component {
   onAppleSignin = async () => {
     await appleSignin()
       .then(async (res) => {
-        console.log('apple signin success', res);
+        //console.log('apple signin success', res);
 
-        LoginInfo.uniqueid = res.user.uid;
-        LoginInfo.fullname = res.user.displayName;
-        LoginInfo.email = res.user.email;
+        LoginInfo.uniqueid = res.user.providerData[0].uid;
+        LoginInfo.fullname = res.user.providerData[0].displayName;
+        LoginInfo.email = res.user.providerData[0].email;
         LoginInfo.telephone = res.user.phoneNumber;
-        LoginInfo.photourl = res.user.photoURL;
+        LoginInfo.photourl = res.user.providerData[0].photoURL;
         LoginInfo.providerid = 'apple';
         LoginInfo.email_verified = res.user.emailVerified;
 
         this.props.navigation.navigate('Form');
       })
       .catch((err) => {
-        //Alert.alert('Apple SignIn is failed');
-        console.log('apple signin error', err);
+        //console.log('apple signin error', err);
       })
   }
 
@@ -82,31 +81,10 @@ export default class SocialLoginScreen extends Component {
         this.props.navigation.navigate('Form');
       })
       .catch((err) => {
-        //Alert.alert('Google SignIn is failed');
-        console.log('google signin error', err)
+        //console.log('google signin error', err)
       })
   }
-
-  // onFBSignin = async () => {
-  //   await fbSignin()
-  //     .then(async (res) => {
-  //       //console.log('fb signin success', res);        
-  //       LoginInfo.uniqueid = res.user.uid;
-  //       LoginInfo.fullname = res.user.displayName;
-  //       LoginInfo.email = res.user.email;
-  //       LoginInfo.telephone = res.user.phoneNumber;
-  //       LoginInfo.photourl = res.user.photoURL;
-  //       LoginInfo.providerid = 'facebook';
-  //       LoginInfo.email_verified = res.user.emailVerified;
-
-  //       this.props.navigation.navigate('Form');
-  //     })
-  //     .catch((err) => {
-  //       //Alert.alert('Facebook SignIn is failed');
-  //       console.log('fb signin error', err)
-  //     })
-  // }   
-
+  
   render() {
     return (
       <ImageBackground style={styles.container} source={Images.splashBackground}>
@@ -126,12 +104,7 @@ export default class SocialLoginScreen extends Component {
             </Text>
           </View>
 
-          <View style={styles.btnsContainer}>
-            {/* <View style={styles.btnContainer}>
-              <TouchableOpacity style={styles.btnImg} onPress={() => this.onFBSignin()}>
-                <Image style={{ width: '100%', height: '100%', borderRadius: normalize(5) }} source={Images.btnFBLogin} resizeMode='stretch' />
-              </TouchableOpacity>
-            </View> */}
+          <View style={styles.btnsContainer}>            
             <View style={styles.btnContainer}>
               <TouchableOpacity style={styles.btnImg} onPress={() => this.onGoogleSignin()}>
                 <Image style={{ width: '100%', height: '100%', borderRadius: normalize(5) }} source={Images.btnGoogleLogin} resizeMode='stretch' />

@@ -49,7 +49,7 @@ export default class SignModal extends Component {
   }
 
   _onDragEvent() {
-    //console.warn('drag');    
+    //console.log('drag');    
     isDrag = true;    
   }
 
@@ -58,17 +58,17 @@ export default class SignModal extends Component {
     RNFetchBlob.fs
       .writeFile(signPath, sign.encoded, 'base64')
       .then((res) => {        
-        console.log('signature saved', res)
+        //console.log('signature saved', res)
       })
-      .catch(err => console.log('signature error', err));  
+      .catch(err => {
+        //console.log('signature error', err);
+      });  
   }
 
   render() {
     return (
       <Overlay
         visible={this.props.visible}
-        // onClose={this.onClose}
-        // closeOnTouchOutside
         containerStyle={{ backgroundColor: 'rgba(0, 0, 0, 0.5)' }}
         childrenWrapperStyle={styles.signModal}
       >

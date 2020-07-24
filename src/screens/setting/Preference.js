@@ -68,7 +68,7 @@ export default class PreferenceScreen extends Component {
       answer: PreferencesData[this.state.selectedPreferenceIndex].options[index]
     }
 
-    console.log(postParam);
+    //console.log(postParam);
 
     let bodyFormData = new FormData();
     bodyFormData.append('action', 'update_preferrences');
@@ -79,11 +79,14 @@ export default class PreferenceScreen extends Component {
     bodyFormData.append('user_answer', postParam.answer);
 
     await postData(bodyFormData)
-      .then((res) => console.log('post save or remove favorite success', res))
-      .catch((err) => console.log('post save or remove favorite error', err))
+      .then((res) => {
+        //console.log('post save or remove favorite success', res);
+      })
+      .catch((err) => {
+        //console.log('post save or remove favorite error', err);
+      })
   }
 
-  //////////////////////// format //////////////
   formatter = new Intl.NumberFormat('en-US', {
     style: 'currency',
     currency: 'USD',
@@ -112,7 +115,6 @@ export default class PreferenceScreen extends Component {
     var realValue = valueNoComma.replace("$", "");
     return realValue;
   }
-  ///////////////////////////////////////////////
 
   render() {
     const isOptionOverFlow = PreferencesData[this.state.selectedPreferenceIndex].options.length > 8 ? true : false;
@@ -146,8 +148,6 @@ export default class PreferenceScreen extends Component {
 
         <Overlay
           visible={this.state.visibleModal}
-          // onClose={this.onClose}
-          // closeOnTouchOutside
           containerStyle={{ backgroundColor: 'rgba(0, 0, 0, 0.5)' }}
           childrenWrapperStyle={styles.modal}
         >

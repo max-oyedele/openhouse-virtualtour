@@ -82,7 +82,7 @@ export default class OpenVirtualHomeScreen extends Component {
         }
       })
       .catch((err) => {
-        console.log('get openhouse into error', err);
+        //console.log('get openhouse into error', err);
       })
   }
 
@@ -112,7 +112,7 @@ export default class OpenVirtualHomeScreen extends Component {
         }
       })
       .catch((err) => {
-        console.log('get live info error', err);
+        //console.log('get live info error', err);
       })
   }
 
@@ -127,11 +127,13 @@ export default class OpenVirtualHomeScreen extends Component {
         if (supported) {
           Linking.openURL(this.state.property_virtual_tour_url)
             .then(() => { })
-            .catch((err) => console.log('open browse url error'))
+            .catch((err) => {
+              //console.log('open browse url error');
+            })
 
           this.props.navigation.navigate('Property');
         } else {
-          console.log('open browser error');
+          //console.log('open browser error');
         }
       });
     }
@@ -147,15 +149,15 @@ export default class OpenVirtualHomeScreen extends Component {
 
     await postData(bodyFormData)
       .then((res) => {
-        console.log('post attendee success', res);
+        //console.log('post attendee success', res);
       })
       .catch((err) => {
-        console.log('post attendee error', err)
+        //console.log('post attendee error', err)
       })
   }
 
   sendPushNotification = async (fcmToken) => {
-    console.log('target token', fcmToken);
+    //console.log('target token', fcmToken);
     if (fcmToken == '' || fcmToken == null) return;
     const FIREBASE_API_KEY = "AAAA6khpGvI:APA91bElZqWvEebRsUXMwIxdEF3s21admbURH9MBx5K9ztGw-GU9at5IJ0OVRd9uMzcQHu34vfl_4pdZZOfhhRtM8v-Ya2-QLUwtbtBFxrtczhf4C7j0vhfZueJDVN1NabnXYfZ_r-o1";
 
@@ -203,10 +205,10 @@ export default class OpenVirtualHomeScreen extends Component {
         return response.json();
       })
       .then((responseJson) => {
-        console.log('push notification response', responseJson);
+        //console.log('push notification response', responseJson);
       })
       .catch(err => {
-        console.log('response error', err);
+        //console.log('response error', err);
       })
   }
 

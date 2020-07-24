@@ -118,7 +118,7 @@ export default class ResultListScreen extends Component {
         RouteParam.mapResultData = sortedRes;
       })
       .catch((err) => {
-        console.log('get search data error', err);
+        //console.log('get search data error', err);
         this.setState({ spinner: false });
       })
   }
@@ -147,7 +147,7 @@ export default class ResultListScreen extends Component {
         RouteParam.mapResultData = sortedRes;
       })
       .catch((err) => {
-        console.log('get search data error', err);
+        //console.log('get search data error', err);
         this.setState({ spinner: false });
       })
   } 

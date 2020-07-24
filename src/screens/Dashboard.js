@@ -265,8 +265,6 @@ export default class DashboardScreen extends Component {
                 />
               </View>
             </View>
-
-            {/* <View style={{ height: normalize(70, 'height') }}></View> */}
           </View>
         </ScrollView>
       </View>

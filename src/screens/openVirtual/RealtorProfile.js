@@ -65,10 +65,10 @@ export default class RealtorProfileScreen extends Component {
 
           <View style={styles.btnsContainer}>
             <View style={styles.callBtnContainer}>
-              <Button btnTxt='Call' btnStyle={{ width: width * 0.66, height: normalize(50, 'height'), color: 'blue' }} onPress={() => console.log('phone call')} />
+              <Button btnTxt='Call' btnStyle={{ width: width * 0.66, height: normalize(50, 'height'), color: 'blue' }} onPress={() => {}} />
             </View>
             <View style={styles.msgBtnContainer}>
-              <TouchableOpacity style={{ width: normalize(55), height: normalize(55) }} onPress={() => console.log('msg button click')}>
+              <TouchableOpacity style={{ width: normalize(55), height: normalize(55) }} onPress={() => {}}>
                 <Image style={{ width: '100%', height: '100%' }} source={Images.btnMsg} resizeMode='contain' />
               </TouchableOpacity>
             </View>

@@ -62,19 +62,19 @@ export default class AgentScreen extends Component {
     getContentByAction(agentParam)
       .then((res) => {
         if (res) {
-          console.log('agent data', res);
+          //console.log('agent data', res);
           this.setState({
             agentData: res,
           });
         }
       })
       .catch((err) => {
-        console.log('get agent error', err);
+        //console.log('get agent error', err);
       })
   }
 
   sendPushNotification = async (fcmToken) => {
-    console.log('target token', fcmToken);
+    //console.log('target token', fcmToken);
     if (fcmToken == '' || fcmToken == null) return;
     const FIREBASE_API_KEY = "AAAA6khpGvI:APA91bElZqWvEebRsUXMwIxdEF3s21admbURH9MBx5K9ztGw-GU9at5IJ0OVRd9uMzcQHu34vfl_4pdZZOfhhRtM8v-Ya2-QLUwtbtBFxrtczhf4C7j0vhfZueJDVN1NabnXYfZ_r-o1";
 
@@ -116,10 +116,10 @@ export default class AgentScreen extends Component {
         return response.json();
       })
       .then((responseJson) => {
-        console.log('push notification response', responseJson);
+        //console.log('push notification response', responseJson);
       })
       .catch(err => {
-        console.log('response error', err);
+        //console.log('response error', err);
       })
   }
 
@@ -233,7 +233,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     alignSelf: 'center',
     marginBottom: normalize(5, 'height'),
-    // borderColor: Colors.borderColor,
-    // borderWidth: normalize(0.5, 'height'),        
+    //borderColor: Colors.borderColor,
+    //borderWidth: normalize(0.5, 'height'),        
   },
 });

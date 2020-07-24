@@ -57,7 +57,7 @@ export default class SMSScreen extends Component {
       this.setState({ spinner: true });
       await linkWithCredential(RouteParam.verifyResult.verificationId, verificationCode)
         .then((cred) => {
-          console.log('linkWith cred', cred);
+          //console.log('linkWith cred', cred);
 
           Keyboard.dismiss();
 
@@ -104,10 +104,10 @@ export default class SMSScreen extends Component {
               ]
             );            
           } 
-          console.log('link with credential error', err);
+          //console.log('link with credential error', err);
         })
     } else {
-      Alert.alert('Please enter a 6 digit activation code.');
+      Alert.alert('Please Enter a 6 Digit Activation Code.');
     }
   }
 
@@ -142,7 +142,9 @@ export default class SMSScreen extends Component {
 
         this.props.navigation.navigate('Welcome');
       })
-      .catch((err) => console.log('post login info error', err))
+      .catch((err) => {
+        //console.log('post login info error', err);
+      })
   }
 
   render() {

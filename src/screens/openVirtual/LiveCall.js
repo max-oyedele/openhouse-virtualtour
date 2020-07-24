@@ -64,7 +64,7 @@ export default class LiveCallScreen extends Component {
         accessToken: RouteParam.liveInfo.token
       });
     } catch (error) {
-      console.log('live connect error', error);
+      //console.log('live connect error', error);
     }
     this.setState({ status: "connecting" });
 
@@ -89,17 +89,17 @@ export default class LiveCallScreen extends Component {
   };
 
   _onRoomDidConnect = () => {
-    console.log("LiveCall :: connected")
+    //console.log("LiveCall :: connected")
     this.setState({ status: "connected" });
   };
 
   _onRoomDidDisconnect = ({ roomName, error }) => {
-    console.log("_onRoomDidDisconnect: ", error);
+    //console.log("_onRoomDidDisconnect: ", error);
     this.setState({ status: "disconnected" });
   };
 
   _onRoomDidFailToConnect = error => {
-    console.log("_onRoomDidFailToConnect: ", error);
+    //console.log("_onRoomDidFailToConnect: ", error);
     this.setState({ status: "disconnected" });
   };
 
@@ -118,7 +118,7 @@ export default class LiveCallScreen extends Component {
   };
 
   _onParticipantRemovedVideoTrack = ({ participant, track }) => {
-    console.log("onParticipantRemovedVideoTrack: ", participant, track);
+    //console.log("onParticipantRemovedVideoTrack: ", participant, track);
 
     const videoTracks = this.state.videoTracks;
     videoTracks.delete(track.trackSid);

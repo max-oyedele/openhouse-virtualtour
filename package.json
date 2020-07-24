@@ -26,7 +26,6 @@
     "axios": "^0.19.2",
     "react": "16.11.0",
     "react-native": "0.62.2",
-    "react-native-fbsdk": "^1.1.2",
     "react-native-gesture-handler": "^1.6.1",
     "react-native-get-location": "^1.4.2",
     "react-native-image-slider-box": "^1.0.12",

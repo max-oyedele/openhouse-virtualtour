@@ -83,7 +83,7 @@ export default class PropertyScreen extends Component {
         });
       })
       .catch((err) => {
-        console.log('get feature property error', err);
+        //console.log('get feature property error', err);
         this.setState({ spinner: false });
       })
   }
@@ -113,7 +113,7 @@ export default class PropertyScreen extends Component {
         this.setState({ propertyPhotoDetailData: propertyPhotoDetailData });
       })
       .catch((err) => {
-        console.log('get property photo error', err)
+        //console.log('get property photo error', err)
       })
   }
 
@@ -135,7 +135,7 @@ export default class PropertyScreen extends Component {
         }
       })
       .catch((err) => {
-        console.log('get agent card error', err)
+        //console.log('get agent card error', err)
       })
   }
 
@@ -164,8 +164,12 @@ export default class PropertyScreen extends Component {
     bodyFormData.append('property_recordno', favoriteParam.property_recordno);
 
     await postData(bodyFormData)
-      .then((res) => console.log('post save or remove favorite success', res))
-      .catch((err) => console.log('post save or remove favorite error', err))
+      .then((res) => {
+        //console.log('post save or remove favorite success', res);
+      })
+      .catch((err) => {
+        //console.log('post save or remove favorite error', err);
+      })
 
     this.setState({ isFavorite: !this.state.isFavorite });
   }

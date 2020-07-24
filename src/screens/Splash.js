@@ -53,29 +53,28 @@ export default class SplashScreen extends Component {
   }
 
   async componentDidMount() {
-    //let res = await getReviewGeoForApple();
-    ////console.log('review for apple', res);
-    //if(res){
-    //  if(res[0].under_review_by_apple){
-    //    LoginInfo.latitude = res[0].user_latitude;
-    //    LoginInfo.longitude = res[0].user_longitude;
-    //    RouteParam.deviceType = 'pad';
-    //    this.isLoggedInProc();
-    //  }
-    //  else{  
-    
-    this.requestCameraMicroPhonePermission()
-      .then(() => {
-        //this.requestLocation();
+    let res = await getReviewGeoForApple();
+    //console.log('review for apple', res);
+    if (res) {
+      if (res[0].under_review_by_apple) {
+        LoginInfo.latitude = res[0].user_latitude;
+        LoginInfo.longitude = res[0].user_longitude;
+        RouteParam.deviceType = 'pad';
+        this.isLoggedInProc();
+      }
+      else {
+        this.requestCameraMicroPhonePermission()
+          .then(() => {
+            //this.requestLocation();
 
-        // skip
-        this.submit();
-      })
-      .catch((err) => {
-        console.log('request camera and microphone error', err);
-      })
-    //  }
-    //}    
+            // remove later
+            this.submit();
+          })
+          .catch((err) => {
+            //console.log('request camera and microphone error', err);
+          })
+      }
+    }
   }
 
   keyboardManager = () => {
@@ -104,8 +103,8 @@ export default class SplashScreen extends Component {
     return new Promise((resolve, reject) => {
       requestMultiple([PERMISSIONS.IOS.CAMERA, PERMISSIONS.IOS.MICROPHONE]).then(
         (statuses) => {
-          console.log('Camera', statuses[PERMISSIONS.IOS.CAMERA]);
-          console.log('Microphone', statuses[PERMISSIONS.IOS.MICROPHONE]);
+          //console.log('Camera', statuses[PERMISSIONS.IOS.CAMERA]);
+          //console.log('Microphone', statuses[PERMISSIONS.IOS.MICROPHONE]);
           resolve();
         },
       ).catch((err) => {
@@ -140,11 +139,11 @@ export default class SplashScreen extends Component {
 
       var fcmToken = await messaging().getToken();
       LoginInfo.fcmToken = fcmToken;
-      console.log('fcmToken', fcmToken);
+      //console.log('fcmToken', fcmToken);
 
       messaging().onMessage(async remoteMessage => {
-        console.log('Message arrived', remoteMessage);
-
+        //console.log('message arrived', remoteMessage);
+        if(remoteMessage.data == null || remoteMessage.data == undefined) return;
         if (Platform.OS === 'android') {
           PushNotification.localNotification({
             title: remoteMessage.data.title,
@@ -165,11 +164,11 @@ export default class SplashScreen extends Component {
         watchdogTimer();
       }
       catch (err) {
-        console.log('permission watchdog error', err);
+        //console.log('permission watchdog error', err);
       }
     }
     else {
-      console.log('Authorization status: disabled');
+      //console.log('Authorization status: disabled');
       Linking.openSettings();
     }
   }
@@ -199,13 +198,13 @@ export default class SplashScreen extends Component {
         }
       })
       .catch((err) => {
-        console.log('get login info error', err);
+        //console.log('get login info error', err);
         setTimeout(() => { this.props.navigation.navigate('Auth') }, 2000);
       })
   }
 
   submit = async () => {
-    // skip
+    // remove later
     LoginInfo.uniqueid = '1234567890';
     LoginInfo.user_account = '32';
     LoginInfo.fullname = 'Tomas Andersson';
@@ -256,7 +255,7 @@ export default class SplashScreen extends Component {
         }
       })
       .catch((err) => {
-        console.log('post login info error', err)
+        //console.log('post login info error', err)
       })
   }
 
@@ -394,7 +393,6 @@ const styles = StyleSheet.create({
     //borderWidth: 1
   },
 
-  /////////////////////////////////////////////////
   modalBackGeo: {
     backgroundColor: 'rgba(255,255,255,1)',
     width: wp(75),
@@ -463,5 +461,4 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     //borderWidth: 1
   },
-
 });

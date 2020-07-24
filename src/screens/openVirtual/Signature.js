@@ -54,20 +54,22 @@ export default class SignatureScreen extends Component {
 
     const { from } = this.props.route.params;
     if(from === 'live') {
-      if(RouteParam.liveInfo.error === undefined) {
+      if(RouteParam.liveInfo.error == undefined) {
         this.props.navigation.navigate('LiveCall');
       }
-      console.log('live info error');      
+      //console.log('live info error');      
     }      
     else if(from === 'virtual_tour') {
       Linking.canOpenURL(RouteParam.browseUrl).then(supported => {
         if (supported) {
           Linking.openURL(RouteParam.browseUrl)
             .then(() => { })
-            .catch((err) => console.log('open browse url error'))
+            .catch((err) => {
+              //console.log('open browse url error');
+            })
             this.props.navigation.navigate('Property');
         } else {
-          console.log('open browser error');
+          //console.log('open browser error');
         }
       });     
     }
@@ -96,10 +98,10 @@ export default class SignatureScreen extends Component {
     })
       .then(res => res.json())      
       .then(res => {        
-        console.log('post sign success', res)
+        //console.log('post sign success', res)
       })
       .catch((err)=>{
-        console.log('post sign error',err);
+        //console.log('post sign error',err);
       })
       .done();   
   }
@@ -114,10 +116,10 @@ export default class SignatureScreen extends Component {
 
     await postData(bodyFormData)
       .then((res) => {
-        console.log('post attendee success', res);
+        //console.log('post attendee success', res);
       })
       .catch((err) => {
-        console.log('post attendee error', err)
+        //console.log('post attendee error', err)
       })
   }
 

@@ -72,7 +72,7 @@ export default class FavoritesScreen extends Component {
         else if (this.state.tab == 'viewed') this.setState({ viewedData: sortedRes, spinner: false });
       })
       .catch((err) => {
-        console.log('get data error', err);
+        //console.log('get data error', err);
         this.setState({ spinner: false })
       })
   }
