@@ -147,7 +147,7 @@ export default class AgentScreen extends Component {
   onYes = async () => {
     let userAssignedAgent = this.state.agentData[this.state.selectedIndex].realtor_account;
     LoginInfo.user_assigned_agent = userAssignedAgent;
-    //await AsyncStorage.setItem('UserAssignedAgent', userAssignedAgent.toString());
+    await AsyncStorage.setItem('UserAssignedAgent', userAssignedAgent.toString());
     await AsyncStorage.setItem('LoginInfo', JSON.stringify(LoginInfo));
 
     let agentFCMToken = this.state.agentData[this.state.selectedIndex].fcmToken;
