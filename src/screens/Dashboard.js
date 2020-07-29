@@ -79,9 +79,11 @@ export default class DashboardScreen extends Component {
   getCategory = () => {
     var categoryParam = {
       action: 'properties_categories',
+      user_id: LoginInfo.uniqueid,
+      user_account: LoginInfo.user_account,
       user_latitude: LoginInfo.latitude,
       user_longitude: LoginInfo.longitude,
-      user_id: LoginInfo.uniqueid
+      user_assigned_agent: LoginInfo.user_assigned_agent
     };
 
     getContentByAction(categoryParam)
@@ -122,10 +124,12 @@ export default class DashboardScreen extends Component {
 
   getSearchWord = () => {
     var searchWordParam = {
-      action: 'searchcities',
+      action: 'searchcities',      
+      user_id: LoginInfo.uniqueid,
+      user_account: LoginInfo.user_account,
       user_latitude: LoginInfo.latitude,
       user_longitude: LoginInfo.longitude,
-      user_id: LoginInfo.uniqueid,
+      user_assigned_agent: LoginInfo.user_assigned_agent
     };
 
     getContentByAction(searchWordParam)
