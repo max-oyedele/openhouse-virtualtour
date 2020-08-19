@@ -245,7 +245,8 @@ export default class SplashScreen extends Component {
         LoginInfo.user_account = res[0].user_account;
         LoginInfo.user_pick_an_agent = res[0].user_pick_an_agent;
         LoginInfo.user_assigned_agent = userAssignedAgent == null ? res[0].user_assigned_agent : parseInt(userAssignedAgent);
-
+console.log('login info', LoignInfo);
+console.log('userAssignedAgent', userAssignedAgent);
         if (LoginInfo.user_pick_an_agent && userAssignedAgent == null) {
           setTimeout(() => { this.props.navigation.navigate('Agent') }, 2000);
         }
