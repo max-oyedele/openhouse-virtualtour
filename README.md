@@ -22,4 +22,4 @@ Video chat with Agent
 [iOS app](https://apps.apple.com/us/app/open-house-and-virtual-tours/id1517663733)
 
 ## Screenshot
-<img src="./openhousevirtualtour.png" height="736px" width="1000px">
+<img src="./openhousevirtualtour.png" height="500px" width="1000px">
